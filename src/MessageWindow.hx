@@ -62,4 +62,13 @@ class MessageWindow {
     }
 
   }
+
+
+  public function setText(text:String) {
+    storyText.text = text;
+  }
+
+  public function setInputText(text:String) {
+    textInput.text = text;
+  }
 }
