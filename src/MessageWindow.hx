@@ -71,4 +71,9 @@ class MessageWindow {
   public function setInputText(text:String) {
     textInput.text = text;
   }
+
+  public function hide(bool:Bool) {
+    textInput.visible = bool;
+    storyText.visible = bool;
+  }
 }

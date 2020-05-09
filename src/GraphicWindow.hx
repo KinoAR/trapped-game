@@ -1,7 +1,13 @@
 package;
 
+import h2d.Text;
+import hxd.res.DefaultFont;
+
 class GraphicWindow {
   var scene: h2d.Scene;
+  var storyText: h2d.Text;
+  var storyGraphic: h2d.Graphics;
+  var background: h2d.Graphics;
 
   public function new(scene:h2d.Scene) {
     this.scene = scene;
@@ -9,13 +15,15 @@ class GraphicWindow {
   }
 
   public function init() {
-    drawBackground(11, 11);
+    drawBackground(11, 11, 0xAAAAAA);
     drawBorder(10, 10);
+    setupGraphic(10, 10);
+    setupTextInput(15, 20);
   }
 
-  function drawBackground(x:Float, y:Float) {
-    var background = new h2d.Graphics(scene);
-    background.beginFill(0xAAAAAA);
+  function drawBackground(x:Float, y:Float, color:Int) {
+    background = new h2d.Graphics(scene);
+    background.beginFill(color);
     background.drawRect(x, y, 347, 347);
     background.endFill();
   }
@@ -32,12 +40,42 @@ class GraphicWindow {
     border.lineTo(x, y);
   }
 
+  function setupGraphic(x:Float, y:Float) {
+    storyGraphic = new h2d.Graphics(scene);
+    storyGraphic.x = x;
+    storyGraphic.y = y;
+  }
+
+  function setupTextInput(x:Float, y:Float) {
+    var font = DefaultFont.get();
+    storyText = new h2d.Text(font, scene);
+    storyText.x = x;
+    storyText.y = y;
+    storyText.scale(1.2);
+    storyText.textColor = 0xFFFFFF;
+  }
 
   public function setGraphic() {
+    storyGraphic.clear();
+  }
 
+  public function setBackgroundColor(color:Int) {
+    background.clear();
+    drawBackground(10, 10, color);
   }
 
   public function clearWindow() {
+    storyText.text = "";
+    storyGraphic.clear();
+  }
 
+  public function setStoryText(text:String) {
+    storyText.text = text;
+  }
+
+  public function hide(bool:Bool) {
+    storyGraphic.visible = bool;
+    storyText.visible = bool;
+    background.visible = bool;
   }
 }
