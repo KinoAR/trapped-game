@@ -11,6 +11,7 @@ class Main extends hxd.App {
 
   override function init() {
     engine.backgroundColor = 0x202020;
+    hxd.Res.initEmbed();
 
     //Create a custom graphics object by passing a 2d scene reference
     //Graphics, act like containers, can have colors, gradients or custom bitmaps

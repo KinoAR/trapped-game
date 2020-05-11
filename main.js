@@ -57,725 +57,6 @@ EReg.prototype = {
 	}
 	,__class__: EReg
 };
-var GraphicWindow = function(scene) {
-	this.scene = scene;
-	this.init();
-};
-$hxClasses["GraphicWindow"] = GraphicWindow;
-GraphicWindow.__name__ = "GraphicWindow";
-GraphicWindow.prototype = {
-	init: function() {
-		this.drawBackground(11,11,11184810);
-		this.drawBorder(10,10);
-		this.setupGraphic(10,10);
-		this.setupTextInput(15,20);
-	}
-	,drawBackground: function(x,y,color) {
-		this.background = new h2d_Graphics(this.scene);
-		this.background.beginFill(color);
-		this.background.drawRect(x,y,347,347);
-		this.background.endFill();
-	}
-	,drawBorder: function(x,y) {
-		var border = new h2d_Graphics(this.scene);
-		var width = 350;
-		var height = 350;
-		border.lineStyle(1,11184810);
-		border.addVertex(x,y,border.curR,border.curG,border.curB,border.curA,x * border.ma + y * border.mc + border.mx,x * border.mb + y * border.md + border.my);
-		var x1 = x + width;
-		border.addVertex(x1,y,border.curR,border.curG,border.curB,border.curA,x1 * border.ma + y * border.mc + border.mx,x1 * border.mb + y * border.md + border.my);
-		var x2 = x + width;
-		var y1 = y + height;
-		border.addVertex(x2,y1,border.curR,border.curG,border.curB,border.curA,x2 * border.ma + y1 * border.mc + border.mx,x2 * border.mb + y1 * border.md + border.my);
-		var y2 = y + height;
-		border.addVertex(x,y2,border.curR,border.curG,border.curB,border.curA,x * border.ma + y2 * border.mc + border.mx,x * border.mb + y2 * border.md + border.my);
-		border.addVertex(x,y,border.curR,border.curG,border.curB,border.curA,x * border.ma + y * border.mc + border.mx,x * border.mb + y * border.md + border.my);
-	}
-	,setupGraphic: function(x,y) {
-		this.storyGraphic = new h2d_Graphics(this.scene);
-		var _this = this.storyGraphic;
-		_this.posChanged = true;
-		_this.x = x;
-		var _this1 = this.storyGraphic;
-		_this1.posChanged = true;
-		_this1.y = y;
-	}
-	,setupTextInput: function(x,y) {
-		var font = hxd_res_DefaultFont.get();
-		this.storyText = new h2d_Text(font,this.scene);
-		var _this = this.storyText;
-		_this.posChanged = true;
-		_this.x = x;
-		var _this1 = this.storyText;
-		_this1.posChanged = true;
-		_this1.y = y;
-		var _this2 = this.storyText;
-		var _g = _this2;
-		_g.posChanged = true;
-		_g.scaleX *= 1.2;
-		var _g1 = _this2;
-		_g1.posChanged = true;
-		_g1.scaleY *= 1.2;
-		this.storyText.set_textColor(16777215);
-	}
-	,setGraphic: function() {
-		this.storyGraphic.clear();
-	}
-	,setBackgroundColor: function(color) {
-		this.background.clear();
-		this.drawBackground(10,10,color);
-	}
-	,clearWindow: function() {
-		this.storyText.set_text("");
-		this.storyGraphic.clear();
-	}
-	,setStoryText: function(text) {
-		this.storyText.set_text(text);
-	}
-	,__class__: GraphicWindow
-};
-var HudWindow = function(scene) {
-	this.scene = scene;
-	this.init();
-};
-$hxClasses["HudWindow"] = HudWindow;
-HudWindow.__name__ = "HudWindow";
-HudWindow.prototype = {
-	init: function() {
-		this.drawHUDBackground(6,6);
-		this.setupCondition(10,10);
-		this.setupDays(50,0);
-	}
-	,drawHUDBackground: function(x,y) {
-		this.background = new h2d_Graphics(this.scene);
-		var _this = this.background;
-		_this.posChanged = true;
-		_this.x = x;
-		var _this1 = this.background;
-		_this1.posChanged = true;
-		_this1.y = y;
-		this.background.beginFill(2105376);
-		this.background.drawRect(x,y,344,50);
-		this.background.endFill();
-	}
-	,setupCondition: function(x,y) {
-		var font = hxd_res_DefaultFont.get();
-		this.conditionText = new h2d_Text(font,this.scene);
-		var _this = this.conditionText;
-		_this.posChanged = true;
-		_this.x = this.background.x + x;
-		var _this1 = this.conditionText;
-		_this1.posChanged = true;
-		_this1.y = this.background.y + y;
-		var _this2 = this.conditionText;
-		var _g = _this2;
-		_g.posChanged = true;
-		_g.scaleX *= 1.5;
-		var _g1 = _this2;
-		_g1.posChanged = true;
-		_g1.scaleY *= 1.5;
-		this.conditionText.smooth = true;
-		this.setCondition(Condition.Good);
-	}
-	,setupDays: function(x,y) {
-		var font = hxd_res_DefaultFont.get();
-		this.dayText = new h2d_Text(font,this.scene);
-		var _this = this.dayText;
-		_this.posChanged = true;
-		_this.x = this.conditionText.x + x;
-		var _this1 = this.dayText;
-		_this1.posChanged = true;
-		_this1.y = this.conditionText.y + y;
-		this.dayText.set_textColor(16777215);
-		this.dayText.smooth = true;
-		var _this2 = this.dayText;
-		var _g = _this2;
-		_g.posChanged = true;
-		_g.scaleX *= 1.5;
-		var _g1 = _this2;
-		_g1.posChanged = true;
-		_g1.scaleY *= 1.5;
-		this.setDays(0);
-	}
-	,setCondition: function(condition) {
-		switch(condition._hx_index) {
-		case 0:
-			this.conditionText.set_text("Good");
-			this.conditionText.set_textColor(14350246);
-			break;
-		case 1:
-			this.conditionText.set_text("Average");
-			this.conditionText.set_textColor(16761600);
-			break;
-		case 2:
-			this.conditionText.set_text("Bad");
-			this.conditionText.set_textColor(16734003);
-			break;
-		}
-		haxe_Log.trace(this.conditionText.textColor,{ fileName : "src/HudWindow.hx", lineNumber : 66, className : "HudWindow", methodName : "setCondition"});
-	}
-	,setDays: function(days) {
-		this.dayText.set_text("Days: " + days);
-	}
-	,__class__: HudWindow
-};
-var HxOverrides = function() { };
-$hxClasses["HxOverrides"] = HxOverrides;
-HxOverrides.__name__ = "HxOverrides";
-HxOverrides.strDate = function(s) {
-	switch(s.length) {
-	case 8:
-		var k = s.split(":");
-		var d = new Date();
-		d["setTime"](0);
-		d["setUTCHours"](k[0]);
-		d["setUTCMinutes"](k[1]);
-		d["setUTCSeconds"](k[2]);
-		return d;
-	case 10:
-		var k1 = s.split("-");
-		return new Date(k1[0],k1[1] - 1,k1[2],0,0,0);
-	case 19:
-		var k2 = s.split(" ");
-		var y = k2[0].split("-");
-		var t = k2[1].split(":");
-		return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
-	default:
-		throw new js__$Boot_HaxeError("Invalid date format : " + s);
-	}
-};
-HxOverrides.cca = function(s,index) {
-	var x = s.charCodeAt(index);
-	if(x != x) {
-		return undefined;
-	}
-	return x;
-};
-HxOverrides.substr = function(s,pos,len) {
-	if(len == null) {
-		len = s.length;
-	} else if(len < 0) {
-		if(pos == 0) {
-			len = s.length + len;
-		} else {
-			return "";
-		}
-	}
-	return s.substr(pos,len);
-};
-HxOverrides.remove = function(a,obj) {
-	var i = a.indexOf(obj);
-	if(i == -1) {
-		return false;
-	}
-	a.splice(i,1);
-	return true;
-};
-HxOverrides.iter = function(a) {
-	return { cur : 0, arr : a, hasNext : function() {
-		return this.cur < this.arr.length;
-	}, next : function() {
-		return this.arr[this.cur++];
-	}};
-};
-var Lambda = function() { };
-$hxClasses["Lambda"] = Lambda;
-Lambda.__name__ = "Lambda";
-Lambda.array = function(it) {
-	var a = [];
-	var i = $getIterator(it);
-	while(i.hasNext()) {
-		var i1 = i.next();
-		a.push(i1);
-	}
-	return a;
-};
-var h3d_IDrawable = function() { };
-$hxClasses["h3d.IDrawable"] = h3d_IDrawable;
-h3d_IDrawable.__name__ = "h3d.IDrawable";
-h3d_IDrawable.__isInterface__ = true;
-h3d_IDrawable.prototype = {
-	__class__: h3d_IDrawable
-};
-var hxd_App = function() {
-	var _gthis = this;
-	var engine = h3d_Engine.CURRENT;
-	if(engine != null) {
-		this.engine = engine;
-		engine.onReady = $bind(this,this.setup);
-		haxe_Timer.delay($bind(this,this.setup),0);
-	} else {
-		hxd_System.start(function() {
-			engine = new h3d_Engine();
-			_gthis.engine = engine;
-			engine.onReady = $bind(_gthis,_gthis.setup);
-			engine.init();
-		});
-	}
-};
-$hxClasses["hxd.App"] = hxd_App;
-hxd_App.__name__ = "hxd.App";
-hxd_App.__interfaces__ = [h3d_IDrawable];
-hxd_App.staticHandler = function() {
-};
-hxd_App.prototype = {
-	onResize: function() {
-	}
-	,setScene: function(scene,disposePrevious) {
-		if(disposePrevious == null) {
-			disposePrevious = true;
-		}
-		var new2D = ((scene) instanceof h2d_Scene) ? scene : null;
-		var new3D = ((scene) instanceof h3d_scene_Scene) ? scene : null;
-		if(new2D != null) {
-			this.sevents.removeScene(this.s2d);
-			this.sevents.addScene(scene,0);
-		} else {
-			if(new3D != null) {
-				this.sevents.removeScene(this.s3d);
-			}
-			this.sevents.addScene(scene);
-		}
-		if(disposePrevious) {
-			if(new2D != null) {
-				this.s2d.dispose();
-			} else if(new3D != null) {
-				this.s3d.dispose();
-			} else {
-				throw new js__$Boot_HaxeError("Can't dispose previous scene");
-			}
-		}
-		if(new2D != null) {
-			this.s2d = new2D;
-		}
-		if(new3D != null) {
-			this.s3d = new3D;
-		}
-	}
-	,setCurrent: function() {
-		var _gthis = this;
-		this.engine = h3d_Engine.CURRENT;
-		this.isDisposed = false;
-		this.engine.onReady = hxd_App.staticHandler;
-		this.engine.onResized = function() {
-			if(_gthis.s2d == null) {
-				return;
-			}
-			_gthis.s2d.checkResize();
-			_gthis.onResize();
-		};
-		hxd_System.setLoop($bind(this,this.mainLoop));
-	}
-	,setScene2D: function(s2d,disposePrevious) {
-		if(disposePrevious == null) {
-			disposePrevious = true;
-		}
-		this.sevents.removeScene(this.s2d);
-		this.sevents.addScene(s2d,0);
-		if(disposePrevious) {
-			this.s2d.dispose();
-		}
-		this.s2d = s2d;
-	}
-	,setScene3D: function(s3d,disposePrevious) {
-		if(disposePrevious == null) {
-			disposePrevious = true;
-		}
-		this.sevents.removeScene(this.s3d);
-		this.sevents.addScene(s3d);
-		if(disposePrevious) {
-			this.s3d.dispose();
-		}
-		this.s3d = s3d;
-	}
-	,render: function(e) {
-		this.s3d.render(e);
-		this.s2d.render(e);
-	}
-	,setup: function() {
-		var _gthis = this;
-		var initDone = false;
-		this.engine.onReady = hxd_App.staticHandler;
-		this.engine.onResized = function() {
-			if(_gthis.s2d == null) {
-				return;
-			}
-			_gthis.s2d.checkResize();
-			if(initDone) {
-				_gthis.onResize();
-			}
-		};
-		this.s3d = new h3d_scene_Scene();
-		this.s2d = new h2d_Scene();
-		this.sevents = new hxd_SceneEvents();
-		this.sevents.addScene(this.s2d);
-		this.sevents.addScene(this.s3d);
-		this.loadAssets(function() {
-			initDone = true;
-			_gthis.init();
-			hxd_Timer.skip();
-			_gthis.mainLoop();
-			hxd_System.setLoop($bind(_gthis,_gthis.mainLoop));
-			hxd_Key.initialize();
-		});
-	}
-	,dispose: function() {
-		this.engine.onResized = hxd_App.staticHandler;
-		this.engine.onContextLost = hxd_App.staticHandler;
-		this.isDisposed = true;
-		this.s2d.dispose();
-		this.s3d.dispose();
-		this.sevents.dispose();
-	}
-	,loadAssets: function(onLoaded) {
-		onLoaded();
-	}
-	,init: function() {
-	}
-	,mainLoop: function() {
-		hxd_Timer.update();
-		this.sevents.checkEvents();
-		if(this.isDisposed) {
-			return;
-		}
-		this.update(hxd_Timer.dt);
-		if(this.isDisposed) {
-			return;
-		}
-		var dt = hxd_Timer.dt;
-		if(this.s2d != null) {
-			this.s2d.setElapsedTime(dt);
-		}
-		if(this.s3d != null) {
-			this.s3d.setElapsedTime(dt);
-		}
-		this.engine.render(this);
-	}
-	,update: function(dt) {
-	}
-	,__class__: hxd_App
-};
-var Main = function() {
-	hxd_App.call(this);
-};
-$hxClasses["Main"] = Main;
-Main.__name__ = "Main";
-Main.main = function() {
-	new Main();
-};
-Main.__super__ = hxd_App;
-Main.prototype = $extend(hxd_App.prototype,{
-	init: function() {
-		this.engine.backgroundColor = 2105376;
-		this.setScene2D(new TestScene());
-	}
-	,update: function(delta) {
-	}
-	,__class__: Main
-});
-var MainWindow = function(scene) {
-	this.messageWindow = new MessageWindow(scene);
-	this.graphicWindow = new GraphicWindow(scene);
-	this.hudWindow = new HudWindow(scene);
-};
-$hxClasses["MainWindow"] = MainWindow;
-MainWindow.__name__ = "MainWindow";
-MainWindow.prototype = {
-	update: function() {
-	}
-	,__class__: MainWindow
-};
-Math.__name__ = "Math";
-var MessageWindow = function(scene) {
-	this.scene = scene;
-	this.init();
-};
-$hxClasses["MessageWindow"] = MessageWindow;
-MessageWindow.__name__ = "MessageWindow";
-MessageWindow.prototype = {
-	init: function() {
-		this.drawBorder(10,360);
-		this.setupText(30,380);
-		this.setupTextInput(30,420);
-	}
-	,drawBorder: function(x,y) {
-		var border = new h2d_Graphics(this.scene);
-		var width = 350;
-		var height = 400;
-		border.lineStyle(1,11184810);
-		border.addVertex(x,y,border.curR,border.curG,border.curB,border.curA,x * border.ma + y * border.mc + border.mx,x * border.mb + y * border.md + border.my);
-		var x1 = x + width;
-		border.addVertex(x1,y,border.curR,border.curG,border.curB,border.curA,x1 * border.ma + y * border.mc + border.mx,x1 * border.mb + y * border.md + border.my);
-		var x2 = x + width;
-		var y1 = y + height;
-		border.addVertex(x2,y1,border.curR,border.curG,border.curB,border.curA,x2 * border.ma + y1 * border.mc + border.mx,x2 * border.mb + y1 * border.md + border.my);
-		var y2 = y + height;
-		border.addVertex(x,y2,border.curR,border.curG,border.curB,border.curA,x * border.ma + y2 * border.mc + border.mx,x * border.mb + y2 * border.md + border.my);
-		border.addVertex(x,y,border.curR,border.curG,border.curB,border.curA,x * border.ma + y * border.mc + border.mx,x * border.mb + y * border.md + border.my);
-	}
-	,setupText: function(x,y) {
-		this.storyText = new h2d_Text(hxd_res_DefaultFont.get(),this.scene);
-		var _this = this.storyText;
-		var _g = _this;
-		_g.posChanged = true;
-		_g.scaleX *= 2;
-		var _g1 = _this;
-		_g1.posChanged = true;
-		_g1.scaleY *= 2;
-		this.storyText.set_text("Story Text");
-		var _this1 = this.storyText;
-		_this1.posChanged = true;
-		_this1.x = x;
-		var _this2 = this.storyText;
-		_this2.posChanged = true;
-		_this2.y = y;
-		this.storyText.set_textColor(16777215);
-		this.storyText.dropShadow = { dx : 2, dy : 2, color : 11184810, alpha : 255};
-	}
-	,setupTextInput: function(x,y) {
-		var _gthis = this;
-		var font = hxd_res_DefaultFont.get();
-		this.textInput = new h2d_TextInput(font,this.scene);
-		this.textInput.set_backgroundColor(-2139062144);
-		this.textInput.set_text("This is a test message");
-		haxe_Log.trace("Added text input",{ fileName : "src/MessageWindow.hx", lineNumber : 49, className : "MessageWindow", methodName : "setupTextInput"});
-		var _this = this.textInput;
-		var _g = _this;
-		_g.posChanged = true;
-		_g.scaleX *= 2;
-		var _g1 = _this;
-		_g1.posChanged = true;
-		_g1.scaleY *= 2;
-		var _this1 = this.textInput;
-		_this1.posChanged = true;
-		_this1.x = x;
-		var _this2 = this.textInput;
-		_this2.posChanged = true;
-		_this2.y = y;
-		this.textInput.set_textColor(11184810);
-		this.textInput.onFocus = function(_) {
-			return _gthis.textInput.set_textColor(16777215);
-		};
-		this.textInput.onFocusLost = function(_1) {
-			return _gthis.textInput.set_textColor(11184810);
-		};
-	}
-	,setText: function(text) {
-		this.storyText.set_text(text);
-	}
-	,setInputText: function(text) {
-		this.textInput.set_text(text);
-	}
-	,__class__: MessageWindow
-};
-var Reflect = function() { };
-$hxClasses["Reflect"] = Reflect;
-Reflect.__name__ = "Reflect";
-Reflect.field = function(o,field) {
-	try {
-		return o[field];
-	} catch( e ) {
-		var e1 = ((e) instanceof js__$Boot_HaxeError) ? e.val : e;
-		return null;
-	}
-};
-Reflect.fields = function(o) {
-	var a = [];
-	if(o != null) {
-		var hasOwnProperty = Object.prototype.hasOwnProperty;
-		for( var f in o ) {
-		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
-			a.push(f);
-		}
-		}
-	}
-	return a;
-};
-Reflect.isFunction = function(f) {
-	if(typeof(f) == "function") {
-		return !(f.__name__ || f.__ename__);
-	} else {
-		return false;
-	}
-};
-Reflect.compare = function(a,b) {
-	if(a == b) {
-		return 0;
-	} else if(a > b) {
-		return 1;
-	} else {
-		return -1;
-	}
-};
-Reflect.compareMethods = function(f1,f2) {
-	if(f1 == f2) {
-		return true;
-	}
-	if(!Reflect.isFunction(f1) || !Reflect.isFunction(f2)) {
-		return false;
-	}
-	if(f1.scope == f2.scope && f1.method == f2.method) {
-		return f1.method != null;
-	} else {
-		return false;
-	}
-};
-Reflect.isEnumValue = function(v) {
-	if(v != null) {
-		return v.__enum__ != null;
-	} else {
-		return false;
-	}
-};
-Reflect.deleteField = function(o,field) {
-	if(!Object.prototype.hasOwnProperty.call(o,field)) {
-		return false;
-	}
-	delete(o[field]);
-	return true;
-};
-var Std = function() { };
-$hxClasses["Std"] = Std;
-Std.__name__ = "Std";
-Std.string = function(s) {
-	return js_Boot.__string_rec(s,"");
-};
-Std.parseInt = function(x) {
-	if(x != null) {
-		var _g = 0;
-		var _g1 = x.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var c = x.charCodeAt(i);
-			if(c <= 8 || c >= 14 && c != 32 && c != 45) {
-				var v = parseInt(x, (x[(i + 1)]=="x" || x[(i + 1)]=="X") ? 16 : 10);
-				if(isNaN(v)) {
-					return null;
-				} else {
-					return v;
-				}
-			}
-		}
-	}
-	return null;
-};
-Std.random = function(x) {
-	if(x <= 0) {
-		return 0;
-	} else {
-		return Math.floor(Math.random() * x);
-	}
-};
-var StringBuf = function() {
-	this.b = "";
-};
-$hxClasses["StringBuf"] = StringBuf;
-StringBuf.__name__ = "StringBuf";
-StringBuf.prototype = {
-	__class__: StringBuf
-};
-var StringTools = function() { };
-$hxClasses["StringTools"] = StringTools;
-StringTools.__name__ = "StringTools";
-StringTools.htmlEscape = function(s,quotes) {
-	var buf_b = "";
-	var _g_offset = 0;
-	var _g_s = s;
-	while(_g_offset < _g_s.length) {
-		var s1 = _g_s;
-		var index = _g_offset++;
-		var c = s1.charCodeAt(index);
-		if(c >= 55296 && c <= 56319) {
-			c = c - 55232 << 10 | s1.charCodeAt(index + 1) & 1023;
-		}
-		var c1 = c;
-		if(c1 >= 65536) {
-			++_g_offset;
-		}
-		var code = c1;
-		switch(code) {
-		case 34:
-			if(quotes) {
-				buf_b += "&quot;";
-			} else {
-				buf_b += String.fromCodePoint(code);
-			}
-			break;
-		case 38:
-			buf_b += "&amp;";
-			break;
-		case 39:
-			if(quotes) {
-				buf_b += "&#039;";
-			} else {
-				buf_b += String.fromCodePoint(code);
-			}
-			break;
-		case 60:
-			buf_b += "&lt;";
-			break;
-		case 62:
-			buf_b += "&gt;";
-			break;
-		default:
-			buf_b += String.fromCodePoint(code);
-		}
-	}
-	return buf_b;
-};
-StringTools.startsWith = function(s,start) {
-	if(s.length >= start.length) {
-		return s.lastIndexOf(start,0) == 0;
-	} else {
-		return false;
-	}
-};
-StringTools.isSpace = function(s,pos) {
-	var c = HxOverrides.cca(s,pos);
-	if(!(c > 8 && c < 14)) {
-		return c == 32;
-	} else {
-		return true;
-	}
-};
-StringTools.ltrim = function(s) {
-	var l = s.length;
-	var r = 0;
-	while(r < l && StringTools.isSpace(s,r)) ++r;
-	if(r > 0) {
-		return HxOverrides.substr(s,r,l - r);
-	} else {
-		return s;
-	}
-};
-StringTools.rtrim = function(s) {
-	var l = s.length;
-	var r = 0;
-	while(r < l && StringTools.isSpace(s,l - r - 1)) ++r;
-	if(r > 0) {
-		return HxOverrides.substr(s,0,l - r);
-	} else {
-		return s;
-	}
-};
-StringTools.trim = function(s) {
-	return StringTools.ltrim(StringTools.rtrim(s));
-};
-StringTools.hex = function(n,digits) {
-	var s = "";
-	var hexChars = "0123456789ABCDEF";
-	while(true) {
-		s = hexChars.charAt(n & 15) + s;
-		n >>>= 4;
-		if(!(n > 0)) {
-			break;
-		}
-	}
-	if(digits != null) {
-		while(s.length < digits) s = "0" + s;
-	}
-	return s;
-};
 var h2d_Object = function(parent) {
 	this.alpha = 1.;
 	this.matA = 1;
@@ -1957,6 +1238,2484 @@ h2d_Object.prototype = {
 	}
 	,__class__: h2d_Object
 };
+var h2d_Drawable = function(parent) {
+	h2d_Object.call(this,parent);
+	this.color = new h3d_Vector(1,1,1,1);
+};
+$hxClasses["h2d.Drawable"] = h2d_Drawable;
+h2d_Drawable.__name__ = "h2d.Drawable";
+h2d_Drawable.__super__ = h2d_Object;
+h2d_Drawable.prototype = $extend(h2d_Object.prototype,{
+	set_tileWrap: function(b) {
+		return this.tileWrap = b;
+	}
+	,get_colorAdd: function() {
+		var s = this.getShader(h3d_shader_ColorAdd);
+		if(s == null) {
+			return null;
+		} else {
+			return s.color__;
+		}
+	}
+	,set_colorAdd: function(c) {
+		var s = this.getShader(h3d_shader_ColorAdd);
+		if(s == null) {
+			if(c != null) {
+				s = this.addShader(new h3d_shader_ColorAdd());
+				s.color__ = c;
+			}
+		} else if(c == null) {
+			this.removeShader(s);
+		} else {
+			s.color__ = c;
+		}
+		return c;
+	}
+	,drawFiltered: function(ctx,tile) {
+		var old = this.shaders;
+		this.shaders = null;
+		h2d_Object.prototype.drawFiltered.call(this,ctx,tile);
+		this.shaders = old;
+	}
+	,set_colorKey: function(v) {
+		var s = this.getShader(h3d_shader_ColorKey);
+		if(s == null) {
+			if(v != null) {
+				s = this.addShader(new h3d_shader_ColorKey(-16777216 | v));
+			}
+		} else if(v == null) {
+			this.removeShader(s);
+		} else {
+			var _this = s.colorKey__;
+			var c = -16777216 | v;
+			_this.x = (c >> 16 & 255) / 255;
+			_this.y = (c >> 8 & 255) / 255;
+			_this.z = (c & 255) / 255;
+			_this.w = (c >>> 24) / 255;
+		}
+		return this.colorKey = v;
+	}
+	,adjustColor: function(col) {
+		if(col == null) {
+			this.set_colorMatrix(null);
+		} else {
+			var m = this.get_colorMatrix();
+			if(m == null) {
+				m = new h3d_Matrix();
+				this.set_colorMatrix(m);
+			}
+			m.identity();
+			m.adjustColor(col);
+		}
+	}
+	,get_colorMatrix: function() {
+		var s = this.getShader(h3d_shader_ColorMatrix);
+		if(s == null) {
+			return null;
+		} else {
+			return s.matrix__;
+		}
+	}
+	,set_colorMatrix: function(m) {
+		var s = this.getShader(h3d_shader_ColorMatrix);
+		if(s == null) {
+			if(m != null) {
+				s = this.addShader(new h3d_shader_ColorMatrix());
+				s.matrix__ = m;
+			}
+		} else if(m == null) {
+			this.removeShader(s);
+		} else {
+			s.matrix__ = m;
+		}
+		return m;
+	}
+	,getDebugShaderCode: function(toHxsl) {
+		if(toHxsl == null) {
+			toHxsl = true;
+		}
+		var ctx = this.getScene().ctx;
+		var shader = ctx.manager.compileShaders(new hxsl_ShaderList(ctx.baseShader,this.shaders));
+		if(toHxsl) {
+			var toString = function(s) {
+				return hxsl_Printer.shaderToString(s,true);
+			};
+			return "// vertex:\n" + toString(shader.vertex.data) + "\n\nfragment:\n" + toString(shader.fragment.data);
+		} else {
+			return h3d_Engine.CURRENT.driver.getNativeShaderCode(shader);
+		}
+	}
+	,getShader: function(stype) {
+		if(this.shaders != null) {
+			var _g_l = this.shaders;
+			var _g_last = null;
+			while(_g_l != _g_last) {
+				var s = _g_l.s;
+				_g_l = _g_l.next;
+				var s1 = s;
+				var s2 = js_Boot.__downcastCheck(s1,stype) ? s1 : null;
+				if(s2 != null) {
+					return s2;
+				}
+			}
+		}
+		return null;
+	}
+	,getShaders: function() {
+		return new hxsl__$ShaderList_ShaderIterator(this.shaders,null);
+	}
+	,addShader: function(s) {
+		if(s == null) {
+			throw new js__$Boot_HaxeError("Can't add null shader");
+		}
+		this.shaders = hxsl_ShaderList.addSort(s,this.shaders);
+		return s;
+	}
+	,removeShader: function(s) {
+		var prev = null;
+		var cur = this.shaders;
+		while(cur != null) {
+			if(cur.s == s) {
+				if(prev == null) {
+					this.shaders = cur.next;
+				} else {
+					prev.next = cur.next;
+				}
+				return true;
+			}
+			prev = cur;
+			cur = cur.next;
+		}
+		return false;
+	}
+	,emitTile: function(ctx,tile) {
+		if(tile == null) {
+			tile = new h2d_Tile(null,0,0,5,5);
+		}
+		if(!ctx.drawTile(this,tile)) {
+			return;
+		}
+		return;
+	}
+	,__class__: h2d_Drawable
+});
+var h2d_Graphics = function(parent) {
+	this.bevel = 0.25;
+	this.my = 0.;
+	this.mx = 0.;
+	this.md = 1.;
+	this.mc = 0.;
+	this.mb = 0.;
+	this.ma = 1.;
+	h2d_Drawable.call(this,parent);
+	this.content = new h2d__$Graphics_GraphicsContent();
+	this.tile = h2d_Tile.fromColor(16777215);
+	this.clear();
+};
+$hxClasses["h2d.Graphics"] = h2d_Graphics;
+h2d_Graphics.__name__ = "h2d.Graphics";
+h2d_Graphics.__super__ = h2d_Drawable;
+h2d_Graphics.prototype = $extend(h2d_Drawable.prototype,{
+	onRemove: function() {
+		h2d_Drawable.prototype.onRemove.call(this);
+		this.clear();
+	}
+	,clear: function() {
+		this.content.clear();
+		this.tmpPoints = [];
+		this.pindex = 0;
+		this.lineSize = 0;
+		this.xMin = Infinity;
+		this.yMin = Infinity;
+		this.yMax = -Infinity;
+		this.xMax = -Infinity;
+	}
+	,getBoundsRec: function(relativeTo,out,forSize) {
+		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
+		if(this.tile != null) {
+			this.addBounds(relativeTo,out,this.xMin,this.yMin,this.xMax - this.xMin,this.yMax - this.yMin);
+		}
+	}
+	,isConvex: function(points) {
+		var first = true;
+		var sign = false;
+		var _g = 0;
+		var _g1 = points.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var p1 = points[i];
+			var p2 = points[(i + 1) % points.length];
+			var p3 = points[(i + 2) % points.length];
+			var s = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) > 0;
+			if(first) {
+				first = false;
+				sign = s;
+			} else if(sign != s) {
+				return false;
+			}
+		}
+		return true;
+	}
+	,flushLine: function(start) {
+		var pts = this.tmpPoints;
+		var last = pts.length - 1;
+		var prev = pts[last];
+		var p = pts[0];
+		var closed = p.x == prev.x && p.y == prev.y;
+		var count = pts.length;
+		if(!closed) {
+			var prevLast = pts[last - 1];
+			if(prevLast == null) {
+				prevLast = p;
+			}
+			var gp = new h2d_GPoint();
+			gp.load(prev.x * 2 - prevLast.x,prev.y * 2 - prevLast.y,0,0,0,0);
+			pts.push(gp);
+			var pNext = pts[1];
+			if(pNext == null) {
+				pNext = p;
+			}
+			var gp1 = new h2d_GPoint();
+			gp1.load(p.x * 2 - pNext.x,p.y * 2 - pNext.y,0,0,0,0);
+			prev = gp1;
+		} else if(p != prev) {
+			--count;
+			--last;
+			prev = pts[last];
+		}
+		var _g = 0;
+		var _g1 = count;
+		while(_g < _g1) {
+			var i = _g++;
+			var next = pts[(i + 1) % pts.length];
+			var nx1 = prev.y - p.y;
+			var ny1 = p.x - prev.x;
+			var ns1 = 1. / Math.sqrt(nx1 * nx1 + ny1 * ny1);
+			var nx2 = p.y - next.y;
+			var ny2 = next.x - p.x;
+			var ns2 = 1. / Math.sqrt(nx2 * nx2 + ny2 * ny2);
+			var nx = nx1 * ns1 + nx2 * ns2;
+			var ny = ny1 * ns1 + ny2 * ns2;
+			var ns = 1. / Math.sqrt(nx * nx + ny * ny);
+			nx *= ns;
+			ny *= ns;
+			var size = nx * nx1 * ns1 + ny * ny1 * ns1;
+			if(size < 0.1) {
+				size = 0.1;
+			}
+			var d = this.lineSize * 0.5 / size;
+			nx *= d;
+			ny *= d;
+			if(size > this.bevel) {
+				var _this = this.content;
+				var x = p.x + nx;
+				var y = p.y + ny;
+				var r = p.r;
+				var g = p.g;
+				var b = p.b;
+				var a = p.a;
+				var this1 = _this.tmp;
+				if(this1.pos == this1.array.length) {
+					var newSize = this1.array.length << 1;
+					if(newSize < 128) {
+						newSize = 128;
+					}
+					var newArray = new Float32Array(newSize);
+					newArray.set(this1.array);
+					this1.array = newArray;
+				}
+				this1.array[this1.pos++] = x;
+				var this11 = _this.tmp;
+				if(this11.pos == this11.array.length) {
+					var newSize1 = this11.array.length << 1;
+					if(newSize1 < 128) {
+						newSize1 = 128;
+					}
+					var newArray1 = new Float32Array(newSize1);
+					newArray1.set(this11.array);
+					this11.array = newArray1;
+				}
+				this11.array[this11.pos++] = y;
+				var this12 = _this.tmp;
+				if(this12.pos == this12.array.length) {
+					var newSize2 = this12.array.length << 1;
+					if(newSize2 < 128) {
+						newSize2 = 128;
+					}
+					var newArray2 = new Float32Array(newSize2);
+					newArray2.set(this12.array);
+					this12.array = newArray2;
+				}
+				this12.array[this12.pos++] = 0;
+				var this13 = _this.tmp;
+				if(this13.pos == this13.array.length) {
+					var newSize3 = this13.array.length << 1;
+					if(newSize3 < 128) {
+						newSize3 = 128;
+					}
+					var newArray3 = new Float32Array(newSize3);
+					newArray3.set(this13.array);
+					this13.array = newArray3;
+				}
+				this13.array[this13.pos++] = 0;
+				var this14 = _this.tmp;
+				if(this14.pos == this14.array.length) {
+					var newSize4 = this14.array.length << 1;
+					if(newSize4 < 128) {
+						newSize4 = 128;
+					}
+					var newArray4 = new Float32Array(newSize4);
+					newArray4.set(this14.array);
+					this14.array = newArray4;
+				}
+				this14.array[this14.pos++] = r;
+				var this15 = _this.tmp;
+				if(this15.pos == this15.array.length) {
+					var newSize5 = this15.array.length << 1;
+					if(newSize5 < 128) {
+						newSize5 = 128;
+					}
+					var newArray5 = new Float32Array(newSize5);
+					newArray5.set(this15.array);
+					this15.array = newArray5;
+				}
+				this15.array[this15.pos++] = g;
+				var this16 = _this.tmp;
+				if(this16.pos == this16.array.length) {
+					var newSize6 = this16.array.length << 1;
+					if(newSize6 < 128) {
+						newSize6 = 128;
+					}
+					var newArray6 = new Float32Array(newSize6);
+					newArray6.set(this16.array);
+					this16.array = newArray6;
+				}
+				this16.array[this16.pos++] = b;
+				var this17 = _this.tmp;
+				if(this17.pos == this17.array.length) {
+					var newSize7 = this17.array.length << 1;
+					if(newSize7 < 128) {
+						newSize7 = 128;
+					}
+					var newArray7 = new Float32Array(newSize7);
+					newArray7.set(this17.array);
+					this17.array = newArray7;
+				}
+				this17.array[this17.pos++] = a;
+				_this.bufferDirty = true;
+				var _this1 = this.content;
+				var x1 = p.x - nx;
+				var y1 = p.y - ny;
+				var r1 = p.r;
+				var g1 = p.g;
+				var b1 = p.b;
+				var a1 = p.a;
+				var this18 = _this1.tmp;
+				if(this18.pos == this18.array.length) {
+					var newSize8 = this18.array.length << 1;
+					if(newSize8 < 128) {
+						newSize8 = 128;
+					}
+					var newArray8 = new Float32Array(newSize8);
+					newArray8.set(this18.array);
+					this18.array = newArray8;
+				}
+				this18.array[this18.pos++] = x1;
+				var this19 = _this1.tmp;
+				if(this19.pos == this19.array.length) {
+					var newSize9 = this19.array.length << 1;
+					if(newSize9 < 128) {
+						newSize9 = 128;
+					}
+					var newArray9 = new Float32Array(newSize9);
+					newArray9.set(this19.array);
+					this19.array = newArray9;
+				}
+				this19.array[this19.pos++] = y1;
+				var this110 = _this1.tmp;
+				if(this110.pos == this110.array.length) {
+					var newSize10 = this110.array.length << 1;
+					if(newSize10 < 128) {
+						newSize10 = 128;
+					}
+					var newArray10 = new Float32Array(newSize10);
+					newArray10.set(this110.array);
+					this110.array = newArray10;
+				}
+				this110.array[this110.pos++] = 0;
+				var this111 = _this1.tmp;
+				if(this111.pos == this111.array.length) {
+					var newSize11 = this111.array.length << 1;
+					if(newSize11 < 128) {
+						newSize11 = 128;
+					}
+					var newArray11 = new Float32Array(newSize11);
+					newArray11.set(this111.array);
+					this111.array = newArray11;
+				}
+				this111.array[this111.pos++] = 0;
+				var this112 = _this1.tmp;
+				if(this112.pos == this112.array.length) {
+					var newSize12 = this112.array.length << 1;
+					if(newSize12 < 128) {
+						newSize12 = 128;
+					}
+					var newArray12 = new Float32Array(newSize12);
+					newArray12.set(this112.array);
+					this112.array = newArray12;
+				}
+				this112.array[this112.pos++] = r1;
+				var this113 = _this1.tmp;
+				if(this113.pos == this113.array.length) {
+					var newSize13 = this113.array.length << 1;
+					if(newSize13 < 128) {
+						newSize13 = 128;
+					}
+					var newArray13 = new Float32Array(newSize13);
+					newArray13.set(this113.array);
+					this113.array = newArray13;
+				}
+				this113.array[this113.pos++] = g1;
+				var this114 = _this1.tmp;
+				if(this114.pos == this114.array.length) {
+					var newSize14 = this114.array.length << 1;
+					if(newSize14 < 128) {
+						newSize14 = 128;
+					}
+					var newArray14 = new Float32Array(newSize14);
+					newArray14.set(this114.array);
+					this114.array = newArray14;
+				}
+				this114.array[this114.pos++] = b1;
+				var this115 = _this1.tmp;
+				if(this115.pos == this115.array.length) {
+					var newSize15 = this115.array.length << 1;
+					if(newSize15 < 128) {
+						newSize15 = 128;
+					}
+					var newArray15 = new Float32Array(newSize15);
+					newArray15.set(this115.array);
+					this115.array = newArray15;
+				}
+				this115.array[this115.pos++] = a1;
+				_this1.bufferDirty = true;
+				var pnext = i == last ? start : this.pindex + 2;
+				if(i < count - 1 || closed) {
+					var _this2 = this.content;
+					_this2.index.push(this.pindex);
+					_this2.indexDirty = true;
+					var _this3 = this.content;
+					_this3.index.push(this.pindex + 1);
+					_this3.indexDirty = true;
+					var _this4 = this.content;
+					_this4.index.push(pnext);
+					_this4.indexDirty = true;
+					var _this5 = this.content;
+					_this5.index.push(this.pindex + 1);
+					_this5.indexDirty = true;
+					var _this6 = this.content;
+					_this6.index.push(pnext);
+					_this6.indexDirty = true;
+					var _this7 = this.content;
+					_this7.index.push(pnext + 1);
+					_this7.indexDirty = true;
+				}
+				this.pindex += 2;
+			} else {
+				var n0x = next.x - p.x;
+				var n0y = next.y - p.y;
+				var sign = n0x * nx + n0y * ny;
+				var nnx = -ny;
+				var nny = nx;
+				var size1 = nnx * nx1 * ns1 + nny * ny1 * ns1;
+				var d1 = this.lineSize * 0.5 / size1;
+				nnx *= d1;
+				nny *= d1;
+				var pnext1 = i == last ? start : this.pindex + 3;
+				if(sign > 0) {
+					var _this8 = this.content;
+					var x2 = p.x + nx;
+					var y2 = p.y + ny;
+					var r2 = p.r;
+					var g2 = p.g;
+					var b2 = p.b;
+					var a2 = p.a;
+					var this116 = _this8.tmp;
+					if(this116.pos == this116.array.length) {
+						var newSize16 = this116.array.length << 1;
+						if(newSize16 < 128) {
+							newSize16 = 128;
+						}
+						var newArray16 = new Float32Array(newSize16);
+						newArray16.set(this116.array);
+						this116.array = newArray16;
+					}
+					this116.array[this116.pos++] = x2;
+					var this117 = _this8.tmp;
+					if(this117.pos == this117.array.length) {
+						var newSize17 = this117.array.length << 1;
+						if(newSize17 < 128) {
+							newSize17 = 128;
+						}
+						var newArray17 = new Float32Array(newSize17);
+						newArray17.set(this117.array);
+						this117.array = newArray17;
+					}
+					this117.array[this117.pos++] = y2;
+					var this118 = _this8.tmp;
+					if(this118.pos == this118.array.length) {
+						var newSize18 = this118.array.length << 1;
+						if(newSize18 < 128) {
+							newSize18 = 128;
+						}
+						var newArray18 = new Float32Array(newSize18);
+						newArray18.set(this118.array);
+						this118.array = newArray18;
+					}
+					this118.array[this118.pos++] = 0;
+					var this119 = _this8.tmp;
+					if(this119.pos == this119.array.length) {
+						var newSize19 = this119.array.length << 1;
+						if(newSize19 < 128) {
+							newSize19 = 128;
+						}
+						var newArray19 = new Float32Array(newSize19);
+						newArray19.set(this119.array);
+						this119.array = newArray19;
+					}
+					this119.array[this119.pos++] = 0;
+					var this120 = _this8.tmp;
+					if(this120.pos == this120.array.length) {
+						var newSize20 = this120.array.length << 1;
+						if(newSize20 < 128) {
+							newSize20 = 128;
+						}
+						var newArray20 = new Float32Array(newSize20);
+						newArray20.set(this120.array);
+						this120.array = newArray20;
+					}
+					this120.array[this120.pos++] = r2;
+					var this121 = _this8.tmp;
+					if(this121.pos == this121.array.length) {
+						var newSize21 = this121.array.length << 1;
+						if(newSize21 < 128) {
+							newSize21 = 128;
+						}
+						var newArray21 = new Float32Array(newSize21);
+						newArray21.set(this121.array);
+						this121.array = newArray21;
+					}
+					this121.array[this121.pos++] = g2;
+					var this122 = _this8.tmp;
+					if(this122.pos == this122.array.length) {
+						var newSize22 = this122.array.length << 1;
+						if(newSize22 < 128) {
+							newSize22 = 128;
+						}
+						var newArray22 = new Float32Array(newSize22);
+						newArray22.set(this122.array);
+						this122.array = newArray22;
+					}
+					this122.array[this122.pos++] = b2;
+					var this123 = _this8.tmp;
+					if(this123.pos == this123.array.length) {
+						var newSize23 = this123.array.length << 1;
+						if(newSize23 < 128) {
+							newSize23 = 128;
+						}
+						var newArray23 = new Float32Array(newSize23);
+						newArray23.set(this123.array);
+						this123.array = newArray23;
+					}
+					this123.array[this123.pos++] = a2;
+					_this8.bufferDirty = true;
+					var _this9 = this.content;
+					var x3 = p.x - nnx;
+					var y3 = p.y - nny;
+					var r3 = p.r;
+					var g3 = p.g;
+					var b3 = p.b;
+					var a3 = p.a;
+					var this124 = _this9.tmp;
+					if(this124.pos == this124.array.length) {
+						var newSize24 = this124.array.length << 1;
+						if(newSize24 < 128) {
+							newSize24 = 128;
+						}
+						var newArray24 = new Float32Array(newSize24);
+						newArray24.set(this124.array);
+						this124.array = newArray24;
+					}
+					this124.array[this124.pos++] = x3;
+					var this125 = _this9.tmp;
+					if(this125.pos == this125.array.length) {
+						var newSize25 = this125.array.length << 1;
+						if(newSize25 < 128) {
+							newSize25 = 128;
+						}
+						var newArray25 = new Float32Array(newSize25);
+						newArray25.set(this125.array);
+						this125.array = newArray25;
+					}
+					this125.array[this125.pos++] = y3;
+					var this126 = _this9.tmp;
+					if(this126.pos == this126.array.length) {
+						var newSize26 = this126.array.length << 1;
+						if(newSize26 < 128) {
+							newSize26 = 128;
+						}
+						var newArray26 = new Float32Array(newSize26);
+						newArray26.set(this126.array);
+						this126.array = newArray26;
+					}
+					this126.array[this126.pos++] = 0;
+					var this127 = _this9.tmp;
+					if(this127.pos == this127.array.length) {
+						var newSize27 = this127.array.length << 1;
+						if(newSize27 < 128) {
+							newSize27 = 128;
+						}
+						var newArray27 = new Float32Array(newSize27);
+						newArray27.set(this127.array);
+						this127.array = newArray27;
+					}
+					this127.array[this127.pos++] = 0;
+					var this128 = _this9.tmp;
+					if(this128.pos == this128.array.length) {
+						var newSize28 = this128.array.length << 1;
+						if(newSize28 < 128) {
+							newSize28 = 128;
+						}
+						var newArray28 = new Float32Array(newSize28);
+						newArray28.set(this128.array);
+						this128.array = newArray28;
+					}
+					this128.array[this128.pos++] = r3;
+					var this129 = _this9.tmp;
+					if(this129.pos == this129.array.length) {
+						var newSize29 = this129.array.length << 1;
+						if(newSize29 < 128) {
+							newSize29 = 128;
+						}
+						var newArray29 = new Float32Array(newSize29);
+						newArray29.set(this129.array);
+						this129.array = newArray29;
+					}
+					this129.array[this129.pos++] = g3;
+					var this130 = _this9.tmp;
+					if(this130.pos == this130.array.length) {
+						var newSize30 = this130.array.length << 1;
+						if(newSize30 < 128) {
+							newSize30 = 128;
+						}
+						var newArray30 = new Float32Array(newSize30);
+						newArray30.set(this130.array);
+						this130.array = newArray30;
+					}
+					this130.array[this130.pos++] = b3;
+					var this131 = _this9.tmp;
+					if(this131.pos == this131.array.length) {
+						var newSize31 = this131.array.length << 1;
+						if(newSize31 < 128) {
+							newSize31 = 128;
+						}
+						var newArray31 = new Float32Array(newSize31);
+						newArray31.set(this131.array);
+						this131.array = newArray31;
+					}
+					this131.array[this131.pos++] = a3;
+					_this9.bufferDirty = true;
+					var _this10 = this.content;
+					var x4 = p.x + nnx;
+					var y4 = p.y + nny;
+					var r4 = p.r;
+					var g4 = p.g;
+					var b4 = p.b;
+					var a4 = p.a;
+					var this132 = _this10.tmp;
+					if(this132.pos == this132.array.length) {
+						var newSize32 = this132.array.length << 1;
+						if(newSize32 < 128) {
+							newSize32 = 128;
+						}
+						var newArray32 = new Float32Array(newSize32);
+						newArray32.set(this132.array);
+						this132.array = newArray32;
+					}
+					this132.array[this132.pos++] = x4;
+					var this133 = _this10.tmp;
+					if(this133.pos == this133.array.length) {
+						var newSize33 = this133.array.length << 1;
+						if(newSize33 < 128) {
+							newSize33 = 128;
+						}
+						var newArray33 = new Float32Array(newSize33);
+						newArray33.set(this133.array);
+						this133.array = newArray33;
+					}
+					this133.array[this133.pos++] = y4;
+					var this134 = _this10.tmp;
+					if(this134.pos == this134.array.length) {
+						var newSize34 = this134.array.length << 1;
+						if(newSize34 < 128) {
+							newSize34 = 128;
+						}
+						var newArray34 = new Float32Array(newSize34);
+						newArray34.set(this134.array);
+						this134.array = newArray34;
+					}
+					this134.array[this134.pos++] = 0;
+					var this135 = _this10.tmp;
+					if(this135.pos == this135.array.length) {
+						var newSize35 = this135.array.length << 1;
+						if(newSize35 < 128) {
+							newSize35 = 128;
+						}
+						var newArray35 = new Float32Array(newSize35);
+						newArray35.set(this135.array);
+						this135.array = newArray35;
+					}
+					this135.array[this135.pos++] = 0;
+					var this136 = _this10.tmp;
+					if(this136.pos == this136.array.length) {
+						var newSize36 = this136.array.length << 1;
+						if(newSize36 < 128) {
+							newSize36 = 128;
+						}
+						var newArray36 = new Float32Array(newSize36);
+						newArray36.set(this136.array);
+						this136.array = newArray36;
+					}
+					this136.array[this136.pos++] = r4;
+					var this137 = _this10.tmp;
+					if(this137.pos == this137.array.length) {
+						var newSize37 = this137.array.length << 1;
+						if(newSize37 < 128) {
+							newSize37 = 128;
+						}
+						var newArray37 = new Float32Array(newSize37);
+						newArray37.set(this137.array);
+						this137.array = newArray37;
+					}
+					this137.array[this137.pos++] = g4;
+					var this138 = _this10.tmp;
+					if(this138.pos == this138.array.length) {
+						var newSize38 = this138.array.length << 1;
+						if(newSize38 < 128) {
+							newSize38 = 128;
+						}
+						var newArray38 = new Float32Array(newSize38);
+						newArray38.set(this138.array);
+						this138.array = newArray38;
+					}
+					this138.array[this138.pos++] = b4;
+					var this139 = _this10.tmp;
+					if(this139.pos == this139.array.length) {
+						var newSize39 = this139.array.length << 1;
+						if(newSize39 < 128) {
+							newSize39 = 128;
+						}
+						var newArray39 = new Float32Array(newSize39);
+						newArray39.set(this139.array);
+						this139.array = newArray39;
+					}
+					this139.array[this139.pos++] = a4;
+					_this10.bufferDirty = true;
+					var _this11 = this.content;
+					_this11.index.push(this.pindex);
+					_this11.indexDirty = true;
+					var _this12 = this.content;
+					_this12.index.push(pnext1);
+					_this12.indexDirty = true;
+					var _this13 = this.content;
+					_this13.index.push(this.pindex + 2);
+					_this13.indexDirty = true;
+					var _this14 = this.content;
+					_this14.index.push(this.pindex + 2);
+					_this14.indexDirty = true;
+					var _this15 = this.content;
+					_this15.index.push(pnext1);
+					_this15.indexDirty = true;
+					var _this16 = this.content;
+					_this16.index.push(pnext1 + 1);
+					_this16.indexDirty = true;
+				} else {
+					var _this17 = this.content;
+					var x5 = p.x + nnx;
+					var y5 = p.y + nny;
+					var r5 = p.r;
+					var g5 = p.g;
+					var b5 = p.b;
+					var a5 = p.a;
+					var this140 = _this17.tmp;
+					if(this140.pos == this140.array.length) {
+						var newSize40 = this140.array.length << 1;
+						if(newSize40 < 128) {
+							newSize40 = 128;
+						}
+						var newArray40 = new Float32Array(newSize40);
+						newArray40.set(this140.array);
+						this140.array = newArray40;
+					}
+					this140.array[this140.pos++] = x5;
+					var this141 = _this17.tmp;
+					if(this141.pos == this141.array.length) {
+						var newSize41 = this141.array.length << 1;
+						if(newSize41 < 128) {
+							newSize41 = 128;
+						}
+						var newArray41 = new Float32Array(newSize41);
+						newArray41.set(this141.array);
+						this141.array = newArray41;
+					}
+					this141.array[this141.pos++] = y5;
+					var this142 = _this17.tmp;
+					if(this142.pos == this142.array.length) {
+						var newSize42 = this142.array.length << 1;
+						if(newSize42 < 128) {
+							newSize42 = 128;
+						}
+						var newArray42 = new Float32Array(newSize42);
+						newArray42.set(this142.array);
+						this142.array = newArray42;
+					}
+					this142.array[this142.pos++] = 0;
+					var this143 = _this17.tmp;
+					if(this143.pos == this143.array.length) {
+						var newSize43 = this143.array.length << 1;
+						if(newSize43 < 128) {
+							newSize43 = 128;
+						}
+						var newArray43 = new Float32Array(newSize43);
+						newArray43.set(this143.array);
+						this143.array = newArray43;
+					}
+					this143.array[this143.pos++] = 0;
+					var this144 = _this17.tmp;
+					if(this144.pos == this144.array.length) {
+						var newSize44 = this144.array.length << 1;
+						if(newSize44 < 128) {
+							newSize44 = 128;
+						}
+						var newArray44 = new Float32Array(newSize44);
+						newArray44.set(this144.array);
+						this144.array = newArray44;
+					}
+					this144.array[this144.pos++] = r5;
+					var this145 = _this17.tmp;
+					if(this145.pos == this145.array.length) {
+						var newSize45 = this145.array.length << 1;
+						if(newSize45 < 128) {
+							newSize45 = 128;
+						}
+						var newArray45 = new Float32Array(newSize45);
+						newArray45.set(this145.array);
+						this145.array = newArray45;
+					}
+					this145.array[this145.pos++] = g5;
+					var this146 = _this17.tmp;
+					if(this146.pos == this146.array.length) {
+						var newSize46 = this146.array.length << 1;
+						if(newSize46 < 128) {
+							newSize46 = 128;
+						}
+						var newArray46 = new Float32Array(newSize46);
+						newArray46.set(this146.array);
+						this146.array = newArray46;
+					}
+					this146.array[this146.pos++] = b5;
+					var this147 = _this17.tmp;
+					if(this147.pos == this147.array.length) {
+						var newSize47 = this147.array.length << 1;
+						if(newSize47 < 128) {
+							newSize47 = 128;
+						}
+						var newArray47 = new Float32Array(newSize47);
+						newArray47.set(this147.array);
+						this147.array = newArray47;
+					}
+					this147.array[this147.pos++] = a5;
+					_this17.bufferDirty = true;
+					var _this18 = this.content;
+					var x6 = p.x - nx;
+					var y6 = p.y - ny;
+					var r6 = p.r;
+					var g6 = p.g;
+					var b6 = p.b;
+					var a6 = p.a;
+					var this148 = _this18.tmp;
+					if(this148.pos == this148.array.length) {
+						var newSize48 = this148.array.length << 1;
+						if(newSize48 < 128) {
+							newSize48 = 128;
+						}
+						var newArray48 = new Float32Array(newSize48);
+						newArray48.set(this148.array);
+						this148.array = newArray48;
+					}
+					this148.array[this148.pos++] = x6;
+					var this149 = _this18.tmp;
+					if(this149.pos == this149.array.length) {
+						var newSize49 = this149.array.length << 1;
+						if(newSize49 < 128) {
+							newSize49 = 128;
+						}
+						var newArray49 = new Float32Array(newSize49);
+						newArray49.set(this149.array);
+						this149.array = newArray49;
+					}
+					this149.array[this149.pos++] = y6;
+					var this150 = _this18.tmp;
+					if(this150.pos == this150.array.length) {
+						var newSize50 = this150.array.length << 1;
+						if(newSize50 < 128) {
+							newSize50 = 128;
+						}
+						var newArray50 = new Float32Array(newSize50);
+						newArray50.set(this150.array);
+						this150.array = newArray50;
+					}
+					this150.array[this150.pos++] = 0;
+					var this151 = _this18.tmp;
+					if(this151.pos == this151.array.length) {
+						var newSize51 = this151.array.length << 1;
+						if(newSize51 < 128) {
+							newSize51 = 128;
+						}
+						var newArray51 = new Float32Array(newSize51);
+						newArray51.set(this151.array);
+						this151.array = newArray51;
+					}
+					this151.array[this151.pos++] = 0;
+					var this152 = _this18.tmp;
+					if(this152.pos == this152.array.length) {
+						var newSize52 = this152.array.length << 1;
+						if(newSize52 < 128) {
+							newSize52 = 128;
+						}
+						var newArray52 = new Float32Array(newSize52);
+						newArray52.set(this152.array);
+						this152.array = newArray52;
+					}
+					this152.array[this152.pos++] = r6;
+					var this153 = _this18.tmp;
+					if(this153.pos == this153.array.length) {
+						var newSize53 = this153.array.length << 1;
+						if(newSize53 < 128) {
+							newSize53 = 128;
+						}
+						var newArray53 = new Float32Array(newSize53);
+						newArray53.set(this153.array);
+						this153.array = newArray53;
+					}
+					this153.array[this153.pos++] = g6;
+					var this154 = _this18.tmp;
+					if(this154.pos == this154.array.length) {
+						var newSize54 = this154.array.length << 1;
+						if(newSize54 < 128) {
+							newSize54 = 128;
+						}
+						var newArray54 = new Float32Array(newSize54);
+						newArray54.set(this154.array);
+						this154.array = newArray54;
+					}
+					this154.array[this154.pos++] = b6;
+					var this155 = _this18.tmp;
+					if(this155.pos == this155.array.length) {
+						var newSize55 = this155.array.length << 1;
+						if(newSize55 < 128) {
+							newSize55 = 128;
+						}
+						var newArray55 = new Float32Array(newSize55);
+						newArray55.set(this155.array);
+						this155.array = newArray55;
+					}
+					this155.array[this155.pos++] = a6;
+					_this18.bufferDirty = true;
+					var _this19 = this.content;
+					var x7 = p.x - nnx;
+					var y7 = p.y - nny;
+					var r7 = p.r;
+					var g7 = p.g;
+					var b7 = p.b;
+					var a7 = p.a;
+					var this156 = _this19.tmp;
+					if(this156.pos == this156.array.length) {
+						var newSize56 = this156.array.length << 1;
+						if(newSize56 < 128) {
+							newSize56 = 128;
+						}
+						var newArray56 = new Float32Array(newSize56);
+						newArray56.set(this156.array);
+						this156.array = newArray56;
+					}
+					this156.array[this156.pos++] = x7;
+					var this157 = _this19.tmp;
+					if(this157.pos == this157.array.length) {
+						var newSize57 = this157.array.length << 1;
+						if(newSize57 < 128) {
+							newSize57 = 128;
+						}
+						var newArray57 = new Float32Array(newSize57);
+						newArray57.set(this157.array);
+						this157.array = newArray57;
+					}
+					this157.array[this157.pos++] = y7;
+					var this158 = _this19.tmp;
+					if(this158.pos == this158.array.length) {
+						var newSize58 = this158.array.length << 1;
+						if(newSize58 < 128) {
+							newSize58 = 128;
+						}
+						var newArray58 = new Float32Array(newSize58);
+						newArray58.set(this158.array);
+						this158.array = newArray58;
+					}
+					this158.array[this158.pos++] = 0;
+					var this159 = _this19.tmp;
+					if(this159.pos == this159.array.length) {
+						var newSize59 = this159.array.length << 1;
+						if(newSize59 < 128) {
+							newSize59 = 128;
+						}
+						var newArray59 = new Float32Array(newSize59);
+						newArray59.set(this159.array);
+						this159.array = newArray59;
+					}
+					this159.array[this159.pos++] = 0;
+					var this160 = _this19.tmp;
+					if(this160.pos == this160.array.length) {
+						var newSize60 = this160.array.length << 1;
+						if(newSize60 < 128) {
+							newSize60 = 128;
+						}
+						var newArray60 = new Float32Array(newSize60);
+						newArray60.set(this160.array);
+						this160.array = newArray60;
+					}
+					this160.array[this160.pos++] = r7;
+					var this161 = _this19.tmp;
+					if(this161.pos == this161.array.length) {
+						var newSize61 = this161.array.length << 1;
+						if(newSize61 < 128) {
+							newSize61 = 128;
+						}
+						var newArray61 = new Float32Array(newSize61);
+						newArray61.set(this161.array);
+						this161.array = newArray61;
+					}
+					this161.array[this161.pos++] = g7;
+					var this162 = _this19.tmp;
+					if(this162.pos == this162.array.length) {
+						var newSize62 = this162.array.length << 1;
+						if(newSize62 < 128) {
+							newSize62 = 128;
+						}
+						var newArray62 = new Float32Array(newSize62);
+						newArray62.set(this162.array);
+						this162.array = newArray62;
+					}
+					this162.array[this162.pos++] = b7;
+					var this163 = _this19.tmp;
+					if(this163.pos == this163.array.length) {
+						var newSize63 = this163.array.length << 1;
+						if(newSize63 < 128) {
+							newSize63 = 128;
+						}
+						var newArray63 = new Float32Array(newSize63);
+						newArray63.set(this163.array);
+						this163.array = newArray63;
+					}
+					this163.array[this163.pos++] = a7;
+					_this19.bufferDirty = true;
+					var _this20 = this.content;
+					_this20.index.push(this.pindex + 1);
+					_this20.indexDirty = true;
+					var _this21 = this.content;
+					_this21.index.push(pnext1);
+					_this21.indexDirty = true;
+					var _this22 = this.content;
+					_this22.index.push(this.pindex + 2);
+					_this22.indexDirty = true;
+					var _this23 = this.content;
+					_this23.index.push(this.pindex + 1);
+					_this23.indexDirty = true;
+					var _this24 = this.content;
+					_this24.index.push(pnext1);
+					_this24.indexDirty = true;
+					var _this25 = this.content;
+					_this25.index.push(pnext1 + 1);
+					_this25.indexDirty = true;
+				}
+				var _this26 = this.content;
+				_this26.index.push(this.pindex);
+				_this26.indexDirty = true;
+				var _this27 = this.content;
+				_this27.index.push(this.pindex + 1);
+				_this27.indexDirty = true;
+				var _this28 = this.content;
+				_this28.index.push(this.pindex + 2);
+				_this28.indexDirty = true;
+				this.pindex += 3;
+			}
+			prev = p;
+			p = next;
+		}
+	}
+	,flushFill: function(i0) {
+		if(this.tmpPoints.length < 3) {
+			return;
+		}
+		var pts = this.tmpPoints;
+		var p0 = pts[0];
+		var p1 = pts[pts.length - 1];
+		var last = null;
+		var tmp;
+		var f = p0.x - p1.x;
+		if((f < 0 ? -f : f) < 1e-9) {
+			var f1 = p0.y - p1.y;
+			tmp = (f1 < 0 ? -f1 : f1) < 1e-9;
+		} else {
+			tmp = false;
+		}
+		if(tmp) {
+			last = pts.pop();
+		}
+		if(this.isConvex(pts)) {
+			var _g = 1;
+			var _g1 = pts.length - 1;
+			while(_g < _g1) {
+				var i = _g++;
+				var _this = this.content;
+				_this.index.push(i0);
+				_this.indexDirty = true;
+				var _this1 = this.content;
+				_this1.index.push(i0 + i);
+				_this1.indexDirty = true;
+				var _this2 = this.content;
+				_this2.index.push(i0 + i + 1);
+				_this2.indexDirty = true;
+			}
+		} else {
+			var ear = h2d_Graphics.EARCUT;
+			if(ear == null) {
+				ear = new hxd_earcut_Earcut();
+				h2d_Graphics.EARCUT = ear;
+			}
+			var _g2 = 0;
+			var _g11 = ear.triangulate_h2d_GPoint(pts);
+			while(_g2 < _g11.length) {
+				var i1 = _g11[_g2];
+				++_g2;
+				var _this3 = this.content;
+				_this3.index.push(i1 + i0);
+				_this3.indexDirty = true;
+			}
+		}
+		if(last != null) {
+			pts.push(last);
+		}
+	}
+	,flush: function() {
+		if(this.tmpPoints.length == 0) {
+			return;
+		}
+		if(this.doFill) {
+			this.flushFill(this.pindex);
+			this.pindex += this.tmpPoints.length;
+			if(this.content.next()) {
+				this.pindex = 0;
+			}
+		}
+		if(this.lineSize > 0) {
+			this.flushLine(this.pindex);
+			if(this.content.next()) {
+				this.pindex = 0;
+			}
+		}
+		this.tmpPoints = [];
+	}
+	,beginFill: function(color,alpha) {
+		if(alpha == null) {
+			alpha = 1.;
+		}
+		if(color == null) {
+			color = 0;
+		}
+		this.flush();
+		var alpha1 = alpha;
+		if(alpha1 == null) {
+			alpha1 = 1.;
+		}
+		this.curA = alpha1;
+		this.curR = (color >> 16 & 255) / 255.;
+		this.curG = (color >> 8 & 255) / 255.;
+		this.curB = (color & 255) / 255.;
+		this.doFill = true;
+	}
+	,beginTileFill: function(dx,dy,scaleX,scaleY,tile) {
+		this.beginFill(16777215);
+		if(dx == null) {
+			dx = 0;
+		}
+		if(dy == null) {
+			dy = 0;
+		}
+		if(tile != null) {
+			if(this.tile != null && tile.innerTex != this.tile.innerTex) {
+				var tex = this.tile.innerTex;
+				if(tex.width != 1 || tex.height != 1) {
+					throw new js__$Boot_HaxeError("All tiles must be of the same texture");
+				}
+				this.tile = tile;
+			}
+			if(this.tile == null) {
+				this.tile = tile;
+			}
+		} else {
+			tile = this.tile;
+		}
+		if(tile == null) {
+			throw new js__$Boot_HaxeError("Tile not specified");
+		}
+		if(scaleX == null) {
+			scaleX = 1;
+		}
+		if(scaleY == null) {
+			scaleY = 1;
+		}
+		dx -= tile.x;
+		dy -= tile.y;
+		var tex1 = tile.innerTex;
+		var pixWidth = 1 / tex1.width;
+		var pixHeight = 1 / tex1.height;
+		this.ma = pixWidth / scaleX;
+		this.mb = 0;
+		this.mc = 0;
+		this.md = pixHeight / scaleY;
+		this.mx = -dx * this.ma;
+		this.my = -dy * this.md;
+	}
+	,drawTile: function(x,y,tile) {
+		this.beginTileFill(x,y,null,null,tile);
+		this.drawRect(x,y,tile.width,tile.height);
+		this.endFill();
+	}
+	,lineStyle: function(size,color,alpha) {
+		if(alpha == null) {
+			alpha = 1.;
+		}
+		if(color == null) {
+			color = 0;
+		}
+		if(size == null) {
+			size = 0;
+		}
+		this.flush();
+		this.lineSize = size;
+		this.lineA = alpha;
+		this.lineR = (color >> 16 & 255) / 255.;
+		this.lineG = (color >> 8 & 255) / 255.;
+		this.lineB = (color & 255) / 255.;
+	}
+	,moveTo: function(x,y) {
+		this.flush();
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+	}
+	,endFill: function() {
+		this.flush();
+		this.doFill = false;
+	}
+	,setColor: function(color,alpha) {
+		if(alpha == null) {
+			alpha = 1.;
+		}
+		this.curA = alpha;
+		this.curR = (color >> 16 & 255) / 255.;
+		this.curG = (color >> 8 & 255) / 255.;
+		this.curB = (color & 255) / 255.;
+	}
+	,drawRect: function(x,y,w,h) {
+		this.flush();
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		var x1 = x + w;
+		this.addVertex(x1,y,this.curR,this.curG,this.curB,this.curA,x1 * this.ma + y * this.mc + this.mx,x1 * this.mb + y * this.md + this.my);
+		var x2 = x + w;
+		var y1 = y + h;
+		this.addVertex(x2,y1,this.curR,this.curG,this.curB,this.curA,x2 * this.ma + y1 * this.mc + this.mx,x2 * this.mb + y1 * this.md + this.my);
+		var y2 = y + h;
+		this.addVertex(x,y2,this.curR,this.curG,this.curB,this.curA,x * this.ma + y2 * this.mc + this.mx,x * this.mb + y2 * this.md + this.my);
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		var e = 0.01;
+		this.tmpPoints[0].x += e;
+		this.tmpPoints[0].y += e;
+		this.tmpPoints[1].y += e;
+		this.tmpPoints[3].x += e;
+		this.tmpPoints[4].x += e;
+		this.tmpPoints[4].y += e;
+		this.flush();
+	}
+	,drawRoundedRect: function(x,y,w,h,radius,nsegments) {
+		if(nsegments == null) {
+			nsegments = 0;
+		}
+		var _gthis = this;
+		if(radius <= 0) {
+			this.drawRect(x,y,w,h);
+			return;
+		}
+		x += radius;
+		y += radius;
+		w -= radius * 2;
+		h -= radius * 2;
+		this.flush();
+		if(nsegments == 0) {
+			var f = radius * 1.57079632679489656 / 4;
+			nsegments = Math.ceil(f < 0 ? -f : f);
+		}
+		if(nsegments < 3) {
+			nsegments = 3;
+		}
+		var angle = 1.57079632679489656 / (nsegments - 1);
+		var y1 = y - radius;
+		this.addVertex(x,y1,this.curR,this.curG,this.curB,this.curA,x * this.ma + y1 * this.mc + this.mx,x * this.mb + y1 * this.md + this.my);
+		var x1 = x + w;
+		var y2 = y - radius;
+		this.addVertex(x1,y2,this.curR,this.curG,this.curB,this.curA,x1 * this.ma + y2 * this.mc + this.mx,x1 * this.mb + y2 * this.md + this.my);
+		var x2 = x + w;
+		var _g = 0;
+		var _g1 = nsegments;
+		while(_g < _g1) {
+			var i = _g++;
+			var a = i * angle + 4.71238898038469;
+			var x3 = x2 + Math.cos(a) * radius;
+			var y3 = y + Math.sin(a) * radius;
+			_gthis.addVertex(x3,y3,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x3 * _gthis.ma + y3 * _gthis.mc + _gthis.mx,x3 * _gthis.mb + y3 * _gthis.md + _gthis.my);
+		}
+		var x4 = x + w + radius;
+		var y4 = y + h;
+		this.addVertex(x4,y4,this.curR,this.curG,this.curB,this.curA,x4 * this.ma + y4 * this.mc + this.mx,x4 * this.mb + y4 * this.md + this.my);
+		var x5 = x + w;
+		var y5 = y + h;
+		var _g2 = 0;
+		var _g11 = nsegments;
+		while(_g2 < _g11) {
+			var i1 = _g2++;
+			var a1 = i1 * angle;
+			var x6 = x5 + Math.cos(a1) * radius;
+			var y6 = y5 + Math.sin(a1) * radius;
+			_gthis.addVertex(x6,y6,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x6 * _gthis.ma + y6 * _gthis.mc + _gthis.mx,x6 * _gthis.mb + y6 * _gthis.md + _gthis.my);
+		}
+		var y7 = y + h + radius;
+		this.addVertex(x,y7,this.curR,this.curG,this.curB,this.curA,x * this.ma + y7 * this.mc + this.mx,x * this.mb + y7 * this.md + this.my);
+		var y8 = y + h;
+		var _g3 = 0;
+		var _g12 = nsegments;
+		while(_g3 < _g12) {
+			var i2 = _g3++;
+			var a2 = i2 * angle + 1.57079632679489656;
+			var x7 = x + Math.cos(a2) * radius;
+			var y9 = y8 + Math.sin(a2) * radius;
+			_gthis.addVertex(x7,y9,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x7 * _gthis.ma + y9 * _gthis.mc + _gthis.mx,x7 * _gthis.mb + y9 * _gthis.md + _gthis.my);
+		}
+		var x8 = x - radius;
+		this.addVertex(x8,y,this.curR,this.curG,this.curB,this.curA,x8 * this.ma + y * this.mc + this.mx,x8 * this.mb + y * this.md + this.my);
+		var _g4 = 0;
+		var _g13 = nsegments;
+		while(_g4 < _g13) {
+			var i3 = _g4++;
+			var a3 = i3 * angle + 3.14159265358979312;
+			var x9 = x + Math.cos(a3) * radius;
+			var y10 = y + Math.sin(a3) * radius;
+			_gthis.addVertex(x9,y10,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x9 * _gthis.ma + y10 * _gthis.mc + _gthis.mx,x9 * _gthis.mb + y10 * _gthis.md + _gthis.my);
+		}
+		this.flush();
+	}
+	,drawCircle: function(cx,cy,radius,nsegments) {
+		if(nsegments == null) {
+			nsegments = 0;
+		}
+		this.flush();
+		if(nsegments == 0) {
+			var f = radius * 3.14 * 2 / 4;
+			nsegments = Math.ceil(f < 0 ? -f : f);
+		}
+		if(nsegments < 3) {
+			nsegments = 3;
+		}
+		var angle = 6.28318530717958623 / nsegments;
+		var _g = 0;
+		var _g1 = nsegments + 1;
+		while(_g < _g1) {
+			var i = _g++;
+			var a = i * angle;
+			var x = cx + Math.cos(a) * radius;
+			var y = cy + Math.sin(a) * radius;
+			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		}
+		this.flush();
+	}
+	,drawEllipse: function(cx,cy,radiusX,radiusY,rotationAngle,nsegments) {
+		if(nsegments == null) {
+			nsegments = 0;
+		}
+		if(rotationAngle == null) {
+			rotationAngle = 0;
+		}
+		this.flush();
+		if(nsegments == 0) {
+			var f = radiusY * 3.14 * 2 / 4;
+			nsegments = Math.ceil(f < 0 ? -f : f);
+		}
+		if(nsegments < 3) {
+			nsegments = 3;
+		}
+		var angle = 6.28318530717958623 / nsegments;
+		var x1;
+		var y1;
+		var _g = 0;
+		var _g1 = nsegments + 1;
+		while(_g < _g1) {
+			var i = _g++;
+			var a = i * angle;
+			x1 = Math.cos(a) * Math.cos(rotationAngle) * radiusX - Math.sin(a) * Math.sin(rotationAngle) * radiusY;
+			y1 = Math.cos(rotationAngle) * Math.sin(a) * radiusY + Math.cos(a) * Math.sin(rotationAngle) * radiusX;
+			var x = cx + x1;
+			var y = cy + y1;
+			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		}
+		this.flush();
+	}
+	,drawPie: function(cx,cy,radius,angleStart,angleLength,nsegments) {
+		if(nsegments == null) {
+			nsegments = 0;
+		}
+		if((angleLength < 0 ? -angleLength : angleLength) >= 6.28318530717958623) {
+			this.drawCircle(cx,cy,radius,nsegments);
+			return;
+		}
+		this.flush();
+		this.addVertex(cx,cy,this.curR,this.curG,this.curB,this.curA,cx * this.ma + cy * this.mc + this.mx,cx * this.mb + cy * this.md + this.my);
+		if(nsegments == 0) {
+			var f = radius * angleLength / 4;
+			nsegments = Math.ceil(f < 0 ? -f : f);
+		}
+		if(nsegments < 3) {
+			nsegments = 3;
+		}
+		var angle = angleLength / (nsegments - 1);
+		var _g = 0;
+		var _g1 = nsegments;
+		while(_g < _g1) {
+			var i = _g++;
+			var a = i * angle + angleStart;
+			var x = cx + Math.cos(a) * radius;
+			var y = cy + Math.sin(a) * radius;
+			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		}
+		this.addVertex(cx,cy,this.curR,this.curG,this.curB,this.curA,cx * this.ma + cy * this.mc + this.mx,cx * this.mb + cy * this.md + this.my);
+		this.flush();
+	}
+	,drawRectanglePie: function(cx,cy,width,height,angleStart,angleLength,nsegments) {
+		if(nsegments == null) {
+			nsegments = 0;
+		}
+		if((angleLength < 0 ? -angleLength : angleLength) >= 6.28318530717958623) {
+			this.drawRect(cx - width / 2,cy - height / 2,width,height);
+			return;
+		}
+		this.flush();
+		this.addVertex(cx,cy,this.curR,this.curG,this.curB,this.curA,cx * this.ma + cy * this.mc + this.mx,cx * this.mb + cy * this.md + this.my);
+		if(nsegments == 0) {
+			var f = (width < height ? height : width) * angleLength / 4;
+			nsegments = Math.ceil(f < 0 ? -f : f);
+		}
+		if(nsegments < 3) {
+			nsegments = 3;
+		}
+		var angle = angleLength / (nsegments - 1);
+		var square2 = Math.sqrt(2);
+		var _g = 0;
+		var _g1 = nsegments;
+		while(_g < _g1) {
+			var i = _g++;
+			var a = i * angle + angleStart;
+			var _width = Math.cos(a) * (width / 2 + 1) * square2;
+			var _height = Math.sin(a) * (height / 2 + 1) * square2;
+			_width = (_width < 0 ? -_width : _width) >= width / 2 ? Math.cos(a) < 0 ? width / 2 * -1 : width / 2 : _width;
+			_height = (_height < 0 ? -_height : _height) >= height / 2 ? Math.sin(a) < 0 ? height / 2 * -1 : height / 2 : _height;
+			var x = cx + _width;
+			var y = cy + _height;
+			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		}
+		this.addVertex(cx,cy,this.curR,this.curG,this.curB,this.curA,cx * this.ma + cy * this.mc + this.mx,cx * this.mb + cy * this.md + this.my);
+		this.flush();
+	}
+	,curveTo: function(bx,by,cx,cy) {
+		var ax = this.tmpPoints.length == 0 ? 0 : this.tmpPoints[this.tmpPoints.length - 1].x;
+		var ay = this.tmpPoints.length == 0 ? 0 : this.tmpPoints[this.tmpPoints.length - 1].y;
+		var t = 0.66666666666666663;
+		this.cubicCurveTo(ax + t * (bx - ax),ay + t * (by - ay),cx + t * (bx - cx),cy + t * (by - cy),cx,cy);
+	}
+	,cubicCurveTo: function(bx,by,cx,cy,dx,dy,nsegments) {
+		if(nsegments == null) {
+			nsegments = 40;
+		}
+		var ax = this.tmpPoints.length == 0 ? 0 : this.tmpPoints[this.tmpPoints.length - 1].x;
+		var ay = this.tmpPoints.length == 0 ? 0 : this.tmpPoints[this.tmpPoints.length - 1].y;
+		var tobx = bx - ax;
+		var toby = by - ay;
+		var tocx = cx - bx;
+		var tocy = cy - by;
+		var todx = dx - cx;
+		var tody = dy - cy;
+		var step = 1 / nsegments;
+		var _g = 1;
+		var _g1 = nsegments;
+		while(_g < _g1) {
+			var i = _g++;
+			var d = i * step;
+			var px = ax + d * tobx;
+			var py = ay + d * toby;
+			var qx = bx + d * tocx;
+			var qy = by + d * tocy;
+			var rx = cx + d * todx;
+			var ry = cy + d * tody;
+			var toqx = qx - px;
+			var toqy = qy - py;
+			var torx = rx - qx;
+			var tory = ry - qy;
+			var sx = px + d * toqx;
+			var sy = py + d * toqy;
+			var tx = qx + d * torx;
+			var ty = qy + d * tory;
+			var totx = tx - sx;
+			var toty = ty - sy;
+			var x = sx + d * totx;
+			var y = sy + d * toty;
+			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		}
+		this.addVertex(dx,dy,this.curR,this.curG,this.curB,this.curA,dx * this.ma + dy * this.mc + this.mx,dx * this.mb + dy * this.md + this.my);
+	}
+	,lineTo: function(x,y) {
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+	}
+	,addVertex: function(x,y,r,g,b,a,u,v) {
+		if(v == null) {
+			v = 0.;
+		}
+		if(u == null) {
+			u = 0.;
+		}
+		if(x < this.xMin) {
+			this.xMin = x;
+		}
+		if(y < this.yMin) {
+			this.yMin = y;
+		}
+		if(x > this.xMax) {
+			this.xMax = x;
+		}
+		if(y > this.yMax) {
+			this.yMax = y;
+		}
+		if(this.doFill) {
+			var _this = this.content;
+			var this1 = _this.tmp;
+			if(this1.pos == this1.array.length) {
+				var newSize = this1.array.length << 1;
+				if(newSize < 128) {
+					newSize = 128;
+				}
+				var newArray = new Float32Array(newSize);
+				newArray.set(this1.array);
+				this1.array = newArray;
+			}
+			this1.array[this1.pos++] = x;
+			var this11 = _this.tmp;
+			if(this11.pos == this11.array.length) {
+				var newSize1 = this11.array.length << 1;
+				if(newSize1 < 128) {
+					newSize1 = 128;
+				}
+				var newArray1 = new Float32Array(newSize1);
+				newArray1.set(this11.array);
+				this11.array = newArray1;
+			}
+			this11.array[this11.pos++] = y;
+			var this12 = _this.tmp;
+			if(this12.pos == this12.array.length) {
+				var newSize2 = this12.array.length << 1;
+				if(newSize2 < 128) {
+					newSize2 = 128;
+				}
+				var newArray2 = new Float32Array(newSize2);
+				newArray2.set(this12.array);
+				this12.array = newArray2;
+			}
+			this12.array[this12.pos++] = u;
+			var this13 = _this.tmp;
+			if(this13.pos == this13.array.length) {
+				var newSize3 = this13.array.length << 1;
+				if(newSize3 < 128) {
+					newSize3 = 128;
+				}
+				var newArray3 = new Float32Array(newSize3);
+				newArray3.set(this13.array);
+				this13.array = newArray3;
+			}
+			this13.array[this13.pos++] = v;
+			var this14 = _this.tmp;
+			if(this14.pos == this14.array.length) {
+				var newSize4 = this14.array.length << 1;
+				if(newSize4 < 128) {
+					newSize4 = 128;
+				}
+				var newArray4 = new Float32Array(newSize4);
+				newArray4.set(this14.array);
+				this14.array = newArray4;
+			}
+			this14.array[this14.pos++] = r;
+			var this15 = _this.tmp;
+			if(this15.pos == this15.array.length) {
+				var newSize5 = this15.array.length << 1;
+				if(newSize5 < 128) {
+					newSize5 = 128;
+				}
+				var newArray5 = new Float32Array(newSize5);
+				newArray5.set(this15.array);
+				this15.array = newArray5;
+			}
+			this15.array[this15.pos++] = g;
+			var this16 = _this.tmp;
+			if(this16.pos == this16.array.length) {
+				var newSize6 = this16.array.length << 1;
+				if(newSize6 < 128) {
+					newSize6 = 128;
+				}
+				var newArray6 = new Float32Array(newSize6);
+				newArray6.set(this16.array);
+				this16.array = newArray6;
+			}
+			this16.array[this16.pos++] = b;
+			var this17 = _this.tmp;
+			if(this17.pos == this17.array.length) {
+				var newSize7 = this17.array.length << 1;
+				if(newSize7 < 128) {
+					newSize7 = 128;
+				}
+				var newArray7 = new Float32Array(newSize7);
+				newArray7.set(this17.array);
+				this17.array = newArray7;
+			}
+			this17.array[this17.pos++] = a;
+			_this.bufferDirty = true;
+		}
+		var gp = new h2d_GPoint();
+		gp.load(x,y,this.lineR,this.lineG,this.lineB,this.lineA);
+		this.tmpPoints.push(gp);
+	}
+	,draw: function(ctx) {
+		if(!ctx.beginDrawObject(this,this.tile.innerTex)) {
+			return;
+		}
+		this.content.render(ctx.engine);
+	}
+	,sync: function(ctx) {
+		h2d_Drawable.prototype.sync.call(this,ctx);
+		this.flush();
+		var _this = this.content;
+		if(_this.buffer == null || _this.buffer.isDisposed()) {
+			_this.alloc(h3d_Engine.CURRENT);
+		} else {
+			if(_this.bufferDirty) {
+				_this.buffer.dispose();
+				_this.buffer = h3d_Buffer.ofFloats(_this.tmp,8,[h3d_BufferFlag.RawFormat]);
+				_this.bufferDirty = false;
+			}
+			if(_this.indexDirty) {
+				_this.indexes.dispose();
+				_this.indexes = h3d_Indexes.alloc(_this.index);
+				_this.indexDirty = false;
+			}
+		}
+	}
+	,__class__: h2d_Graphics
+});
+var WindowBase = function(scene,x,y,width,height) {
+	h2d_Graphics.call(this,scene);
+	this.posChanged = true;
+	this.x = x;
+	this.posChanged = true;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+	this.init();
+};
+$hxClasses["WindowBase"] = WindowBase;
+WindowBase.__name__ = "WindowBase";
+WindowBase.__super__ = h2d_Graphics;
+WindowBase.prototype = $extend(h2d_Graphics.prototype,{
+	init: function() {
+		this.drawBorder(this.x,this.y,this.width,this.height);
+	}
+	,drawBorder: function(x,y,width,height) {
+		this.lineStyle(1,11184810);
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		var x1 = x + width;
+		this.addVertex(x1,y,this.curR,this.curG,this.curB,this.curA,x1 * this.ma + y * this.mc + this.mx,x1 * this.mb + y * this.md + this.my);
+		var x2 = x + width;
+		var y1 = y + height;
+		this.addVertex(x2,y1,this.curR,this.curG,this.curB,this.curA,x2 * this.ma + y1 * this.mc + this.mx,x2 * this.mb + y1 * this.md + this.my);
+		var y2 = y + height;
+		this.addVertex(x,y2,this.curR,this.curG,this.curB,this.curA,x * this.ma + y2 * this.mc + this.mx,x * this.mb + y2 * this.md + this.my);
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+	}
+	,show: function(bool) {
+		this.set_visible(bool);
+	}
+	,__class__: WindowBase
+});
+var GraphicWindow = function(scene,x,y,width,height) {
+	WindowBase.call(this,scene,x,y,width,height);
+	this.init();
+};
+$hxClasses["GraphicWindow"] = GraphicWindow;
+GraphicWindow.__name__ = "GraphicWindow";
+GraphicWindow.__super__ = WindowBase;
+GraphicWindow.prototype = $extend(WindowBase.prototype,{
+	init: function() {
+		WindowBase.prototype.init.call(this);
+		this.drawBackground(this.x + 1,this.y + 1,11184810);
+		this.setupGraphic(this.x,this.y);
+		this.setupTextInput(this.x + 5,this.y + 10);
+	}
+	,drawBackground: function(x,y,color) {
+		this.beginFill(color);
+		this.drawRect(x,y,347,347);
+		this.endFill();
+	}
+	,setupGraphic: function(x,y) {
+		this.storyGraphic = new h2d_Graphics(this);
+		var _this = this.storyGraphic;
+		_this.posChanged = true;
+		_this.x = x;
+		var _this1 = this.storyGraphic;
+		_this1.posChanged = true;
+		_this1.y = y;
+	}
+	,setupTextInput: function(x,y) {
+		var font = hxd_res_DefaultFont.get();
+		this.storyText = new h2d_Text(font,this);
+		var _this = this.storyText;
+		_this.posChanged = true;
+		_this.x = x;
+		var _this1 = this.storyText;
+		_this1.posChanged = true;
+		_this1.y = y;
+		var _this2 = this.storyText;
+		var _g = _this2;
+		_g.posChanged = true;
+		_g.scaleX *= 1.2;
+		var _g1 = _this2;
+		_g1.posChanged = true;
+		_g1.scaleY *= 1.2;
+		this.storyText.set_textColor(16777215);
+	}
+	,setGraphic: function(image) {
+		this.storyGraphic.clear();
+		this.storyGraphic.drawTile(this.x,this.y,image);
+		var scaleAmount = this.width / this.storyGraphic.tile.width;
+		var _this = this.storyGraphic;
+		var v = scaleAmount / 2;
+		var _g = _this;
+		_g.posChanged = true;
+		_g.scaleX *= v;
+		var _g1 = _this;
+		_g1.posChanged = true;
+		_g1.scaleY *= v;
+	}
+	,setBackgroundColor: function(color) {
+		this.background.clear();
+		this.drawBackground(10,10,color);
+	}
+	,clearWindow: function() {
+		this.storyText.set_text("");
+		this.storyGraphic.clear();
+	}
+	,setStoryText: function(text) {
+		this.storyText.set_text(text);
+	}
+	,__class__: GraphicWindow
+});
+var HudWindow = function(scene,x,y,width,height) {
+	WindowBase.call(this,scene,x,y,width,height);
+	this.init();
+};
+$hxClasses["HudWindow"] = HudWindow;
+HudWindow.__name__ = "HudWindow";
+HudWindow.__super__ = WindowBase;
+HudWindow.prototype = $extend(WindowBase.prototype,{
+	init: function() {
+		this.drawHUDBackground(this.x + 6,this.y + 6);
+		this.setupCondition(this.x + 10,this.y + 10);
+		this.setupDays(this.x + 50,0);
+	}
+	,drawHUDBackground: function(x,y) {
+		this.beginFill(2105376);
+		this.drawRect(x,y,this.width,this.height);
+		this.endFill();
+	}
+	,setupCondition: function(x,y) {
+		var font = hxd_res_DefaultFont.get();
+		this.conditionText = new h2d_Text(font,this);
+		var _this = this.conditionText;
+		_this.posChanged = true;
+		_this.x = x;
+		var _this1 = this.conditionText;
+		_this1.posChanged = true;
+		_this1.y = y;
+		var _this2 = this.conditionText;
+		var _g = _this2;
+		_g.posChanged = true;
+		_g.scaleX *= 1.5;
+		var _g1 = _this2;
+		_g1.posChanged = true;
+		_g1.scaleY *= 1.5;
+		this.conditionText.smooth = true;
+		this.setCondition(Condition.Good);
+	}
+	,setupDays: function(x,y) {
+		var font = hxd_res_DefaultFont.get();
+		this.dayText = new h2d_Text(font,this);
+		var _this = this.dayText;
+		_this.posChanged = true;
+		_this.x = this.conditionText.x + x;
+		var _this1 = this.dayText;
+		_this1.posChanged = true;
+		_this1.y = this.conditionText.y + y;
+		this.dayText.set_textColor(16777215);
+		this.dayText.smooth = true;
+		var _this2 = this.dayText;
+		var _g = _this2;
+		_g.posChanged = true;
+		_g.scaleX *= 1.5;
+		var _g1 = _this2;
+		_g1.posChanged = true;
+		_g1.scaleY *= 1.5;
+		this.setDays(0);
+	}
+	,setCondition: function(condition) {
+		switch(condition._hx_index) {
+		case 0:
+			this.conditionText.set_text("Good");
+			this.conditionText.set_textColor(14350246);
+			break;
+		case 1:
+			this.conditionText.set_text("Average");
+			this.conditionText.set_textColor(16761600);
+			break;
+		case 2:
+			this.conditionText.set_text("Bad");
+			this.conditionText.set_textColor(16734003);
+			break;
+		}
+		haxe_Log.trace(this.conditionText.textColor,{ fileName : "src/HudWindow.hx", lineNumber : 63, className : "HudWindow", methodName : "setCondition"});
+	}
+	,setDays: function(days) {
+		this.dayText.set_text("Days: " + days);
+	}
+	,hide: function(bool) {
+		this.conditionText.set_visible(bool);
+		this.dayText.set_visible(bool);
+		this.background.set_visible(bool);
+	}
+	,__class__: HudWindow
+});
+var HxOverrides = function() { };
+$hxClasses["HxOverrides"] = HxOverrides;
+HxOverrides.__name__ = "HxOverrides";
+HxOverrides.strDate = function(s) {
+	switch(s.length) {
+	case 8:
+		var k = s.split(":");
+		var d = new Date();
+		d["setTime"](0);
+		d["setUTCHours"](k[0]);
+		d["setUTCMinutes"](k[1]);
+		d["setUTCSeconds"](k[2]);
+		return d;
+	case 10:
+		var k1 = s.split("-");
+		return new Date(k1[0],k1[1] - 1,k1[2],0,0,0);
+	case 19:
+		var k2 = s.split(" ");
+		var y = k2[0].split("-");
+		var t = k2[1].split(":");
+		return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
+	default:
+		throw new js__$Boot_HaxeError("Invalid date format : " + s);
+	}
+};
+HxOverrides.cca = function(s,index) {
+	var x = s.charCodeAt(index);
+	if(x != x) {
+		return undefined;
+	}
+	return x;
+};
+HxOverrides.substr = function(s,pos,len) {
+	if(len == null) {
+		len = s.length;
+	} else if(len < 0) {
+		if(pos == 0) {
+			len = s.length + len;
+		} else {
+			return "";
+		}
+	}
+	return s.substr(pos,len);
+};
+HxOverrides.remove = function(a,obj) {
+	var i = a.indexOf(obj);
+	if(i == -1) {
+		return false;
+	}
+	a.splice(i,1);
+	return true;
+};
+HxOverrides.iter = function(a) {
+	return { cur : 0, arr : a, hasNext : function() {
+		return this.cur < this.arr.length;
+	}, next : function() {
+		return this.arr[this.cur++];
+	}};
+};
+var Lambda = function() { };
+$hxClasses["Lambda"] = Lambda;
+Lambda.__name__ = "Lambda";
+Lambda.array = function(it) {
+	var a = [];
+	var i = $getIterator(it);
+	while(i.hasNext()) {
+		var i1 = i.next();
+		a.push(i1);
+	}
+	return a;
+};
+var h3d_IDrawable = function() { };
+$hxClasses["h3d.IDrawable"] = h3d_IDrawable;
+h3d_IDrawable.__name__ = "h3d.IDrawable";
+h3d_IDrawable.__isInterface__ = true;
+h3d_IDrawable.prototype = {
+	__class__: h3d_IDrawable
+};
+var hxd_App = function() {
+	var _gthis = this;
+	var engine = h3d_Engine.CURRENT;
+	if(engine != null) {
+		this.engine = engine;
+		engine.onReady = $bind(this,this.setup);
+		haxe_Timer.delay($bind(this,this.setup),0);
+	} else {
+		hxd_System.start(function() {
+			engine = new h3d_Engine();
+			_gthis.engine = engine;
+			engine.onReady = $bind(_gthis,_gthis.setup);
+			engine.init();
+		});
+	}
+};
+$hxClasses["hxd.App"] = hxd_App;
+hxd_App.__name__ = "hxd.App";
+hxd_App.__interfaces__ = [h3d_IDrawable];
+hxd_App.staticHandler = function() {
+};
+hxd_App.prototype = {
+	onResize: function() {
+	}
+	,setScene: function(scene,disposePrevious) {
+		if(disposePrevious == null) {
+			disposePrevious = true;
+		}
+		var new2D = ((scene) instanceof h2d_Scene) ? scene : null;
+		var new3D = ((scene) instanceof h3d_scene_Scene) ? scene : null;
+		if(new2D != null) {
+			this.sevents.removeScene(this.s2d);
+			this.sevents.addScene(scene,0);
+		} else {
+			if(new3D != null) {
+				this.sevents.removeScene(this.s3d);
+			}
+			this.sevents.addScene(scene);
+		}
+		if(disposePrevious) {
+			if(new2D != null) {
+				this.s2d.dispose();
+			} else if(new3D != null) {
+				this.s3d.dispose();
+			} else {
+				throw new js__$Boot_HaxeError("Can't dispose previous scene");
+			}
+		}
+		if(new2D != null) {
+			this.s2d = new2D;
+		}
+		if(new3D != null) {
+			this.s3d = new3D;
+		}
+	}
+	,setCurrent: function() {
+		var _gthis = this;
+		this.engine = h3d_Engine.CURRENT;
+		this.isDisposed = false;
+		this.engine.onReady = hxd_App.staticHandler;
+		this.engine.onResized = function() {
+			if(_gthis.s2d == null) {
+				return;
+			}
+			_gthis.s2d.checkResize();
+			_gthis.onResize();
+		};
+		hxd_System.setLoop($bind(this,this.mainLoop));
+	}
+	,setScene2D: function(s2d,disposePrevious) {
+		if(disposePrevious == null) {
+			disposePrevious = true;
+		}
+		this.sevents.removeScene(this.s2d);
+		this.sevents.addScene(s2d,0);
+		if(disposePrevious) {
+			this.s2d.dispose();
+		}
+		this.s2d = s2d;
+	}
+	,setScene3D: function(s3d,disposePrevious) {
+		if(disposePrevious == null) {
+			disposePrevious = true;
+		}
+		this.sevents.removeScene(this.s3d);
+		this.sevents.addScene(s3d);
+		if(disposePrevious) {
+			this.s3d.dispose();
+		}
+		this.s3d = s3d;
+	}
+	,render: function(e) {
+		this.s3d.render(e);
+		this.s2d.render(e);
+	}
+	,setup: function() {
+		var _gthis = this;
+		var initDone = false;
+		this.engine.onReady = hxd_App.staticHandler;
+		this.engine.onResized = function() {
+			if(_gthis.s2d == null) {
+				return;
+			}
+			_gthis.s2d.checkResize();
+			if(initDone) {
+				_gthis.onResize();
+			}
+		};
+		this.s3d = new h3d_scene_Scene();
+		this.s2d = new h2d_Scene();
+		this.sevents = new hxd_SceneEvents();
+		this.sevents.addScene(this.s2d);
+		this.sevents.addScene(this.s3d);
+		this.loadAssets(function() {
+			initDone = true;
+			_gthis.init();
+			hxd_Timer.skip();
+			_gthis.mainLoop();
+			hxd_System.setLoop($bind(_gthis,_gthis.mainLoop));
+			hxd_Key.initialize();
+		});
+	}
+	,dispose: function() {
+		this.engine.onResized = hxd_App.staticHandler;
+		this.engine.onContextLost = hxd_App.staticHandler;
+		this.isDisposed = true;
+		this.s2d.dispose();
+		this.s3d.dispose();
+		this.sevents.dispose();
+	}
+	,loadAssets: function(onLoaded) {
+		onLoaded();
+	}
+	,init: function() {
+	}
+	,mainLoop: function() {
+		hxd_Timer.update();
+		this.sevents.checkEvents();
+		if(this.isDisposed) {
+			return;
+		}
+		this.update(hxd_Timer.dt);
+		if(this.isDisposed) {
+			return;
+		}
+		var dt = hxd_Timer.dt;
+		if(this.s2d != null) {
+			this.s2d.setElapsedTime(dt);
+		}
+		if(this.s3d != null) {
+			this.s3d.setElapsedTime(dt);
+		}
+		this.engine.render(this);
+	}
+	,update: function(dt) {
+	}
+	,__class__: hxd_App
+};
+var Main = function() {
+	hxd_App.call(this);
+};
+$hxClasses["Main"] = Main;
+Main.__name__ = "Main";
+Main.main = function() {
+	new Main();
+};
+Main.__super__ = hxd_App;
+Main.prototype = $extend(hxd_App.prototype,{
+	init: function() {
+		this.engine.backgroundColor = 2105376;
+		hxd_Res.set_loader(new hxd_res_Loader(new hxd_fs_EmbedFileSystem(haxe_Unserializer.run("oy11:zipper4.pngtg"))));
+		this.setScene2D(new TestScene());
+	}
+	,update: function(delta) {
+	}
+	,__class__: Main
+});
+var MainWindow = function(scene) {
+	this.messageWindow = new MessageWindow(scene,10,190,350,350);
+	this.graphicWindow = new GraphicWindow(scene,10,10,350,350);
+	this.hudWindow = new HudWindow(scene,8,8,344,50);
+	this.init();
+};
+$hxClasses["MainWindow"] = MainWindow;
+MainWindow.__name__ = "MainWindow";
+MainWindow.prototype = {
+	init: function() {
+		this.sendCommand(SysCommands.ShowText("Welcome to the show"));
+		this.sendCommand(SysCommands.ChangeGraphic(hxd_Res.get_loader().loadCache("zipper4.png",hxd_res_Image).toTile()));
+	}
+	,update: function() {
+	}
+	,sendCommand: function(command) {
+		switch(command._hx_index) {
+		case 0:
+			var str = command.str;
+			this.showStoryText(str);
+			break;
+		case 1:
+			var tile = command.tile;
+			this.showGraphic(tile);
+			break;
+		case 2:
+			this.show(false);
+			break;
+		case 3:
+			this.show(true);
+			break;
+		}
+	}
+	,setCondition: function(condition) {
+		this.hudWindow.setCondition(condition);
+	}
+	,showGraphic: function(image) {
+		this.graphicWindow.setGraphic(image);
+	}
+	,showStoryText: function(text) {
+		this.messageWindow.setText(text);
+	}
+	,show: function(bool) {
+		this.hudWindow.show(bool);
+		this.messageWindow.show(bool);
+		this.graphicWindow.show(bool);
+	}
+	,__class__: MainWindow
+};
+Math.__name__ = "Math";
+var MessageWindow = function(scene,x,y,width,height) {
+	WindowBase.call(this,scene,x,y,width,height);
+	this.init();
+};
+$hxClasses["MessageWindow"] = MessageWindow;
+MessageWindow.__name__ = "MessageWindow";
+MessageWindow.__super__ = WindowBase;
+MessageWindow.prototype = $extend(WindowBase.prototype,{
+	init: function() {
+		WindowBase.prototype.init.call(this);
+		this.drawBorder(this.x,this.y,this.width,this.height);
+		this.setupText(this.x + 30,this.y + 20);
+	}
+	,setupText: function(x,y) {
+		this.storyText = new h2d_Text(hxd_res_DefaultFont.get(),this);
+		var _this = this.storyText;
+		var _g = _this;
+		_g.posChanged = true;
+		_g.scaleX *= 1.2;
+		var _g1 = _this;
+		_g1.posChanged = true;
+		_g1.scaleY *= 1.2;
+		this.storyText.smooth = true;
+		var _this1 = this.storyText;
+		_this1.posChanged = true;
+		_this1.x = x;
+		var _this2 = this.storyText;
+		_this2.posChanged = true;
+		_this2.y = y;
+		this.storyText.set_textColor(16777215);
+	}
+	,setupTextInput: function(x,y) {
+		var _gthis = this;
+		var font = hxd_res_DefaultFont.get();
+		this.textInput = new h2d_TextInput(font,this);
+		this.textInput.set_backgroundColor(-2139062144);
+		this.textInput.set_text("This is a test message");
+		haxe_Log.trace("Added text input",{ fileName : "src/MessageWindow.hx", lineNumber : 39, className : "MessageWindow", methodName : "setupTextInput"});
+		var _this = this.textInput;
+		var _g = _this;
+		_g.posChanged = true;
+		_g.scaleX *= 2;
+		var _g1 = _this;
+		_g1.posChanged = true;
+		_g1.scaleY *= 2;
+		var _this1 = this.textInput;
+		_this1.posChanged = true;
+		_this1.x = x;
+		var _this2 = this.textInput;
+		_this2.posChanged = true;
+		_this2.y = y;
+		this.textInput.set_textColor(11184810);
+		this.textInput.onFocus = function(_) {
+			return _gthis.textInput.set_textColor(16777215);
+		};
+		this.textInput.onFocusLost = function(_1) {
+			return _gthis.textInput.set_textColor(11184810);
+		};
+	}
+	,setText: function(text) {
+		this.storyText.set_text(text);
+	}
+	,setInputText: function(text) {
+		this.textInput.set_text(text);
+	}
+	,hide: function(bool) {
+		this.textInput.set_visible(bool);
+		this.storyText.set_visible(bool);
+	}
+	,__class__: MessageWindow
+});
+var Reflect = function() { };
+$hxClasses["Reflect"] = Reflect;
+Reflect.__name__ = "Reflect";
+Reflect.field = function(o,field) {
+	try {
+		return o[field];
+	} catch( e ) {
+		var e1 = ((e) instanceof js__$Boot_HaxeError) ? e.val : e;
+		return null;
+	}
+};
+Reflect.fields = function(o) {
+	var a = [];
+	if(o != null) {
+		var hasOwnProperty = Object.prototype.hasOwnProperty;
+		for( var f in o ) {
+		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
+			a.push(f);
+		}
+		}
+	}
+	return a;
+};
+Reflect.isFunction = function(f) {
+	if(typeof(f) == "function") {
+		return !(f.__name__ || f.__ename__);
+	} else {
+		return false;
+	}
+};
+Reflect.compare = function(a,b) {
+	if(a == b) {
+		return 0;
+	} else if(a > b) {
+		return 1;
+	} else {
+		return -1;
+	}
+};
+Reflect.compareMethods = function(f1,f2) {
+	if(f1 == f2) {
+		return true;
+	}
+	if(!Reflect.isFunction(f1) || !Reflect.isFunction(f2)) {
+		return false;
+	}
+	if(f1.scope == f2.scope && f1.method == f2.method) {
+		return f1.method != null;
+	} else {
+		return false;
+	}
+};
+Reflect.isEnumValue = function(v) {
+	if(v != null) {
+		return v.__enum__ != null;
+	} else {
+		return false;
+	}
+};
+Reflect.deleteField = function(o,field) {
+	if(!Object.prototype.hasOwnProperty.call(o,field)) {
+		return false;
+	}
+	delete(o[field]);
+	return true;
+};
+var Std = function() { };
+$hxClasses["Std"] = Std;
+Std.__name__ = "Std";
+Std.string = function(s) {
+	return js_Boot.__string_rec(s,"");
+};
+Std.parseInt = function(x) {
+	if(x != null) {
+		var _g = 0;
+		var _g1 = x.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var c = x.charCodeAt(i);
+			if(c <= 8 || c >= 14 && c != 32 && c != 45) {
+				var v = parseInt(x, (x[(i + 1)]=="x" || x[(i + 1)]=="X") ? 16 : 10);
+				if(isNaN(v)) {
+					return null;
+				} else {
+					return v;
+				}
+			}
+		}
+	}
+	return null;
+};
+Std.random = function(x) {
+	if(x <= 0) {
+		return 0;
+	} else {
+		return Math.floor(Math.random() * x);
+	}
+};
+var StringBuf = function() {
+	this.b = "";
+};
+$hxClasses["StringBuf"] = StringBuf;
+StringBuf.__name__ = "StringBuf";
+StringBuf.prototype = {
+	__class__: StringBuf
+};
+var StringTools = function() { };
+$hxClasses["StringTools"] = StringTools;
+StringTools.__name__ = "StringTools";
+StringTools.htmlEscape = function(s,quotes) {
+	var buf_b = "";
+	var _g_offset = 0;
+	var _g_s = s;
+	while(_g_offset < _g_s.length) {
+		var s1 = _g_s;
+		var index = _g_offset++;
+		var c = s1.charCodeAt(index);
+		if(c >= 55296 && c <= 56319) {
+			c = c - 55232 << 10 | s1.charCodeAt(index + 1) & 1023;
+		}
+		var c1 = c;
+		if(c1 >= 65536) {
+			++_g_offset;
+		}
+		var code = c1;
+		switch(code) {
+		case 34:
+			if(quotes) {
+				buf_b += "&quot;";
+			} else {
+				buf_b += String.fromCodePoint(code);
+			}
+			break;
+		case 38:
+			buf_b += "&amp;";
+			break;
+		case 39:
+			if(quotes) {
+				buf_b += "&#039;";
+			} else {
+				buf_b += String.fromCodePoint(code);
+			}
+			break;
+		case 60:
+			buf_b += "&lt;";
+			break;
+		case 62:
+			buf_b += "&gt;";
+			break;
+		default:
+			buf_b += String.fromCodePoint(code);
+		}
+	}
+	return buf_b;
+};
+StringTools.startsWith = function(s,start) {
+	if(s.length >= start.length) {
+		return s.lastIndexOf(start,0) == 0;
+	} else {
+		return false;
+	}
+};
+StringTools.isSpace = function(s,pos) {
+	var c = HxOverrides.cca(s,pos);
+	if(!(c > 8 && c < 14)) {
+		return c == 32;
+	} else {
+		return true;
+	}
+};
+StringTools.ltrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,r)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,r,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.rtrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,l - r - 1)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,0,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.trim = function(s) {
+	return StringTools.ltrim(StringTools.rtrim(s));
+};
+StringTools.hex = function(n,digits) {
+	var s = "";
+	var hexChars = "0123456789ABCDEF";
+	while(true) {
+		s = hexChars.charAt(n & 15) + s;
+		n >>>= 4;
+		if(!(n > 0)) {
+			break;
+		}
+	}
+	if(digits != null) {
+		while(s.length < digits) s = "0" + s;
+	}
+	return s;
+};
 var h2d_Layers = function(parent) {
 	h2d_Object.call(this,parent);
 	this.layersIndexes = [];
@@ -2918,6 +4677,13 @@ var Condition = $hxEnums["Condition"] = { __ename__ : true, __constructs__ : ["G
 	,Bad: {_hx_index:2,__enum__:"Condition",toString:$estr}
 };
 Condition.__empty_constructs__ = [Condition.Good,Condition.Average,Condition.Bad];
+var SysCommands = $hxEnums["SysCommands"] = { __ename__ : true, __constructs__ : ["ShowText","ChangeGraphic","CloseWindow","ShowWindow"]
+	,ShowText: ($_=function(str) { return {_hx_index:0,str:str,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["str"],$_)
+	,ChangeGraphic: ($_=function(tile) { return {_hx_index:1,tile:tile,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["tile"],$_)
+	,CloseWindow: {_hx_index:2,__enum__:"SysCommands",toString:$estr}
+	,ShowWindow: {_hx_index:3,__enum__:"SysCommands",toString:$estr}
+};
+SysCommands.__empty_constructs__ = [SysCommands.CloseWindow,SysCommands.ShowWindow];
 var _$Xml_XmlType_$Impl_$ = {};
 $hxClasses["_Xml.XmlType_Impl_"] = _$Xml_XmlType_$Impl_$;
 _$Xml_XmlType_$Impl_$.__name__ = "_Xml.XmlType_Impl_";
@@ -6295,167 +8061,6 @@ format_wav_Reader.prototype = {
 	}
 	,__class__: format_wav_Reader
 };
-var h2d_Drawable = function(parent) {
-	h2d_Object.call(this,parent);
-	this.color = new h3d_Vector(1,1,1,1);
-};
-$hxClasses["h2d.Drawable"] = h2d_Drawable;
-h2d_Drawable.__name__ = "h2d.Drawable";
-h2d_Drawable.__super__ = h2d_Object;
-h2d_Drawable.prototype = $extend(h2d_Object.prototype,{
-	set_tileWrap: function(b) {
-		return this.tileWrap = b;
-	}
-	,get_colorAdd: function() {
-		var s = this.getShader(h3d_shader_ColorAdd);
-		if(s == null) {
-			return null;
-		} else {
-			return s.color__;
-		}
-	}
-	,set_colorAdd: function(c) {
-		var s = this.getShader(h3d_shader_ColorAdd);
-		if(s == null) {
-			if(c != null) {
-				s = this.addShader(new h3d_shader_ColorAdd());
-				s.color__ = c;
-			}
-		} else if(c == null) {
-			this.removeShader(s);
-		} else {
-			s.color__ = c;
-		}
-		return c;
-	}
-	,drawFiltered: function(ctx,tile) {
-		var old = this.shaders;
-		this.shaders = null;
-		h2d_Object.prototype.drawFiltered.call(this,ctx,tile);
-		this.shaders = old;
-	}
-	,set_colorKey: function(v) {
-		var s = this.getShader(h3d_shader_ColorKey);
-		if(s == null) {
-			if(v != null) {
-				s = this.addShader(new h3d_shader_ColorKey(-16777216 | v));
-			}
-		} else if(v == null) {
-			this.removeShader(s);
-		} else {
-			var _this = s.colorKey__;
-			var c = -16777216 | v;
-			_this.x = (c >> 16 & 255) / 255;
-			_this.y = (c >> 8 & 255) / 255;
-			_this.z = (c & 255) / 255;
-			_this.w = (c >>> 24) / 255;
-		}
-		return this.colorKey = v;
-	}
-	,adjustColor: function(col) {
-		if(col == null) {
-			this.set_colorMatrix(null);
-		} else {
-			var m = this.get_colorMatrix();
-			if(m == null) {
-				m = new h3d_Matrix();
-				this.set_colorMatrix(m);
-			}
-			m.identity();
-			m.adjustColor(col);
-		}
-	}
-	,get_colorMatrix: function() {
-		var s = this.getShader(h3d_shader_ColorMatrix);
-		if(s == null) {
-			return null;
-		} else {
-			return s.matrix__;
-		}
-	}
-	,set_colorMatrix: function(m) {
-		var s = this.getShader(h3d_shader_ColorMatrix);
-		if(s == null) {
-			if(m != null) {
-				s = this.addShader(new h3d_shader_ColorMatrix());
-				s.matrix__ = m;
-			}
-		} else if(m == null) {
-			this.removeShader(s);
-		} else {
-			s.matrix__ = m;
-		}
-		return m;
-	}
-	,getDebugShaderCode: function(toHxsl) {
-		if(toHxsl == null) {
-			toHxsl = true;
-		}
-		var ctx = this.getScene().ctx;
-		var shader = ctx.manager.compileShaders(new hxsl_ShaderList(ctx.baseShader,this.shaders));
-		if(toHxsl) {
-			var toString = function(s) {
-				return hxsl_Printer.shaderToString(s,true);
-			};
-			return "// vertex:\n" + toString(shader.vertex.data) + "\n\nfragment:\n" + toString(shader.fragment.data);
-		} else {
-			return h3d_Engine.CURRENT.driver.getNativeShaderCode(shader);
-		}
-	}
-	,getShader: function(stype) {
-		if(this.shaders != null) {
-			var _g_l = this.shaders;
-			var _g_last = null;
-			while(_g_l != _g_last) {
-				var s = _g_l.s;
-				_g_l = _g_l.next;
-				var s1 = s;
-				var s2 = js_Boot.__downcastCheck(s1,stype) ? s1 : null;
-				if(s2 != null) {
-					return s2;
-				}
-			}
-		}
-		return null;
-	}
-	,getShaders: function() {
-		return new hxsl__$ShaderList_ShaderIterator(this.shaders,null);
-	}
-	,addShader: function(s) {
-		if(s == null) {
-			throw new js__$Boot_HaxeError("Can't add null shader");
-		}
-		this.shaders = hxsl_ShaderList.addSort(s,this.shaders);
-		return s;
-	}
-	,removeShader: function(s) {
-		var prev = null;
-		var cur = this.shaders;
-		while(cur != null) {
-			if(cur.s == s) {
-				if(prev == null) {
-					this.shaders = cur.next;
-				} else {
-					prev.next = cur.next;
-				}
-				return true;
-			}
-			prev = cur;
-			cur = cur.next;
-		}
-		return false;
-	}
-	,emitTile: function(ctx,tile) {
-		if(tile == null) {
-			tile = new h2d_Tile(null,0,0,5,5);
-		}
-		if(!ctx.drawTile(this,tile)) {
-			return;
-		}
-		return;
-	}
-	,__class__: h2d_Drawable
-});
 var h2d_Bitmap = function(tile,parent) {
 	h2d_Drawable.call(this,parent);
 	this.set_tile(tile);
@@ -6987,1549 +8592,6 @@ h2d__$Graphics_GraphicsContent.prototype = $extend(h3d_prim_Primitive.prototype,
 		this.buffers = [];
 	}
 	,__class__: h2d__$Graphics_GraphicsContent
-});
-var h2d_Graphics = function(parent) {
-	this.bevel = 0.25;
-	this.my = 0.;
-	this.mx = 0.;
-	this.md = 1.;
-	this.mc = 0.;
-	this.mb = 0.;
-	this.ma = 1.;
-	h2d_Drawable.call(this,parent);
-	this.content = new h2d__$Graphics_GraphicsContent();
-	this.tile = h2d_Tile.fromColor(16777215);
-	this.clear();
-};
-$hxClasses["h2d.Graphics"] = h2d_Graphics;
-h2d_Graphics.__name__ = "h2d.Graphics";
-h2d_Graphics.__super__ = h2d_Drawable;
-h2d_Graphics.prototype = $extend(h2d_Drawable.prototype,{
-	onRemove: function() {
-		h2d_Drawable.prototype.onRemove.call(this);
-		this.clear();
-	}
-	,clear: function() {
-		this.content.clear();
-		this.tmpPoints = [];
-		this.pindex = 0;
-		this.lineSize = 0;
-		this.xMin = Infinity;
-		this.yMin = Infinity;
-		this.yMax = -Infinity;
-		this.xMax = -Infinity;
-	}
-	,getBoundsRec: function(relativeTo,out,forSize) {
-		h2d_Drawable.prototype.getBoundsRec.call(this,relativeTo,out,forSize);
-		if(this.tile != null) {
-			this.addBounds(relativeTo,out,this.xMin,this.yMin,this.xMax - this.xMin,this.yMax - this.yMin);
-		}
-	}
-	,isConvex: function(points) {
-		var first = true;
-		var sign = false;
-		var _g = 0;
-		var _g1 = points.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var p1 = points[i];
-			var p2 = points[(i + 1) % points.length];
-			var p3 = points[(i + 2) % points.length];
-			var s = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) > 0;
-			if(first) {
-				first = false;
-				sign = s;
-			} else if(sign != s) {
-				return false;
-			}
-		}
-		return true;
-	}
-	,flushLine: function(start) {
-		var pts = this.tmpPoints;
-		var last = pts.length - 1;
-		var prev = pts[last];
-		var p = pts[0];
-		var closed = p.x == prev.x && p.y == prev.y;
-		var count = pts.length;
-		if(!closed) {
-			var prevLast = pts[last - 1];
-			if(prevLast == null) {
-				prevLast = p;
-			}
-			var gp = new h2d_GPoint();
-			gp.load(prev.x * 2 - prevLast.x,prev.y * 2 - prevLast.y,0,0,0,0);
-			pts.push(gp);
-			var pNext = pts[1];
-			if(pNext == null) {
-				pNext = p;
-			}
-			var gp1 = new h2d_GPoint();
-			gp1.load(p.x * 2 - pNext.x,p.y * 2 - pNext.y,0,0,0,0);
-			prev = gp1;
-		} else if(p != prev) {
-			--count;
-			--last;
-			prev = pts[last];
-		}
-		var _g = 0;
-		var _g1 = count;
-		while(_g < _g1) {
-			var i = _g++;
-			var next = pts[(i + 1) % pts.length];
-			var nx1 = prev.y - p.y;
-			var ny1 = p.x - prev.x;
-			var ns1 = 1. / Math.sqrt(nx1 * nx1 + ny1 * ny1);
-			var nx2 = p.y - next.y;
-			var ny2 = next.x - p.x;
-			var ns2 = 1. / Math.sqrt(nx2 * nx2 + ny2 * ny2);
-			var nx = nx1 * ns1 + nx2 * ns2;
-			var ny = ny1 * ns1 + ny2 * ns2;
-			var ns = 1. / Math.sqrt(nx * nx + ny * ny);
-			nx *= ns;
-			ny *= ns;
-			var size = nx * nx1 * ns1 + ny * ny1 * ns1;
-			if(size < 0.1) {
-				size = 0.1;
-			}
-			var d = this.lineSize * 0.5 / size;
-			nx *= d;
-			ny *= d;
-			if(size > this.bevel) {
-				var _this = this.content;
-				var x = p.x + nx;
-				var y = p.y + ny;
-				var r = p.r;
-				var g = p.g;
-				var b = p.b;
-				var a = p.a;
-				var this1 = _this.tmp;
-				if(this1.pos == this1.array.length) {
-					var newSize = this1.array.length << 1;
-					if(newSize < 128) {
-						newSize = 128;
-					}
-					var newArray = new Float32Array(newSize);
-					newArray.set(this1.array);
-					this1.array = newArray;
-				}
-				this1.array[this1.pos++] = x;
-				var this11 = _this.tmp;
-				if(this11.pos == this11.array.length) {
-					var newSize1 = this11.array.length << 1;
-					if(newSize1 < 128) {
-						newSize1 = 128;
-					}
-					var newArray1 = new Float32Array(newSize1);
-					newArray1.set(this11.array);
-					this11.array = newArray1;
-				}
-				this11.array[this11.pos++] = y;
-				var this12 = _this.tmp;
-				if(this12.pos == this12.array.length) {
-					var newSize2 = this12.array.length << 1;
-					if(newSize2 < 128) {
-						newSize2 = 128;
-					}
-					var newArray2 = new Float32Array(newSize2);
-					newArray2.set(this12.array);
-					this12.array = newArray2;
-				}
-				this12.array[this12.pos++] = 0;
-				var this13 = _this.tmp;
-				if(this13.pos == this13.array.length) {
-					var newSize3 = this13.array.length << 1;
-					if(newSize3 < 128) {
-						newSize3 = 128;
-					}
-					var newArray3 = new Float32Array(newSize3);
-					newArray3.set(this13.array);
-					this13.array = newArray3;
-				}
-				this13.array[this13.pos++] = 0;
-				var this14 = _this.tmp;
-				if(this14.pos == this14.array.length) {
-					var newSize4 = this14.array.length << 1;
-					if(newSize4 < 128) {
-						newSize4 = 128;
-					}
-					var newArray4 = new Float32Array(newSize4);
-					newArray4.set(this14.array);
-					this14.array = newArray4;
-				}
-				this14.array[this14.pos++] = r;
-				var this15 = _this.tmp;
-				if(this15.pos == this15.array.length) {
-					var newSize5 = this15.array.length << 1;
-					if(newSize5 < 128) {
-						newSize5 = 128;
-					}
-					var newArray5 = new Float32Array(newSize5);
-					newArray5.set(this15.array);
-					this15.array = newArray5;
-				}
-				this15.array[this15.pos++] = g;
-				var this16 = _this.tmp;
-				if(this16.pos == this16.array.length) {
-					var newSize6 = this16.array.length << 1;
-					if(newSize6 < 128) {
-						newSize6 = 128;
-					}
-					var newArray6 = new Float32Array(newSize6);
-					newArray6.set(this16.array);
-					this16.array = newArray6;
-				}
-				this16.array[this16.pos++] = b;
-				var this17 = _this.tmp;
-				if(this17.pos == this17.array.length) {
-					var newSize7 = this17.array.length << 1;
-					if(newSize7 < 128) {
-						newSize7 = 128;
-					}
-					var newArray7 = new Float32Array(newSize7);
-					newArray7.set(this17.array);
-					this17.array = newArray7;
-				}
-				this17.array[this17.pos++] = a;
-				_this.bufferDirty = true;
-				var _this1 = this.content;
-				var x1 = p.x - nx;
-				var y1 = p.y - ny;
-				var r1 = p.r;
-				var g1 = p.g;
-				var b1 = p.b;
-				var a1 = p.a;
-				var this18 = _this1.tmp;
-				if(this18.pos == this18.array.length) {
-					var newSize8 = this18.array.length << 1;
-					if(newSize8 < 128) {
-						newSize8 = 128;
-					}
-					var newArray8 = new Float32Array(newSize8);
-					newArray8.set(this18.array);
-					this18.array = newArray8;
-				}
-				this18.array[this18.pos++] = x1;
-				var this19 = _this1.tmp;
-				if(this19.pos == this19.array.length) {
-					var newSize9 = this19.array.length << 1;
-					if(newSize9 < 128) {
-						newSize9 = 128;
-					}
-					var newArray9 = new Float32Array(newSize9);
-					newArray9.set(this19.array);
-					this19.array = newArray9;
-				}
-				this19.array[this19.pos++] = y1;
-				var this110 = _this1.tmp;
-				if(this110.pos == this110.array.length) {
-					var newSize10 = this110.array.length << 1;
-					if(newSize10 < 128) {
-						newSize10 = 128;
-					}
-					var newArray10 = new Float32Array(newSize10);
-					newArray10.set(this110.array);
-					this110.array = newArray10;
-				}
-				this110.array[this110.pos++] = 0;
-				var this111 = _this1.tmp;
-				if(this111.pos == this111.array.length) {
-					var newSize11 = this111.array.length << 1;
-					if(newSize11 < 128) {
-						newSize11 = 128;
-					}
-					var newArray11 = new Float32Array(newSize11);
-					newArray11.set(this111.array);
-					this111.array = newArray11;
-				}
-				this111.array[this111.pos++] = 0;
-				var this112 = _this1.tmp;
-				if(this112.pos == this112.array.length) {
-					var newSize12 = this112.array.length << 1;
-					if(newSize12 < 128) {
-						newSize12 = 128;
-					}
-					var newArray12 = new Float32Array(newSize12);
-					newArray12.set(this112.array);
-					this112.array = newArray12;
-				}
-				this112.array[this112.pos++] = r1;
-				var this113 = _this1.tmp;
-				if(this113.pos == this113.array.length) {
-					var newSize13 = this113.array.length << 1;
-					if(newSize13 < 128) {
-						newSize13 = 128;
-					}
-					var newArray13 = new Float32Array(newSize13);
-					newArray13.set(this113.array);
-					this113.array = newArray13;
-				}
-				this113.array[this113.pos++] = g1;
-				var this114 = _this1.tmp;
-				if(this114.pos == this114.array.length) {
-					var newSize14 = this114.array.length << 1;
-					if(newSize14 < 128) {
-						newSize14 = 128;
-					}
-					var newArray14 = new Float32Array(newSize14);
-					newArray14.set(this114.array);
-					this114.array = newArray14;
-				}
-				this114.array[this114.pos++] = b1;
-				var this115 = _this1.tmp;
-				if(this115.pos == this115.array.length) {
-					var newSize15 = this115.array.length << 1;
-					if(newSize15 < 128) {
-						newSize15 = 128;
-					}
-					var newArray15 = new Float32Array(newSize15);
-					newArray15.set(this115.array);
-					this115.array = newArray15;
-				}
-				this115.array[this115.pos++] = a1;
-				_this1.bufferDirty = true;
-				var pnext = i == last ? start : this.pindex + 2;
-				if(i < count - 1 || closed) {
-					var _this2 = this.content;
-					_this2.index.push(this.pindex);
-					_this2.indexDirty = true;
-					var _this3 = this.content;
-					_this3.index.push(this.pindex + 1);
-					_this3.indexDirty = true;
-					var _this4 = this.content;
-					_this4.index.push(pnext);
-					_this4.indexDirty = true;
-					var _this5 = this.content;
-					_this5.index.push(this.pindex + 1);
-					_this5.indexDirty = true;
-					var _this6 = this.content;
-					_this6.index.push(pnext);
-					_this6.indexDirty = true;
-					var _this7 = this.content;
-					_this7.index.push(pnext + 1);
-					_this7.indexDirty = true;
-				}
-				this.pindex += 2;
-			} else {
-				var n0x = next.x - p.x;
-				var n0y = next.y - p.y;
-				var sign = n0x * nx + n0y * ny;
-				var nnx = -ny;
-				var nny = nx;
-				var size1 = nnx * nx1 * ns1 + nny * ny1 * ns1;
-				var d1 = this.lineSize * 0.5 / size1;
-				nnx *= d1;
-				nny *= d1;
-				var pnext1 = i == last ? start : this.pindex + 3;
-				if(sign > 0) {
-					var _this8 = this.content;
-					var x2 = p.x + nx;
-					var y2 = p.y + ny;
-					var r2 = p.r;
-					var g2 = p.g;
-					var b2 = p.b;
-					var a2 = p.a;
-					var this116 = _this8.tmp;
-					if(this116.pos == this116.array.length) {
-						var newSize16 = this116.array.length << 1;
-						if(newSize16 < 128) {
-							newSize16 = 128;
-						}
-						var newArray16 = new Float32Array(newSize16);
-						newArray16.set(this116.array);
-						this116.array = newArray16;
-					}
-					this116.array[this116.pos++] = x2;
-					var this117 = _this8.tmp;
-					if(this117.pos == this117.array.length) {
-						var newSize17 = this117.array.length << 1;
-						if(newSize17 < 128) {
-							newSize17 = 128;
-						}
-						var newArray17 = new Float32Array(newSize17);
-						newArray17.set(this117.array);
-						this117.array = newArray17;
-					}
-					this117.array[this117.pos++] = y2;
-					var this118 = _this8.tmp;
-					if(this118.pos == this118.array.length) {
-						var newSize18 = this118.array.length << 1;
-						if(newSize18 < 128) {
-							newSize18 = 128;
-						}
-						var newArray18 = new Float32Array(newSize18);
-						newArray18.set(this118.array);
-						this118.array = newArray18;
-					}
-					this118.array[this118.pos++] = 0;
-					var this119 = _this8.tmp;
-					if(this119.pos == this119.array.length) {
-						var newSize19 = this119.array.length << 1;
-						if(newSize19 < 128) {
-							newSize19 = 128;
-						}
-						var newArray19 = new Float32Array(newSize19);
-						newArray19.set(this119.array);
-						this119.array = newArray19;
-					}
-					this119.array[this119.pos++] = 0;
-					var this120 = _this8.tmp;
-					if(this120.pos == this120.array.length) {
-						var newSize20 = this120.array.length << 1;
-						if(newSize20 < 128) {
-							newSize20 = 128;
-						}
-						var newArray20 = new Float32Array(newSize20);
-						newArray20.set(this120.array);
-						this120.array = newArray20;
-					}
-					this120.array[this120.pos++] = r2;
-					var this121 = _this8.tmp;
-					if(this121.pos == this121.array.length) {
-						var newSize21 = this121.array.length << 1;
-						if(newSize21 < 128) {
-							newSize21 = 128;
-						}
-						var newArray21 = new Float32Array(newSize21);
-						newArray21.set(this121.array);
-						this121.array = newArray21;
-					}
-					this121.array[this121.pos++] = g2;
-					var this122 = _this8.tmp;
-					if(this122.pos == this122.array.length) {
-						var newSize22 = this122.array.length << 1;
-						if(newSize22 < 128) {
-							newSize22 = 128;
-						}
-						var newArray22 = new Float32Array(newSize22);
-						newArray22.set(this122.array);
-						this122.array = newArray22;
-					}
-					this122.array[this122.pos++] = b2;
-					var this123 = _this8.tmp;
-					if(this123.pos == this123.array.length) {
-						var newSize23 = this123.array.length << 1;
-						if(newSize23 < 128) {
-							newSize23 = 128;
-						}
-						var newArray23 = new Float32Array(newSize23);
-						newArray23.set(this123.array);
-						this123.array = newArray23;
-					}
-					this123.array[this123.pos++] = a2;
-					_this8.bufferDirty = true;
-					var _this9 = this.content;
-					var x3 = p.x - nnx;
-					var y3 = p.y - nny;
-					var r3 = p.r;
-					var g3 = p.g;
-					var b3 = p.b;
-					var a3 = p.a;
-					var this124 = _this9.tmp;
-					if(this124.pos == this124.array.length) {
-						var newSize24 = this124.array.length << 1;
-						if(newSize24 < 128) {
-							newSize24 = 128;
-						}
-						var newArray24 = new Float32Array(newSize24);
-						newArray24.set(this124.array);
-						this124.array = newArray24;
-					}
-					this124.array[this124.pos++] = x3;
-					var this125 = _this9.tmp;
-					if(this125.pos == this125.array.length) {
-						var newSize25 = this125.array.length << 1;
-						if(newSize25 < 128) {
-							newSize25 = 128;
-						}
-						var newArray25 = new Float32Array(newSize25);
-						newArray25.set(this125.array);
-						this125.array = newArray25;
-					}
-					this125.array[this125.pos++] = y3;
-					var this126 = _this9.tmp;
-					if(this126.pos == this126.array.length) {
-						var newSize26 = this126.array.length << 1;
-						if(newSize26 < 128) {
-							newSize26 = 128;
-						}
-						var newArray26 = new Float32Array(newSize26);
-						newArray26.set(this126.array);
-						this126.array = newArray26;
-					}
-					this126.array[this126.pos++] = 0;
-					var this127 = _this9.tmp;
-					if(this127.pos == this127.array.length) {
-						var newSize27 = this127.array.length << 1;
-						if(newSize27 < 128) {
-							newSize27 = 128;
-						}
-						var newArray27 = new Float32Array(newSize27);
-						newArray27.set(this127.array);
-						this127.array = newArray27;
-					}
-					this127.array[this127.pos++] = 0;
-					var this128 = _this9.tmp;
-					if(this128.pos == this128.array.length) {
-						var newSize28 = this128.array.length << 1;
-						if(newSize28 < 128) {
-							newSize28 = 128;
-						}
-						var newArray28 = new Float32Array(newSize28);
-						newArray28.set(this128.array);
-						this128.array = newArray28;
-					}
-					this128.array[this128.pos++] = r3;
-					var this129 = _this9.tmp;
-					if(this129.pos == this129.array.length) {
-						var newSize29 = this129.array.length << 1;
-						if(newSize29 < 128) {
-							newSize29 = 128;
-						}
-						var newArray29 = new Float32Array(newSize29);
-						newArray29.set(this129.array);
-						this129.array = newArray29;
-					}
-					this129.array[this129.pos++] = g3;
-					var this130 = _this9.tmp;
-					if(this130.pos == this130.array.length) {
-						var newSize30 = this130.array.length << 1;
-						if(newSize30 < 128) {
-							newSize30 = 128;
-						}
-						var newArray30 = new Float32Array(newSize30);
-						newArray30.set(this130.array);
-						this130.array = newArray30;
-					}
-					this130.array[this130.pos++] = b3;
-					var this131 = _this9.tmp;
-					if(this131.pos == this131.array.length) {
-						var newSize31 = this131.array.length << 1;
-						if(newSize31 < 128) {
-							newSize31 = 128;
-						}
-						var newArray31 = new Float32Array(newSize31);
-						newArray31.set(this131.array);
-						this131.array = newArray31;
-					}
-					this131.array[this131.pos++] = a3;
-					_this9.bufferDirty = true;
-					var _this10 = this.content;
-					var x4 = p.x + nnx;
-					var y4 = p.y + nny;
-					var r4 = p.r;
-					var g4 = p.g;
-					var b4 = p.b;
-					var a4 = p.a;
-					var this132 = _this10.tmp;
-					if(this132.pos == this132.array.length) {
-						var newSize32 = this132.array.length << 1;
-						if(newSize32 < 128) {
-							newSize32 = 128;
-						}
-						var newArray32 = new Float32Array(newSize32);
-						newArray32.set(this132.array);
-						this132.array = newArray32;
-					}
-					this132.array[this132.pos++] = x4;
-					var this133 = _this10.tmp;
-					if(this133.pos == this133.array.length) {
-						var newSize33 = this133.array.length << 1;
-						if(newSize33 < 128) {
-							newSize33 = 128;
-						}
-						var newArray33 = new Float32Array(newSize33);
-						newArray33.set(this133.array);
-						this133.array = newArray33;
-					}
-					this133.array[this133.pos++] = y4;
-					var this134 = _this10.tmp;
-					if(this134.pos == this134.array.length) {
-						var newSize34 = this134.array.length << 1;
-						if(newSize34 < 128) {
-							newSize34 = 128;
-						}
-						var newArray34 = new Float32Array(newSize34);
-						newArray34.set(this134.array);
-						this134.array = newArray34;
-					}
-					this134.array[this134.pos++] = 0;
-					var this135 = _this10.tmp;
-					if(this135.pos == this135.array.length) {
-						var newSize35 = this135.array.length << 1;
-						if(newSize35 < 128) {
-							newSize35 = 128;
-						}
-						var newArray35 = new Float32Array(newSize35);
-						newArray35.set(this135.array);
-						this135.array = newArray35;
-					}
-					this135.array[this135.pos++] = 0;
-					var this136 = _this10.tmp;
-					if(this136.pos == this136.array.length) {
-						var newSize36 = this136.array.length << 1;
-						if(newSize36 < 128) {
-							newSize36 = 128;
-						}
-						var newArray36 = new Float32Array(newSize36);
-						newArray36.set(this136.array);
-						this136.array = newArray36;
-					}
-					this136.array[this136.pos++] = r4;
-					var this137 = _this10.tmp;
-					if(this137.pos == this137.array.length) {
-						var newSize37 = this137.array.length << 1;
-						if(newSize37 < 128) {
-							newSize37 = 128;
-						}
-						var newArray37 = new Float32Array(newSize37);
-						newArray37.set(this137.array);
-						this137.array = newArray37;
-					}
-					this137.array[this137.pos++] = g4;
-					var this138 = _this10.tmp;
-					if(this138.pos == this138.array.length) {
-						var newSize38 = this138.array.length << 1;
-						if(newSize38 < 128) {
-							newSize38 = 128;
-						}
-						var newArray38 = new Float32Array(newSize38);
-						newArray38.set(this138.array);
-						this138.array = newArray38;
-					}
-					this138.array[this138.pos++] = b4;
-					var this139 = _this10.tmp;
-					if(this139.pos == this139.array.length) {
-						var newSize39 = this139.array.length << 1;
-						if(newSize39 < 128) {
-							newSize39 = 128;
-						}
-						var newArray39 = new Float32Array(newSize39);
-						newArray39.set(this139.array);
-						this139.array = newArray39;
-					}
-					this139.array[this139.pos++] = a4;
-					_this10.bufferDirty = true;
-					var _this11 = this.content;
-					_this11.index.push(this.pindex);
-					_this11.indexDirty = true;
-					var _this12 = this.content;
-					_this12.index.push(pnext1);
-					_this12.indexDirty = true;
-					var _this13 = this.content;
-					_this13.index.push(this.pindex + 2);
-					_this13.indexDirty = true;
-					var _this14 = this.content;
-					_this14.index.push(this.pindex + 2);
-					_this14.indexDirty = true;
-					var _this15 = this.content;
-					_this15.index.push(pnext1);
-					_this15.indexDirty = true;
-					var _this16 = this.content;
-					_this16.index.push(pnext1 + 1);
-					_this16.indexDirty = true;
-				} else {
-					var _this17 = this.content;
-					var x5 = p.x + nnx;
-					var y5 = p.y + nny;
-					var r5 = p.r;
-					var g5 = p.g;
-					var b5 = p.b;
-					var a5 = p.a;
-					var this140 = _this17.tmp;
-					if(this140.pos == this140.array.length) {
-						var newSize40 = this140.array.length << 1;
-						if(newSize40 < 128) {
-							newSize40 = 128;
-						}
-						var newArray40 = new Float32Array(newSize40);
-						newArray40.set(this140.array);
-						this140.array = newArray40;
-					}
-					this140.array[this140.pos++] = x5;
-					var this141 = _this17.tmp;
-					if(this141.pos == this141.array.length) {
-						var newSize41 = this141.array.length << 1;
-						if(newSize41 < 128) {
-							newSize41 = 128;
-						}
-						var newArray41 = new Float32Array(newSize41);
-						newArray41.set(this141.array);
-						this141.array = newArray41;
-					}
-					this141.array[this141.pos++] = y5;
-					var this142 = _this17.tmp;
-					if(this142.pos == this142.array.length) {
-						var newSize42 = this142.array.length << 1;
-						if(newSize42 < 128) {
-							newSize42 = 128;
-						}
-						var newArray42 = new Float32Array(newSize42);
-						newArray42.set(this142.array);
-						this142.array = newArray42;
-					}
-					this142.array[this142.pos++] = 0;
-					var this143 = _this17.tmp;
-					if(this143.pos == this143.array.length) {
-						var newSize43 = this143.array.length << 1;
-						if(newSize43 < 128) {
-							newSize43 = 128;
-						}
-						var newArray43 = new Float32Array(newSize43);
-						newArray43.set(this143.array);
-						this143.array = newArray43;
-					}
-					this143.array[this143.pos++] = 0;
-					var this144 = _this17.tmp;
-					if(this144.pos == this144.array.length) {
-						var newSize44 = this144.array.length << 1;
-						if(newSize44 < 128) {
-							newSize44 = 128;
-						}
-						var newArray44 = new Float32Array(newSize44);
-						newArray44.set(this144.array);
-						this144.array = newArray44;
-					}
-					this144.array[this144.pos++] = r5;
-					var this145 = _this17.tmp;
-					if(this145.pos == this145.array.length) {
-						var newSize45 = this145.array.length << 1;
-						if(newSize45 < 128) {
-							newSize45 = 128;
-						}
-						var newArray45 = new Float32Array(newSize45);
-						newArray45.set(this145.array);
-						this145.array = newArray45;
-					}
-					this145.array[this145.pos++] = g5;
-					var this146 = _this17.tmp;
-					if(this146.pos == this146.array.length) {
-						var newSize46 = this146.array.length << 1;
-						if(newSize46 < 128) {
-							newSize46 = 128;
-						}
-						var newArray46 = new Float32Array(newSize46);
-						newArray46.set(this146.array);
-						this146.array = newArray46;
-					}
-					this146.array[this146.pos++] = b5;
-					var this147 = _this17.tmp;
-					if(this147.pos == this147.array.length) {
-						var newSize47 = this147.array.length << 1;
-						if(newSize47 < 128) {
-							newSize47 = 128;
-						}
-						var newArray47 = new Float32Array(newSize47);
-						newArray47.set(this147.array);
-						this147.array = newArray47;
-					}
-					this147.array[this147.pos++] = a5;
-					_this17.bufferDirty = true;
-					var _this18 = this.content;
-					var x6 = p.x - nx;
-					var y6 = p.y - ny;
-					var r6 = p.r;
-					var g6 = p.g;
-					var b6 = p.b;
-					var a6 = p.a;
-					var this148 = _this18.tmp;
-					if(this148.pos == this148.array.length) {
-						var newSize48 = this148.array.length << 1;
-						if(newSize48 < 128) {
-							newSize48 = 128;
-						}
-						var newArray48 = new Float32Array(newSize48);
-						newArray48.set(this148.array);
-						this148.array = newArray48;
-					}
-					this148.array[this148.pos++] = x6;
-					var this149 = _this18.tmp;
-					if(this149.pos == this149.array.length) {
-						var newSize49 = this149.array.length << 1;
-						if(newSize49 < 128) {
-							newSize49 = 128;
-						}
-						var newArray49 = new Float32Array(newSize49);
-						newArray49.set(this149.array);
-						this149.array = newArray49;
-					}
-					this149.array[this149.pos++] = y6;
-					var this150 = _this18.tmp;
-					if(this150.pos == this150.array.length) {
-						var newSize50 = this150.array.length << 1;
-						if(newSize50 < 128) {
-							newSize50 = 128;
-						}
-						var newArray50 = new Float32Array(newSize50);
-						newArray50.set(this150.array);
-						this150.array = newArray50;
-					}
-					this150.array[this150.pos++] = 0;
-					var this151 = _this18.tmp;
-					if(this151.pos == this151.array.length) {
-						var newSize51 = this151.array.length << 1;
-						if(newSize51 < 128) {
-							newSize51 = 128;
-						}
-						var newArray51 = new Float32Array(newSize51);
-						newArray51.set(this151.array);
-						this151.array = newArray51;
-					}
-					this151.array[this151.pos++] = 0;
-					var this152 = _this18.tmp;
-					if(this152.pos == this152.array.length) {
-						var newSize52 = this152.array.length << 1;
-						if(newSize52 < 128) {
-							newSize52 = 128;
-						}
-						var newArray52 = new Float32Array(newSize52);
-						newArray52.set(this152.array);
-						this152.array = newArray52;
-					}
-					this152.array[this152.pos++] = r6;
-					var this153 = _this18.tmp;
-					if(this153.pos == this153.array.length) {
-						var newSize53 = this153.array.length << 1;
-						if(newSize53 < 128) {
-							newSize53 = 128;
-						}
-						var newArray53 = new Float32Array(newSize53);
-						newArray53.set(this153.array);
-						this153.array = newArray53;
-					}
-					this153.array[this153.pos++] = g6;
-					var this154 = _this18.tmp;
-					if(this154.pos == this154.array.length) {
-						var newSize54 = this154.array.length << 1;
-						if(newSize54 < 128) {
-							newSize54 = 128;
-						}
-						var newArray54 = new Float32Array(newSize54);
-						newArray54.set(this154.array);
-						this154.array = newArray54;
-					}
-					this154.array[this154.pos++] = b6;
-					var this155 = _this18.tmp;
-					if(this155.pos == this155.array.length) {
-						var newSize55 = this155.array.length << 1;
-						if(newSize55 < 128) {
-							newSize55 = 128;
-						}
-						var newArray55 = new Float32Array(newSize55);
-						newArray55.set(this155.array);
-						this155.array = newArray55;
-					}
-					this155.array[this155.pos++] = a6;
-					_this18.bufferDirty = true;
-					var _this19 = this.content;
-					var x7 = p.x - nnx;
-					var y7 = p.y - nny;
-					var r7 = p.r;
-					var g7 = p.g;
-					var b7 = p.b;
-					var a7 = p.a;
-					var this156 = _this19.tmp;
-					if(this156.pos == this156.array.length) {
-						var newSize56 = this156.array.length << 1;
-						if(newSize56 < 128) {
-							newSize56 = 128;
-						}
-						var newArray56 = new Float32Array(newSize56);
-						newArray56.set(this156.array);
-						this156.array = newArray56;
-					}
-					this156.array[this156.pos++] = x7;
-					var this157 = _this19.tmp;
-					if(this157.pos == this157.array.length) {
-						var newSize57 = this157.array.length << 1;
-						if(newSize57 < 128) {
-							newSize57 = 128;
-						}
-						var newArray57 = new Float32Array(newSize57);
-						newArray57.set(this157.array);
-						this157.array = newArray57;
-					}
-					this157.array[this157.pos++] = y7;
-					var this158 = _this19.tmp;
-					if(this158.pos == this158.array.length) {
-						var newSize58 = this158.array.length << 1;
-						if(newSize58 < 128) {
-							newSize58 = 128;
-						}
-						var newArray58 = new Float32Array(newSize58);
-						newArray58.set(this158.array);
-						this158.array = newArray58;
-					}
-					this158.array[this158.pos++] = 0;
-					var this159 = _this19.tmp;
-					if(this159.pos == this159.array.length) {
-						var newSize59 = this159.array.length << 1;
-						if(newSize59 < 128) {
-							newSize59 = 128;
-						}
-						var newArray59 = new Float32Array(newSize59);
-						newArray59.set(this159.array);
-						this159.array = newArray59;
-					}
-					this159.array[this159.pos++] = 0;
-					var this160 = _this19.tmp;
-					if(this160.pos == this160.array.length) {
-						var newSize60 = this160.array.length << 1;
-						if(newSize60 < 128) {
-							newSize60 = 128;
-						}
-						var newArray60 = new Float32Array(newSize60);
-						newArray60.set(this160.array);
-						this160.array = newArray60;
-					}
-					this160.array[this160.pos++] = r7;
-					var this161 = _this19.tmp;
-					if(this161.pos == this161.array.length) {
-						var newSize61 = this161.array.length << 1;
-						if(newSize61 < 128) {
-							newSize61 = 128;
-						}
-						var newArray61 = new Float32Array(newSize61);
-						newArray61.set(this161.array);
-						this161.array = newArray61;
-					}
-					this161.array[this161.pos++] = g7;
-					var this162 = _this19.tmp;
-					if(this162.pos == this162.array.length) {
-						var newSize62 = this162.array.length << 1;
-						if(newSize62 < 128) {
-							newSize62 = 128;
-						}
-						var newArray62 = new Float32Array(newSize62);
-						newArray62.set(this162.array);
-						this162.array = newArray62;
-					}
-					this162.array[this162.pos++] = b7;
-					var this163 = _this19.tmp;
-					if(this163.pos == this163.array.length) {
-						var newSize63 = this163.array.length << 1;
-						if(newSize63 < 128) {
-							newSize63 = 128;
-						}
-						var newArray63 = new Float32Array(newSize63);
-						newArray63.set(this163.array);
-						this163.array = newArray63;
-					}
-					this163.array[this163.pos++] = a7;
-					_this19.bufferDirty = true;
-					var _this20 = this.content;
-					_this20.index.push(this.pindex + 1);
-					_this20.indexDirty = true;
-					var _this21 = this.content;
-					_this21.index.push(pnext1);
-					_this21.indexDirty = true;
-					var _this22 = this.content;
-					_this22.index.push(this.pindex + 2);
-					_this22.indexDirty = true;
-					var _this23 = this.content;
-					_this23.index.push(this.pindex + 1);
-					_this23.indexDirty = true;
-					var _this24 = this.content;
-					_this24.index.push(pnext1);
-					_this24.indexDirty = true;
-					var _this25 = this.content;
-					_this25.index.push(pnext1 + 1);
-					_this25.indexDirty = true;
-				}
-				var _this26 = this.content;
-				_this26.index.push(this.pindex);
-				_this26.indexDirty = true;
-				var _this27 = this.content;
-				_this27.index.push(this.pindex + 1);
-				_this27.indexDirty = true;
-				var _this28 = this.content;
-				_this28.index.push(this.pindex + 2);
-				_this28.indexDirty = true;
-				this.pindex += 3;
-			}
-			prev = p;
-			p = next;
-		}
-	}
-	,flushFill: function(i0) {
-		if(this.tmpPoints.length < 3) {
-			return;
-		}
-		var pts = this.tmpPoints;
-		var p0 = pts[0];
-		var p1 = pts[pts.length - 1];
-		var last = null;
-		var tmp;
-		var f = p0.x - p1.x;
-		if((f < 0 ? -f : f) < 1e-9) {
-			var f1 = p0.y - p1.y;
-			tmp = (f1 < 0 ? -f1 : f1) < 1e-9;
-		} else {
-			tmp = false;
-		}
-		if(tmp) {
-			last = pts.pop();
-		}
-		if(this.isConvex(pts)) {
-			var _g = 1;
-			var _g1 = pts.length - 1;
-			while(_g < _g1) {
-				var i = _g++;
-				var _this = this.content;
-				_this.index.push(i0);
-				_this.indexDirty = true;
-				var _this1 = this.content;
-				_this1.index.push(i0 + i);
-				_this1.indexDirty = true;
-				var _this2 = this.content;
-				_this2.index.push(i0 + i + 1);
-				_this2.indexDirty = true;
-			}
-		} else {
-			var ear = h2d_Graphics.EARCUT;
-			if(ear == null) {
-				ear = new hxd_earcut_Earcut();
-				h2d_Graphics.EARCUT = ear;
-			}
-			var _g2 = 0;
-			var _g11 = ear.triangulate_h2d_GPoint(pts);
-			while(_g2 < _g11.length) {
-				var i1 = _g11[_g2];
-				++_g2;
-				var _this3 = this.content;
-				_this3.index.push(i1 + i0);
-				_this3.indexDirty = true;
-			}
-		}
-		if(last != null) {
-			pts.push(last);
-		}
-	}
-	,flush: function() {
-		if(this.tmpPoints.length == 0) {
-			return;
-		}
-		if(this.doFill) {
-			this.flushFill(this.pindex);
-			this.pindex += this.tmpPoints.length;
-			if(this.content.next()) {
-				this.pindex = 0;
-			}
-		}
-		if(this.lineSize > 0) {
-			this.flushLine(this.pindex);
-			if(this.content.next()) {
-				this.pindex = 0;
-			}
-		}
-		this.tmpPoints = [];
-	}
-	,beginFill: function(color,alpha) {
-		if(alpha == null) {
-			alpha = 1.;
-		}
-		if(color == null) {
-			color = 0;
-		}
-		this.flush();
-		var alpha1 = alpha;
-		if(alpha1 == null) {
-			alpha1 = 1.;
-		}
-		this.curA = alpha1;
-		this.curR = (color >> 16 & 255) / 255.;
-		this.curG = (color >> 8 & 255) / 255.;
-		this.curB = (color & 255) / 255.;
-		this.doFill = true;
-	}
-	,beginTileFill: function(dx,dy,scaleX,scaleY,tile) {
-		this.beginFill(16777215);
-		if(dx == null) {
-			dx = 0;
-		}
-		if(dy == null) {
-			dy = 0;
-		}
-		if(tile != null) {
-			if(this.tile != null && tile.innerTex != this.tile.innerTex) {
-				var tex = this.tile.innerTex;
-				if(tex.width != 1 || tex.height != 1) {
-					throw new js__$Boot_HaxeError("All tiles must be of the same texture");
-				}
-				this.tile = tile;
-			}
-			if(this.tile == null) {
-				this.tile = tile;
-			}
-		} else {
-			tile = this.tile;
-		}
-		if(tile == null) {
-			throw new js__$Boot_HaxeError("Tile not specified");
-		}
-		if(scaleX == null) {
-			scaleX = 1;
-		}
-		if(scaleY == null) {
-			scaleY = 1;
-		}
-		dx -= tile.x;
-		dy -= tile.y;
-		var tex1 = tile.innerTex;
-		var pixWidth = 1 / tex1.width;
-		var pixHeight = 1 / tex1.height;
-		this.ma = pixWidth / scaleX;
-		this.mb = 0;
-		this.mc = 0;
-		this.md = pixHeight / scaleY;
-		this.mx = -dx * this.ma;
-		this.my = -dy * this.md;
-	}
-	,drawTile: function(x,y,tile) {
-		this.beginTileFill(x,y,null,null,tile);
-		this.drawRect(x,y,tile.width,tile.height);
-		this.endFill();
-	}
-	,lineStyle: function(size,color,alpha) {
-		if(alpha == null) {
-			alpha = 1.;
-		}
-		if(color == null) {
-			color = 0;
-		}
-		if(size == null) {
-			size = 0;
-		}
-		this.flush();
-		this.lineSize = size;
-		this.lineA = alpha;
-		this.lineR = (color >> 16 & 255) / 255.;
-		this.lineG = (color >> 8 & 255) / 255.;
-		this.lineB = (color & 255) / 255.;
-	}
-	,moveTo: function(x,y) {
-		this.flush();
-		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
-	}
-	,endFill: function() {
-		this.flush();
-		this.doFill = false;
-	}
-	,setColor: function(color,alpha) {
-		if(alpha == null) {
-			alpha = 1.;
-		}
-		this.curA = alpha;
-		this.curR = (color >> 16 & 255) / 255.;
-		this.curG = (color >> 8 & 255) / 255.;
-		this.curB = (color & 255) / 255.;
-	}
-	,drawRect: function(x,y,w,h) {
-		this.flush();
-		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
-		var x1 = x + w;
-		this.addVertex(x1,y,this.curR,this.curG,this.curB,this.curA,x1 * this.ma + y * this.mc + this.mx,x1 * this.mb + y * this.md + this.my);
-		var x2 = x + w;
-		var y1 = y + h;
-		this.addVertex(x2,y1,this.curR,this.curG,this.curB,this.curA,x2 * this.ma + y1 * this.mc + this.mx,x2 * this.mb + y1 * this.md + this.my);
-		var y2 = y + h;
-		this.addVertex(x,y2,this.curR,this.curG,this.curB,this.curA,x * this.ma + y2 * this.mc + this.mx,x * this.mb + y2 * this.md + this.my);
-		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
-		var e = 0.01;
-		this.tmpPoints[0].x += e;
-		this.tmpPoints[0].y += e;
-		this.tmpPoints[1].y += e;
-		this.tmpPoints[3].x += e;
-		this.tmpPoints[4].x += e;
-		this.tmpPoints[4].y += e;
-		this.flush();
-	}
-	,drawRoundedRect: function(x,y,w,h,radius,nsegments) {
-		if(nsegments == null) {
-			nsegments = 0;
-		}
-		var _gthis = this;
-		if(radius <= 0) {
-			this.drawRect(x,y,w,h);
-			return;
-		}
-		x += radius;
-		y += radius;
-		w -= radius * 2;
-		h -= radius * 2;
-		this.flush();
-		if(nsegments == 0) {
-			var f = radius * 1.57079632679489656 / 4;
-			nsegments = Math.ceil(f < 0 ? -f : f);
-		}
-		if(nsegments < 3) {
-			nsegments = 3;
-		}
-		var angle = 1.57079632679489656 / (nsegments - 1);
-		var y1 = y - radius;
-		this.addVertex(x,y1,this.curR,this.curG,this.curB,this.curA,x * this.ma + y1 * this.mc + this.mx,x * this.mb + y1 * this.md + this.my);
-		var x1 = x + w;
-		var y2 = y - radius;
-		this.addVertex(x1,y2,this.curR,this.curG,this.curB,this.curA,x1 * this.ma + y2 * this.mc + this.mx,x1 * this.mb + y2 * this.md + this.my);
-		var x2 = x + w;
-		var _g = 0;
-		var _g1 = nsegments;
-		while(_g < _g1) {
-			var i = _g++;
-			var a = i * angle + 4.71238898038469;
-			var x3 = x2 + Math.cos(a) * radius;
-			var y3 = y + Math.sin(a) * radius;
-			_gthis.addVertex(x3,y3,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x3 * _gthis.ma + y3 * _gthis.mc + _gthis.mx,x3 * _gthis.mb + y3 * _gthis.md + _gthis.my);
-		}
-		var x4 = x + w + radius;
-		var y4 = y + h;
-		this.addVertex(x4,y4,this.curR,this.curG,this.curB,this.curA,x4 * this.ma + y4 * this.mc + this.mx,x4 * this.mb + y4 * this.md + this.my);
-		var x5 = x + w;
-		var y5 = y + h;
-		var _g2 = 0;
-		var _g11 = nsegments;
-		while(_g2 < _g11) {
-			var i1 = _g2++;
-			var a1 = i1 * angle;
-			var x6 = x5 + Math.cos(a1) * radius;
-			var y6 = y5 + Math.sin(a1) * radius;
-			_gthis.addVertex(x6,y6,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x6 * _gthis.ma + y6 * _gthis.mc + _gthis.mx,x6 * _gthis.mb + y6 * _gthis.md + _gthis.my);
-		}
-		var y7 = y + h + radius;
-		this.addVertex(x,y7,this.curR,this.curG,this.curB,this.curA,x * this.ma + y7 * this.mc + this.mx,x * this.mb + y7 * this.md + this.my);
-		var y8 = y + h;
-		var _g3 = 0;
-		var _g12 = nsegments;
-		while(_g3 < _g12) {
-			var i2 = _g3++;
-			var a2 = i2 * angle + 1.57079632679489656;
-			var x7 = x + Math.cos(a2) * radius;
-			var y9 = y8 + Math.sin(a2) * radius;
-			_gthis.addVertex(x7,y9,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x7 * _gthis.ma + y9 * _gthis.mc + _gthis.mx,x7 * _gthis.mb + y9 * _gthis.md + _gthis.my);
-		}
-		var x8 = x - radius;
-		this.addVertex(x8,y,this.curR,this.curG,this.curB,this.curA,x8 * this.ma + y * this.mc + this.mx,x8 * this.mb + y * this.md + this.my);
-		var _g4 = 0;
-		var _g13 = nsegments;
-		while(_g4 < _g13) {
-			var i3 = _g4++;
-			var a3 = i3 * angle + 3.14159265358979312;
-			var x9 = x + Math.cos(a3) * radius;
-			var y10 = y + Math.sin(a3) * radius;
-			_gthis.addVertex(x9,y10,_gthis.curR,_gthis.curG,_gthis.curB,_gthis.curA,x9 * _gthis.ma + y10 * _gthis.mc + _gthis.mx,x9 * _gthis.mb + y10 * _gthis.md + _gthis.my);
-		}
-		this.flush();
-	}
-	,drawCircle: function(cx,cy,radius,nsegments) {
-		if(nsegments == null) {
-			nsegments = 0;
-		}
-		this.flush();
-		if(nsegments == 0) {
-			var f = radius * 3.14 * 2 / 4;
-			nsegments = Math.ceil(f < 0 ? -f : f);
-		}
-		if(nsegments < 3) {
-			nsegments = 3;
-		}
-		var angle = 6.28318530717958623 / nsegments;
-		var _g = 0;
-		var _g1 = nsegments + 1;
-		while(_g < _g1) {
-			var i = _g++;
-			var a = i * angle;
-			var x = cx + Math.cos(a) * radius;
-			var y = cy + Math.sin(a) * radius;
-			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
-		}
-		this.flush();
-	}
-	,drawEllipse: function(cx,cy,radiusX,radiusY,rotationAngle,nsegments) {
-		if(nsegments == null) {
-			nsegments = 0;
-		}
-		if(rotationAngle == null) {
-			rotationAngle = 0;
-		}
-		this.flush();
-		if(nsegments == 0) {
-			var f = radiusY * 3.14 * 2 / 4;
-			nsegments = Math.ceil(f < 0 ? -f : f);
-		}
-		if(nsegments < 3) {
-			nsegments = 3;
-		}
-		var angle = 6.28318530717958623 / nsegments;
-		var x1;
-		var y1;
-		var _g = 0;
-		var _g1 = nsegments + 1;
-		while(_g < _g1) {
-			var i = _g++;
-			var a = i * angle;
-			x1 = Math.cos(a) * Math.cos(rotationAngle) * radiusX - Math.sin(a) * Math.sin(rotationAngle) * radiusY;
-			y1 = Math.cos(rotationAngle) * Math.sin(a) * radiusY + Math.cos(a) * Math.sin(rotationAngle) * radiusX;
-			var x = cx + x1;
-			var y = cy + y1;
-			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
-		}
-		this.flush();
-	}
-	,drawPie: function(cx,cy,radius,angleStart,angleLength,nsegments) {
-		if(nsegments == null) {
-			nsegments = 0;
-		}
-		if((angleLength < 0 ? -angleLength : angleLength) >= 6.28318530717958623) {
-			this.drawCircle(cx,cy,radius,nsegments);
-			return;
-		}
-		this.flush();
-		this.addVertex(cx,cy,this.curR,this.curG,this.curB,this.curA,cx * this.ma + cy * this.mc + this.mx,cx * this.mb + cy * this.md + this.my);
-		if(nsegments == 0) {
-			var f = radius * angleLength / 4;
-			nsegments = Math.ceil(f < 0 ? -f : f);
-		}
-		if(nsegments < 3) {
-			nsegments = 3;
-		}
-		var angle = angleLength / (nsegments - 1);
-		var _g = 0;
-		var _g1 = nsegments;
-		while(_g < _g1) {
-			var i = _g++;
-			var a = i * angle + angleStart;
-			var x = cx + Math.cos(a) * radius;
-			var y = cy + Math.sin(a) * radius;
-			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
-		}
-		this.addVertex(cx,cy,this.curR,this.curG,this.curB,this.curA,cx * this.ma + cy * this.mc + this.mx,cx * this.mb + cy * this.md + this.my);
-		this.flush();
-	}
-	,drawRectanglePie: function(cx,cy,width,height,angleStart,angleLength,nsegments) {
-		if(nsegments == null) {
-			nsegments = 0;
-		}
-		if((angleLength < 0 ? -angleLength : angleLength) >= 6.28318530717958623) {
-			this.drawRect(cx - width / 2,cy - height / 2,width,height);
-			return;
-		}
-		this.flush();
-		this.addVertex(cx,cy,this.curR,this.curG,this.curB,this.curA,cx * this.ma + cy * this.mc + this.mx,cx * this.mb + cy * this.md + this.my);
-		if(nsegments == 0) {
-			var f = (width < height ? height : width) * angleLength / 4;
-			nsegments = Math.ceil(f < 0 ? -f : f);
-		}
-		if(nsegments < 3) {
-			nsegments = 3;
-		}
-		var angle = angleLength / (nsegments - 1);
-		var square2 = Math.sqrt(2);
-		var _g = 0;
-		var _g1 = nsegments;
-		while(_g < _g1) {
-			var i = _g++;
-			var a = i * angle + angleStart;
-			var _width = Math.cos(a) * (width / 2 + 1) * square2;
-			var _height = Math.sin(a) * (height / 2 + 1) * square2;
-			_width = (_width < 0 ? -_width : _width) >= width / 2 ? Math.cos(a) < 0 ? width / 2 * -1 : width / 2 : _width;
-			_height = (_height < 0 ? -_height : _height) >= height / 2 ? Math.sin(a) < 0 ? height / 2 * -1 : height / 2 : _height;
-			var x = cx + _width;
-			var y = cy + _height;
-			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
-		}
-		this.addVertex(cx,cy,this.curR,this.curG,this.curB,this.curA,cx * this.ma + cy * this.mc + this.mx,cx * this.mb + cy * this.md + this.my);
-		this.flush();
-	}
-	,curveTo: function(bx,by,cx,cy) {
-		var ax = this.tmpPoints.length == 0 ? 0 : this.tmpPoints[this.tmpPoints.length - 1].x;
-		var ay = this.tmpPoints.length == 0 ? 0 : this.tmpPoints[this.tmpPoints.length - 1].y;
-		var t = 0.66666666666666663;
-		this.cubicCurveTo(ax + t * (bx - ax),ay + t * (by - ay),cx + t * (bx - cx),cy + t * (by - cy),cx,cy);
-	}
-	,cubicCurveTo: function(bx,by,cx,cy,dx,dy,nsegments) {
-		if(nsegments == null) {
-			nsegments = 40;
-		}
-		var ax = this.tmpPoints.length == 0 ? 0 : this.tmpPoints[this.tmpPoints.length - 1].x;
-		var ay = this.tmpPoints.length == 0 ? 0 : this.tmpPoints[this.tmpPoints.length - 1].y;
-		var tobx = bx - ax;
-		var toby = by - ay;
-		var tocx = cx - bx;
-		var tocy = cy - by;
-		var todx = dx - cx;
-		var tody = dy - cy;
-		var step = 1 / nsegments;
-		var _g = 1;
-		var _g1 = nsegments;
-		while(_g < _g1) {
-			var i = _g++;
-			var d = i * step;
-			var px = ax + d * tobx;
-			var py = ay + d * toby;
-			var qx = bx + d * tocx;
-			var qy = by + d * tocy;
-			var rx = cx + d * todx;
-			var ry = cy + d * tody;
-			var toqx = qx - px;
-			var toqy = qy - py;
-			var torx = rx - qx;
-			var tory = ry - qy;
-			var sx = px + d * toqx;
-			var sy = py + d * toqy;
-			var tx = qx + d * torx;
-			var ty = qy + d * tory;
-			var totx = tx - sx;
-			var toty = ty - sy;
-			var x = sx + d * totx;
-			var y = sy + d * toty;
-			this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
-		}
-		this.addVertex(dx,dy,this.curR,this.curG,this.curB,this.curA,dx * this.ma + dy * this.mc + this.mx,dx * this.mb + dy * this.md + this.my);
-	}
-	,lineTo: function(x,y) {
-		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
-	}
-	,addVertex: function(x,y,r,g,b,a,u,v) {
-		if(v == null) {
-			v = 0.;
-		}
-		if(u == null) {
-			u = 0.;
-		}
-		if(x < this.xMin) {
-			this.xMin = x;
-		}
-		if(y < this.yMin) {
-			this.yMin = y;
-		}
-		if(x > this.xMax) {
-			this.xMax = x;
-		}
-		if(y > this.yMax) {
-			this.yMax = y;
-		}
-		if(this.doFill) {
-			var _this = this.content;
-			var this1 = _this.tmp;
-			if(this1.pos == this1.array.length) {
-				var newSize = this1.array.length << 1;
-				if(newSize < 128) {
-					newSize = 128;
-				}
-				var newArray = new Float32Array(newSize);
-				newArray.set(this1.array);
-				this1.array = newArray;
-			}
-			this1.array[this1.pos++] = x;
-			var this11 = _this.tmp;
-			if(this11.pos == this11.array.length) {
-				var newSize1 = this11.array.length << 1;
-				if(newSize1 < 128) {
-					newSize1 = 128;
-				}
-				var newArray1 = new Float32Array(newSize1);
-				newArray1.set(this11.array);
-				this11.array = newArray1;
-			}
-			this11.array[this11.pos++] = y;
-			var this12 = _this.tmp;
-			if(this12.pos == this12.array.length) {
-				var newSize2 = this12.array.length << 1;
-				if(newSize2 < 128) {
-					newSize2 = 128;
-				}
-				var newArray2 = new Float32Array(newSize2);
-				newArray2.set(this12.array);
-				this12.array = newArray2;
-			}
-			this12.array[this12.pos++] = u;
-			var this13 = _this.tmp;
-			if(this13.pos == this13.array.length) {
-				var newSize3 = this13.array.length << 1;
-				if(newSize3 < 128) {
-					newSize3 = 128;
-				}
-				var newArray3 = new Float32Array(newSize3);
-				newArray3.set(this13.array);
-				this13.array = newArray3;
-			}
-			this13.array[this13.pos++] = v;
-			var this14 = _this.tmp;
-			if(this14.pos == this14.array.length) {
-				var newSize4 = this14.array.length << 1;
-				if(newSize4 < 128) {
-					newSize4 = 128;
-				}
-				var newArray4 = new Float32Array(newSize4);
-				newArray4.set(this14.array);
-				this14.array = newArray4;
-			}
-			this14.array[this14.pos++] = r;
-			var this15 = _this.tmp;
-			if(this15.pos == this15.array.length) {
-				var newSize5 = this15.array.length << 1;
-				if(newSize5 < 128) {
-					newSize5 = 128;
-				}
-				var newArray5 = new Float32Array(newSize5);
-				newArray5.set(this15.array);
-				this15.array = newArray5;
-			}
-			this15.array[this15.pos++] = g;
-			var this16 = _this.tmp;
-			if(this16.pos == this16.array.length) {
-				var newSize6 = this16.array.length << 1;
-				if(newSize6 < 128) {
-					newSize6 = 128;
-				}
-				var newArray6 = new Float32Array(newSize6);
-				newArray6.set(this16.array);
-				this16.array = newArray6;
-			}
-			this16.array[this16.pos++] = b;
-			var this17 = _this.tmp;
-			if(this17.pos == this17.array.length) {
-				var newSize7 = this17.array.length << 1;
-				if(newSize7 < 128) {
-					newSize7 = 128;
-				}
-				var newArray7 = new Float32Array(newSize7);
-				newArray7.set(this17.array);
-				this17.array = newArray7;
-			}
-			this17.array[this17.pos++] = a;
-			_this.bufferDirty = true;
-		}
-		var gp = new h2d_GPoint();
-		gp.load(x,y,this.lineR,this.lineG,this.lineB,this.lineA);
-		this.tmpPoints.push(gp);
-	}
-	,draw: function(ctx) {
-		if(!ctx.beginDrawObject(this,this.tile.innerTex)) {
-			return;
-		}
-		this.content.render(ctx.engine);
-	}
-	,sync: function(ctx) {
-		h2d_Drawable.prototype.sync.call(this,ctx);
-		this.flush();
-		var _this = this.content;
-		if(_this.buffer == null || _this.buffer.isDisposed()) {
-			_this.alloc(h3d_Engine.CURRENT);
-		} else {
-			if(_this.bufferDirty) {
-				_this.buffer.dispose();
-				_this.buffer = h3d_Buffer.ofFloats(_this.tmp,8,[h3d_BufferFlag.RawFormat]);
-				_this.bufferDirty = false;
-			}
-			if(_this.indexDirty) {
-				_this.indexes.dispose();
-				_this.indexes = h3d_Indexes.alloc(_this.index);
-				_this.indexDirty = false;
-			}
-		}
-	}
-	,__class__: h2d_Graphics
 });
 var hxd_Interactive = function() { };
 $hxClasses["hxd.Interactive"] = hxd_Interactive;
@@ -23623,6 +23685,73 @@ var h3d_impl_RenderFlag = $hxEnums["h3d.impl.RenderFlag"] = { __ename__ : true, 
 	,CameraHandness: {_hx_index:0,__enum__:"h3d.impl.RenderFlag",toString:$estr}
 };
 h3d_impl_RenderFlag.__empty_constructs__ = [h3d_impl_RenderFlag.CameraHandness];
+var haxe_IMap = function() { };
+$hxClasses["haxe.IMap"] = haxe_IMap;
+haxe_IMap.__name__ = "haxe.IMap";
+haxe_IMap.__isInterface__ = true;
+var haxe_ds_StringMap = function() {
+	this.h = { };
+};
+$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
+haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
+haxe_ds_StringMap.prototype = {
+	setReserved: function(key,value) {
+		if(this.rh == null) {
+			this.rh = { };
+		}
+		this.rh["$" + key] = value;
+	}
+	,getReserved: function(key) {
+		if(this.rh == null) {
+			return null;
+		} else {
+			return this.rh["$" + key];
+		}
+	}
+	,existsReserved: function(key) {
+		if(this.rh == null) {
+			return false;
+		}
+		return this.rh.hasOwnProperty("$" + key);
+	}
+	,remove: function(key) {
+		if(__map_reserved[key] != null) {
+			key = "$" + key;
+			if(this.rh == null || !this.rh.hasOwnProperty(key)) {
+				return false;
+			}
+			delete(this.rh[key]);
+			return true;
+		} else {
+			if(!this.h.hasOwnProperty(key)) {
+				return false;
+			}
+			delete(this.h[key]);
+			return true;
+		}
+	}
+	,keys: function() {
+		return HxOverrides.iter(this.arrayKeys());
+	}
+	,arrayKeys: function() {
+		var out = [];
+		for( var key in this.h ) {
+		if(this.h.hasOwnProperty(key)) {
+			out.push(key);
+		}
+		}
+		if(this.rh != null) {
+			for( var key in this.rh ) {
+			if(key.charCodeAt(0) == 36) {
+				out.push(key.substr(1));
+			}
+			}
+		}
+		return out;
+	}
+	,__class__: haxe_ds_StringMap
+};
 var h3d_impl_InputNames = function(names) {
 	this.id = h3d_impl_InputNames.UID++;
 	this.names = names;
@@ -27284,6 +27413,35 @@ h3d_mat_Stencil.prototype = {
 		this.set_reference(this.maskBits >> 16 & 255);
 	}
 	,__class__: h3d_mat_Stencil
+};
+var haxe_ds_IntMap = function() {
+	this.h = { };
+};
+$hxClasses["haxe.ds.IntMap"] = haxe_ds_IntMap;
+haxe_ds_IntMap.__name__ = "haxe.ds.IntMap";
+haxe_ds_IntMap.__interfaces__ = [haxe_IMap];
+haxe_ds_IntMap.prototype = {
+	remove: function(key) {
+		if(!this.h.hasOwnProperty(key)) {
+			return false;
+		}
+		delete(this.h[key]);
+		return true;
+	}
+	,keys: function() {
+		var a = [];
+		for( var key in this.h ) (this.h.hasOwnProperty(key) ? a.push(key | 0) : null);
+		return HxOverrides.iter(a);
+	}
+	,iterator: function() {
+		return { ref : this.h, it : this.keys(), hasNext : function() {
+			return this.it.hasNext();
+		}, next : function() {
+			var i = this.it.next();
+			return this.ref[i];
+		}};
+	}
+	,__class__: haxe_ds_IntMap
 };
 var hxd_PixelFormat = $hxEnums["hxd.PixelFormat"] = { __ename__ : true, __constructs__ : ["ARGB","BGRA","RGBA","RGBA16F","RGBA32F","R8","R16F","R32F","RG8","RG16F","RG32F","RGB8","RGB16F","RGB32F","SRGB","SRGB_ALPHA","RGB10A2","RG11B10UF","S3TC"]
 	,ARGB: {_hx_index:0,__enum__:"hxd.PixelFormat",toString:$estr}
@@ -39594,10 +39752,6 @@ h3d_shader_VolumeDecal.prototype = $extend(hxsl_Shader.prototype,{
 	}
 	,__class__: h3d_shader_VolumeDecal
 });
-var haxe_IMap = function() { };
-$hxClasses["haxe.IMap"] = haxe_IMap;
-haxe_IMap.__name__ = "haxe.IMap";
-haxe_IMap.__isInterface__ = true;
 var haxe_EntryPoint = function() { };
 $hxClasses["haxe.EntryPoint"] = haxe_EntryPoint;
 haxe_EntryPoint.__name__ = "haxe.EntryPoint";
@@ -39787,6 +39941,24 @@ haxe_MainLoop.tick = function() {
 		e = next;
 	}
 	return wait;
+};
+var haxe_Resource = function() { };
+$hxClasses["haxe.Resource"] = haxe_Resource;
+haxe_Resource.__name__ = "haxe.Resource";
+haxe_Resource.getBytes = function(name) {
+	var _g = 0;
+	var _g1 = haxe_Resource.content;
+	while(_g < _g1.length) {
+		var x = _g1[_g];
+		++_g;
+		if(x.name == name) {
+			if(x.str != null) {
+				return haxe_io_Bytes.ofString(x.str);
+			}
+			return haxe_crypto_Base64.decode(x.data);
+		}
+	}
+	return null;
 };
 var haxe_Timer = function(time_ms) {
 	var me = this;
@@ -40936,35 +41108,6 @@ haxe_ds_EnumValueMap.prototype = $extend(haxe_ds_BalancedTree.prototype,{
 	}
 	,__class__: haxe_ds_EnumValueMap
 });
-var haxe_ds_IntMap = function() {
-	this.h = { };
-};
-$hxClasses["haxe.ds.IntMap"] = haxe_ds_IntMap;
-haxe_ds_IntMap.__name__ = "haxe.ds.IntMap";
-haxe_ds_IntMap.__interfaces__ = [haxe_IMap];
-haxe_ds_IntMap.prototype = {
-	remove: function(key) {
-		if(!this.h.hasOwnProperty(key)) {
-			return false;
-		}
-		delete(this.h[key]);
-		return true;
-	}
-	,keys: function() {
-		var a = [];
-		for( var key in this.h ) (this.h.hasOwnProperty(key) ? a.push(key | 0) : null);
-		return HxOverrides.iter(a);
-	}
-	,iterator: function() {
-		return { ref : this.h, it : this.keys(), hasNext : function() {
-			return this.it.hasNext();
-		}, next : function() {
-			var i = this.it.next();
-			return this.ref[i];
-		}};
-	}
-	,__class__: haxe_ds_IntMap
-};
 var haxe_ds_List = function() {
 	this.length = 0;
 };
@@ -41078,69 +41221,6 @@ haxe_ds__$StringMap_StringMapIterator.prototype = {
 		}
 	}
 	,__class__: haxe_ds__$StringMap_StringMapIterator
-};
-var haxe_ds_StringMap = function() {
-	this.h = { };
-};
-$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
-haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
-haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
-haxe_ds_StringMap.prototype = {
-	setReserved: function(key,value) {
-		if(this.rh == null) {
-			this.rh = { };
-		}
-		this.rh["$" + key] = value;
-	}
-	,getReserved: function(key) {
-		if(this.rh == null) {
-			return null;
-		} else {
-			return this.rh["$" + key];
-		}
-	}
-	,existsReserved: function(key) {
-		if(this.rh == null) {
-			return false;
-		}
-		return this.rh.hasOwnProperty("$" + key);
-	}
-	,remove: function(key) {
-		if(__map_reserved[key] != null) {
-			key = "$" + key;
-			if(this.rh == null || !this.rh.hasOwnProperty(key)) {
-				return false;
-			}
-			delete(this.rh[key]);
-			return true;
-		} else {
-			if(!this.h.hasOwnProperty(key)) {
-				return false;
-			}
-			delete(this.h[key]);
-			return true;
-		}
-	}
-	,keys: function() {
-		return HxOverrides.iter(this.arrayKeys());
-	}
-	,arrayKeys: function() {
-		var out = [];
-		for( var key in this.h ) {
-		if(this.h.hasOwnProperty(key)) {
-			out.push(key);
-		}
-		}
-		if(this.rh != null) {
-			for( var key in this.rh ) {
-			if(key.charCodeAt(0) == 36) {
-				out.push(key.substr(1));
-			}
-			}
-		}
-		return out;
-	}
-	,__class__: haxe_ds_StringMap
 };
 var haxe_ds__$Vector_Vector_$Impl_$ = {};
 $hxClasses["haxe.ds._Vector.Vector_Impl_"] = haxe_ds__$Vector_Vector_$Impl_$;
@@ -44792,6 +44872,22 @@ hxd_Pixels.prototype = {
 		return p;
 	}
 	,__class__: hxd_Pixels
+};
+var hxd_Res = function() { };
+$hxClasses["hxd.Res"] = hxd_Res;
+hxd_Res.__name__ = "hxd.Res";
+hxd_Res.load = function(name) {
+	return hxd_Res.get_loader().load(name);
+};
+hxd_Res.get_loader = function() {
+	var l = hxd_res_Loader.currentInstance;
+	if(l == null) {
+		throw new js__$Boot_HaxeError("Resource loader not initialized: call to hxd.Res.initXXX() required");
+	}
+	return l;
+};
+hxd_Res.set_loader = function(l) {
+	return hxd_res_Loader.currentInstance = l;
 };
 var hxd_SceneEvents = function($window) {
 	this.defaultCursor = hxd_Cursor.Default;
@@ -48995,6 +49091,198 @@ hxd_fs_BytesFileSystem.prototype = {
 		throw new js__$Boot_HaxeError("Not implemented");
 	}
 	,__class__: hxd_fs_BytesFileSystem
+};
+var hxd_fs__$EmbedFileSystem_EmbedEntry = function(fs,name,relPath,data) {
+	this.fs = fs;
+	this.name = name;
+	this.relPath = relPath;
+	this.data = data;
+};
+$hxClasses["hxd.fs._EmbedFileSystem.EmbedEntry"] = hxd_fs__$EmbedFileSystem_EmbedEntry;
+hxd_fs__$EmbedFileSystem_EmbedEntry.__name__ = "hxd.fs._EmbedFileSystem.EmbedEntry";
+hxd_fs__$EmbedFileSystem_EmbedEntry.__super__ = hxd_fs_FileEntry;
+hxd_fs__$EmbedFileSystem_EmbedEntry.prototype = $extend(hxd_fs_FileEntry.prototype,{
+	getSign: function() {
+		var old = this.readPos;
+		this.open();
+		this.readPos = old;
+		return this.bytes.b[0] | this.bytes.b[1] << 8 | this.bytes.b[2] << 16 | this.bytes.b[3] << 24;
+	}
+	,getBytes: function() {
+		if(this.bytes == null) {
+			this.open();
+		}
+		return this.bytes;
+	}
+	,open: function() {
+		if(this.bytes == null) {
+			this.bytes = haxe_Resource.getBytes(this.data);
+			if(this.bytes == null) {
+				throw new js__$Boot_HaxeError("Missing resource " + this.data);
+			}
+		}
+		this.readPos = 0;
+	}
+	,skip: function(nbytes) {
+		this.readPos += nbytes;
+	}
+	,readByte: function() {
+		return this.bytes.b[this.readPos++];
+	}
+	,read: function(out,pos,size) {
+		out.blit(pos,this.bytes,this.readPos,size);
+		this.readPos += size;
+	}
+	,close: function() {
+		this.bytes = null;
+		this.readPos = 0;
+	}
+	,load: function(onReady) {
+		if(onReady != null) {
+			haxe_Timer.delay(onReady,1);
+		}
+	}
+	,loadBitmap: function(onLoaded) {
+		var rawData = null;
+		var _g = 0;
+		var _g1 = haxe_Resource.content;
+		while(_g < _g1.length) {
+			var res = _g1[_g];
+			++_g;
+			if(res.name == this.data) {
+				rawData = res.data;
+				break;
+			}
+		}
+		if(rawData == null) {
+			throw new js__$Boot_HaxeError("Missing resource " + this.data);
+		}
+		var image = new Image();
+		image.onload = function(_) {
+			var this1 = image;
+			onLoaded(this1);
+		};
+		var extra = "";
+		var bytes = rawData.length * 6 >> 3;
+		var _g2 = 0;
+		var _g3 = (3 - bytes * 4 % 3) % 3;
+		while(_g2 < _g3) {
+			var i = _g2++;
+			extra += "=";
+		}
+		var tmp = "data:image/" + this.get_extension() + ";base64," + rawData;
+		image.src = tmp + extra;
+	}
+	,get_isDirectory: function() {
+		return this.fs.isDirectory(this.relPath);
+	}
+	,get_path: function() {
+		if(this.relPath == ".") {
+			return "<root>";
+		} else {
+			return this.relPath;
+		}
+	}
+	,exists: function(name) {
+		return this.fs.exists(this.relPath == "." ? name : this.relPath + "/" + name);
+	}
+	,get: function(name) {
+		return this.fs.get(this.relPath == "." ? name : this.relPath + "/" + name);
+	}
+	,get_size: function() {
+		this.open();
+		return this.bytes.length;
+	}
+	,iterator: function() {
+		return new hxd_impl_ArrayIterator_$hxd_$fs_$FileEntry(this.fs.subFiles(this.relPath));
+	}
+	,__class__: hxd_fs__$EmbedFileSystem_EmbedEntry
+});
+var hxd_fs_EmbedFileSystem = function(root) {
+	this.root = root;
+};
+$hxClasses["hxd.fs.EmbedFileSystem"] = hxd_fs_EmbedFileSystem;
+hxd_fs_EmbedFileSystem.__name__ = "hxd.fs.EmbedFileSystem";
+hxd_fs_EmbedFileSystem.__interfaces__ = [hxd_fs_FileSystem];
+hxd_fs_EmbedFileSystem.resolve = function(path) {
+	return "R_" + path.replace(hxd_fs_EmbedFileSystem.invalidChars.r,"_");
+};
+hxd_fs_EmbedFileSystem.prototype = {
+	getRoot: function() {
+		return new hxd_fs__$EmbedFileSystem_EmbedEntry(this,"root",".",null);
+	}
+	,splitPath: function(path) {
+		if(path == ".") {
+			return [];
+		} else {
+			return path.split("/");
+		}
+	}
+	,subFiles: function(path) {
+		var r = this.root;
+		var _g = 0;
+		var _g1 = this.splitPath(path);
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			r = Reflect.field(r,p);
+		}
+		if(r == null) {
+			throw new js__$Boot_HaxeError(path + " is not a directory");
+		}
+		var fields = Reflect.fields(r);
+		fields.sort(Reflect.compare);
+		var _g2 = [];
+		var _g3 = 0;
+		while(_g3 < fields.length) {
+			var name = fields[_g3];
+			++_g3;
+			_g2.push(this.get(path == "." ? name : path + "/" + name));
+		}
+		return _g2;
+	}
+	,isDirectory: function(path) {
+		var r = this.root;
+		var _g = 0;
+		var _g1 = this.splitPath(path);
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			r = Reflect.field(r,p);
+		}
+		if(r != null) {
+			return r != true;
+		} else {
+			return false;
+		}
+	}
+	,exists: function(path) {
+		var r = this.root;
+		var _g = 0;
+		var _g1 = this.splitPath(path);
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			r = Reflect.field(r,p);
+			if(r == null) {
+				return false;
+			}
+		}
+		return true;
+	}
+	,get: function(path) {
+		if(!this.exists(path)) {
+			throw new js__$Boot_HaxeError(new hxd_fs_NotFound(path));
+		}
+		var id = hxd_fs_EmbedFileSystem.resolve(path);
+		return new hxd_fs__$EmbedFileSystem_EmbedEntry(this,path.split("/").pop(),path,id);
+	}
+	,dispose: function() {
+	}
+	,dir: function(path) {
+		throw new js__$Boot_HaxeError("Not Supported");
+	}
+	,__class__: hxd_fs_EmbedFileSystem
 };
 var hxd_fs_FileInput = function(f) {
 	this.f = f;
@@ -57812,6 +58100,9 @@ hxsl_Eval.prototype = {
 					d = hxsl_TExprDef.TBinop(op,e12,e22);
 				}
 				break;
+			case 4:case 21:
+				d = hxsl_TExprDef.TBinop(op,e12,e22);
+				break;
 			case 5:
 				var _g10 = e22.e;
 				var _g18 = e12.e;
@@ -58657,9 +58948,6 @@ hxsl_Eval.prototype = {
 				break;
 			case 20:
 				var _g57 = op.op;
-				d = hxsl_TExprDef.TBinop(op,e12,e22);
-				break;
-			case 4:case 21:
 				d = hxsl_TExprDef.TBinop(op,e12,e22);
 				break;
 			case 22:
@@ -60888,10 +61176,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 5:
 				if(_g11._hx_index == 5) {
-					var _g20 = _g11.t;
+					var _g24 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g22 = _g2.t;
-						var _g21 = _g2.size;
+						var _g26 = _g2.t;
+						var _g25 = _g2.size;
 						var n = _g11.size;
 						this.buf.b += Std.string("vec" + n + "(");
 						var v9;
@@ -60942,10 +61230,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 6:
 				if(_g11._hx_index == 5) {
-					var _g111 = _g11.t;
+					var _g13 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g13 = _g2.t;
-						var _g12 = _g2.size;
+						var _g15 = _g2.t;
+						var _g14 = _g2.size;
 						var n1 = _g11.size;
 						this.buf.b += Std.string("vec" + n1 + "(");
 						var v12;
@@ -60996,10 +61284,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 7:
 				if(_g11._hx_index == 5) {
-					var _g24 = _g11.t;
+					var _g17 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g26 = _g2.t;
-						var _g25 = _g2.size;
+						var _g19 = _g2.t;
+						var _g18 = _g2.size;
 						var n2 = _g11.size;
 						this.buf.b += Std.string("vec" + n2 + "(");
 						var v15;
@@ -61050,10 +61338,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 8:
 				if(_g11._hx_index == 5) {
-					var _g28 = _g11.t;
+					var _g9 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g30 = _g2.t;
-						var _g29 = _g2.size;
+						var _g111 = _g2.t;
+						var _g10 = _g2.size;
 						var n3 = _g11.size;
 						this.buf.b += Std.string("vec" + n3 + "(");
 						var v18;
@@ -61104,10 +61392,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 9:
 				if(_g11._hx_index == 5) {
-					var _g7 = _g11.t;
+					var _g28 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g9 = _g2.t;
-						var _g8 = _g2.size;
+						var _g30 = _g2.t;
+						var _g29 = _g2.size;
 						var n4 = _g11.size;
 						this.buf.b += Std.string("vec" + n4 + "(");
 						var v21;
@@ -61252,7 +61540,7 @@ hxsl_GlslOut.prototype = {
 									this.decl("vec3 m3x4mult( vec3 v, _mat3x4 m) { vec4 ve = vec4(v,1.0); return vec3(dot(m.a,ve),dot(m.b,ve),dot(m.c,ve)); }");
 									var tmp2;
 									if(op._hx_index == 20) {
-										var _g10 = op.op;
+										var _g7 = op.op;
 										tmp2 = true;
 									} else {
 										tmp2 = false;
@@ -61303,7 +61591,7 @@ hxsl_GlslOut.prototype = {
 					if(e.t != hxsl_Type.TInt) {
 						var tmp3;
 						if(op._hx_index == 20) {
-							var _g14 = op.op;
+							var _g8 = op.op;
 							tmp3 = true;
 						} else {
 							tmp3 = false;
@@ -61394,10 +61682,10 @@ hxsl_GlslOut.prototype = {
 					var v37 = this.getFunName(g1,args,e.t);
 					this.buf.b += Std.string(v37);
 					this.buf.b += Std.string("(");
-					var _g15 = 0;
-					while(_g15 < args.length) {
-						var e3 = args[_g15];
-						++_g15;
+					var _g12 = 0;
+					while(_g12 < args.length) {
+						var e3 = args[_g12];
+						++_g12;
 						this.addValue(e3,tabs);
 						this.buf.b += Std.string(", ");
 					}
@@ -61422,10 +61710,10 @@ hxsl_GlslOut.prototype = {
 						}
 						this.buf.b += Std.string("(");
 						var first = true;
-						var _g23 = 0;
-						while(_g23 < args1.length) {
-							var e5 = args1[_g23];
-							++_g23;
+						var _g21 = 0;
+						while(_g21 < args1.length) {
+							var e5 = args1[_g21];
+							++_g21;
 							if(first) {
 								first = false;
 							} else {
@@ -61439,9 +61727,9 @@ hxsl_GlslOut.prototype = {
 				default:
 					var args2 = _g35;
 					var v40 = _g34;
-					var _g17 = v40.e;
-					if(_g17._hx_index == 2) {
-						var g3 = _g17.g;
+					var _g20 = v40.e;
+					if(_g20._hx_index == 2) {
+						var g3 = _g20.g;
 						var v41 = this.getFunName(g3,args2,e.t);
 						this.buf.b += Std.string(v41);
 					} else {
@@ -61449,10 +61737,10 @@ hxsl_GlslOut.prototype = {
 					}
 					this.buf.b += Std.string("(");
 					var first1 = true;
-					var _g27 = 0;
-					while(_g27 < args2.length) {
-						var e6 = args2[_g27];
-						++_g27;
+					var _g22 = 0;
+					while(_g22 < args2.length) {
+						var e6 = args2[_g22];
+						++_g22;
 						if(first1) {
 							first1 = false;
 						} else {
@@ -61465,9 +61753,9 @@ hxsl_GlslOut.prototype = {
 			} else {
 				var args3 = _g35;
 				var v42 = _g34;
-				var _g18 = v42.e;
-				if(_g18._hx_index == 2) {
-					var g4 = _g18.g;
+				var _g23 = v42.e;
+				if(_g23._hx_index == 2) {
+					var g4 = _g23.g;
 					var v43 = this.getFunName(g4,args3,e.t);
 					this.buf.b += Std.string(v43);
 				} else {
@@ -61475,10 +61763,10 @@ hxsl_GlslOut.prototype = {
 				}
 				this.buf.b += Std.string("(");
 				var first2 = true;
-				var _g210 = 0;
-				while(_g210 < args3.length) {
-					var e7 = args3[_g210];
-					++_g210;
+				var _g27 = 0;
+				while(_g27 < args3.length) {
+					var e7 = args3[_g27];
+					++_g27;
 					if(first2) {
 						first2 = false;
 					} else {
@@ -61493,10 +61781,10 @@ hxsl_GlslOut.prototype = {
 			var regs = _g.regs;
 			var e8 = _g.e;
 			if(e8.t._hx_index == 3) {
-				var _g19 = 0;
-				while(_g19 < regs.length) {
-					var r = regs[_g19];
-					++_g19;
+				var _g32 = 0;
+				while(_g32 < regs.length) {
+					var r = regs[_g32];
+					++_g32;
 					if(r != hxsl_Component.X) {
 						throw new js__$Boot_HaxeError("assert");
 					}
@@ -61529,10 +61817,10 @@ hxsl_GlslOut.prototype = {
 			} else {
 				this.addValue(e8,tabs);
 				this.buf.b += Std.string(".");
-				var _g32 = 0;
-				while(_g32 < regs.length) {
-					var r1 = regs[_g32];
-					++_g32;
+				var _g33 = 0;
+				while(_g33 < regs.length) {
+					var r1 = regs[_g33];
+					++_g33;
 					var _this2 = this.buf;
 					var _this3 = _this2.b;
 					var tmp5;
@@ -61587,11 +61875,11 @@ hxsl_GlslOut.prototype = {
 			var it = _g.it;
 			var v44 = _g.v;
 			this.locals.h[v44.id] = v44;
-			var _g33 = it.e;
-			if(_g33._hx_index == 5) {
-				if(_g33.op._hx_index == 21) {
-					var e22 = _g33.e2;
-					var e13 = _g33.e1;
+			var _g40 = it.e;
+			if(_g40._hx_index == 5) {
+				if(_g40.op._hx_index == 21) {
+					var e22 = _g40.e2;
+					var e13 = _g40.e1;
 					this.buf.b += Std.string("for(");
 					this.buf.b += Std.string(v44.name + "=");
 					this.addValue(e13,tabs);
@@ -61622,10 +61910,10 @@ hxsl_GlslOut.prototype = {
 			break;
 		case 17:
 			var el1 = _g.el;
-			var _g40 = e.t;
-			if(_g40._hx_index == 15) {
-				var _g211 = _g40.size;
-				var t = _g40.t;
+			var _g41 = e.t;
+			if(_g41._hx_index == 15) {
+				var _g210 = _g41.size;
+				var t = _g41.t;
 				this.addType(t);
 			} else {
 				throw new js__$Boot_HaxeError("assert");
@@ -64884,8 +65172,9 @@ var Float = Number;
 var Bool = Boolean;
 var Class = { };
 var Enum = { };
-haxe_ds_ObjectMap.count = 0;
 var __map_reserved = {};
+haxe_Resource.content = [{ name : "R_zipper4_png", data : "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAJlJREFUOI2tkt0NwyAQgz+YJMoIKGK5rJQJukj34JUH56FNC4SfpKoldMhg31kAL4gv0v0QtiG8bGIBnusDgHlalO6vGJhBR9Pg8wkAYvBZHeDT0PZuDcSC+xGU8EonOGXdnGt1NkXNRIrBa3NOb0FtpYanyRWD74lVilsZezjyG/jtFbrN1Dis8ar91jsGQBFhnpasjvi/YAfM5EP3lBA0cgAAAABJRU5ErkJggg"}];
+haxe_ds_ObjectMap.count = 0;
 Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function() {
 	return String(this.val);
 }});
@@ -65331,6 +65620,7 @@ hxd_fmt_hmd_Position.QTMP = new h3d_Quat();
 hxd_fmt_hmd_Data.CURRENT_VERSION = 3;
 hxd_fmt_hmd_Reader.BLEND = h2d_BlendMode.__empty_constructs__.slice();
 hxd_fmt_hmd_Reader.CULLING = h3d_mat_Face.__empty_constructs__.slice();
+hxd_fs_EmbedFileSystem.invalidChars = new EReg("[^A-Za-z0-9_]","g");
 hxd_impl__$Allocator_BufferFlags_$Impl_$.Dynamic = 0;
 hxd_impl__$Allocator_BufferFlags_$Impl_$.UniformDynamic = 1;
 hxd_poly2tri_Point.C_ID = 0;

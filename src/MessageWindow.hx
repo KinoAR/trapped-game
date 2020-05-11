@@ -1,49 +1,39 @@
 package;
+import WindowBase;
 
 import hxd.res.DefaultFont;
 
-class MessageWindow {
+class MessageWindow  extends WindowBase{
   var storyText: h2d.Text;
   var textInput: h2d.TextInput;
   var debug: h2d.Text;
   var scene: h2d.Scene;
 
-  public function new(scene: h2d.Scene) {
-    this.scene = scene;
+  public function new(scene: h2d.Scene, x:Float, y:Float, width:Float, height:Float) {
+    super(scene, x, y, width, height);
     init();
   }
 
-  function init() {
-    drawBorder(10, 360);
-    setupText(30, 380);
-    setupTextInput(30, 420);
-  }
-
-  function drawBorder(x:Float, y:Float) {
-    var border = new h2d.Graphics(scene);
-    var width = 350;
-    var height = 400;
-    border.lineStyle(1, 0xAAAAAA);
-    border.lineTo(x, y);
-    border.lineTo(x + width, y);
-    border.lineTo(x+ width, y + height);
-    border.lineTo(x, y + height);
-    border.lineTo(x, y);
+  override function init() {
+    super.init();
+    drawBorder(this.x, this.y, this.width, this.height);
+    setupText(this.x + 30, this.y + 20);
+    // setupTextInput(30, 420);
   }
 
   function setupText(x:Float, y:Float) {
-    storyText = new h2d.Text(DefaultFont.get(), scene);
-    storyText.scale(2);
-    storyText.text = "Story Text";
+    storyText = new h2d.Text(DefaultFont.get(), this);
+    storyText.scale(1.2);
+    storyText.smooth = true;
     storyText.x = x;
     storyText.y = y;
     storyText.textColor = 0xFFFFFF;
-    storyText.dropShadow = {dx: 2, dy:2, color:0xAAAAAA, alpha:255};
+    // storyText.dropShadow = {dx: 2, dy:2, color:0xAAAAAA, alpha:255};
   }
 
   function setupTextInput(x:Float, y:Float) {
     var font = DefaultFont.get();
-    textInput = new h2d.TextInput(font, scene);
+    textInput = new h2d.TextInput(font, this);
     textInput.backgroundColor = 0x80808080;
     textInput.text = "This is a test message";
     trace("Added text input");

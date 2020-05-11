@@ -10,3 +10,11 @@
 
 1. Download the project.
 2. Compile the project.
+
+
+
+
+---
+
+## Notes
+- Tiles are essentially raw image data 

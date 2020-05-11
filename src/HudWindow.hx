@@ -2,7 +2,7 @@ import hxd.res.DefaultFont;
 import Types;
 
 
-class HudWindow {
+class HudWindow  extends WindowBase {
   var conditionText: h2d.Text;
   var days:Int;
   var dayText: h2d.Text;
@@ -10,31 +10,28 @@ class HudWindow {
   var background: h2d.Graphics;
 
 
-  public function new(scene:h2d.Scene) {
-    this.scene = scene;
+  public function new(scene:h2d.Scene, x:Float, y:Float, width:Float, height:Float) {
+    super(scene, x, y, width, height);
     init();
   }
 
-  function init() {
-    drawHUDBackground(6, 6);
-    setupCondition(10, 10);
-    setupDays(50, 0);
+  override function init() {
+    drawHUDBackground(this.x + 6, this.y + 6);
+    setupCondition(this.x + 10, this.y + 10);
+    setupDays(this.x + 50, 0);
   }
 
   function  drawHUDBackground(x:Float, y:Float) {
-    background = new h2d.Graphics(scene);
-    background.x = x;
-    background.y = y;
-    background.beginFill(0x0202020);
-    background.drawRect(x, y, 344, 50);
-    background.endFill();
+    this.beginFill(0x0202020);
+    this.drawRect(x, y, this.width, this.height);
+    this.endFill();
   }
 
   function setupCondition(x:Float, y:Float) {
     var font = hxd.res.DefaultFont.get();
-    conditionText = new h2d.Text(font, scene);
-    conditionText.x = background.x + x;
-    conditionText.y = background.y + y;
+    conditionText = new h2d.Text(font, this);
+    conditionText.x = x;
+    conditionText.y = y;
     conditionText.scale(1.5);
     conditionText.smooth = true;
     setCondition(Good);
@@ -42,7 +39,7 @@ class HudWindow {
 
   function setupDays(x:Float, y:Float) {
     var font = DefaultFont.get();
-    dayText = new h2d.Text(font, scene);
+    dayText = new h2d.Text(font, this);
     dayText.x = conditionText.x + x;
     dayText.y = conditionText.y + y;
     dayText.textColor = 0xFFFFFF;
