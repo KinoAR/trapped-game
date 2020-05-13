@@ -1,0 +1,89 @@
+{
+	"sheets": [
+		{
+			"name": "scene",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "1",
+					"name": "name"
+				}
+			],
+			"lines": [
+				{
+					"id": "IntroScene",
+					"name": "Introduction"
+				},
+				{
+					"id": "",
+					"name": ""
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "sceneEvents",
+			"columns": [
+				{
+					"typeStr": "6:scene",
+					"name": "scene",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"scene": "IntroScene"
+				}
+			],
+			"separators": [],
+			"props": {}
+		}
+	],
+	"customTypes": [
+		{
+			"name": "SysCommands",
+			"cases": [
+				{
+					"name": "ShowText",
+					"args": [
+						{
+							"name": "str",
+							"typeStr": "1"
+						}
+					]
+				},
+				{
+					"name": "ChangeGraphic",
+					"args": [
+						{
+							"name": "tile",
+							"typeStr": "1"
+						}
+					]
+				},
+				{
+					"name": "Wait",
+					"args": [
+						{
+							"name": "seconds",
+							"typeStr": "3"
+						}
+					]
+				},
+				{
+					"name": "CloseWindow",
+					"args": []
+				},
+				{
+					"name": "ShowWindow",
+					"args": []
+				}
+			]
+		}
+	],
+	"compress": false
+}

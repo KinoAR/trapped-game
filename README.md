@@ -18,3 +18,4 @@
 
 ## Notes
 - Tiles are essentially raw image data 
+- Haxe Heaps library let's you load textures by just adding them to your res folder

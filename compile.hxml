@@ -1,4 +1,5 @@
 -cp src
+-lib castle
 -lib heaps
 -js main.js
 -main Main

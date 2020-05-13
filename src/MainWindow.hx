@@ -18,6 +18,7 @@ class MainWindow {
 
   public function init() {
     sendCommand(ShowText("Welcome to the show"));
+    trace(hxd.Res.example.entry);
     sendCommand(ChangeGraphic(hxd.Res.zipper4.toTile()));
   }
 
@@ -31,6 +32,8 @@ class MainWindow {
         showStoryText(str);
       case ChangeGraphic(tile):
         showGraphic(tile);
+      case Wait(seconds):
+        //Pass
       case CloseWindow:
         show(false);
       case ShowWindow:

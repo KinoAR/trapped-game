@@ -7,56 +7,6 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
-var EReg = function(r,opt) {
-	this.r = new RegExp(r,opt.split("u").join(""));
-};
-$hxClasses["EReg"] = EReg;
-EReg.__name__ = "EReg";
-EReg.prototype = {
-	match: function(s) {
-		if(this.r.global) {
-			this.r.lastIndex = 0;
-		}
-		this.r.m = this.r.exec(s);
-		this.r.s = s;
-		return this.r.m != null;
-	}
-	,matched: function(n) {
-		if(this.r.m != null && n >= 0 && n < this.r.m.length) {
-			return this.r.m[n];
-		} else {
-			throw new js__$Boot_HaxeError("EReg::matched");
-		}
-	}
-	,matchedPos: function() {
-		if(this.r.m == null) {
-			throw new js__$Boot_HaxeError("No string matched");
-		}
-		return { pos : this.r.m.index, len : this.r.m[0].length};
-	}
-	,matchSub: function(s,pos,len) {
-		if(len == null) {
-			len = -1;
-		}
-		if(this.r.global) {
-			this.r.lastIndex = pos;
-			this.r.m = this.r.exec(len < 0 ? s : HxOverrides.substr(s,0,pos + len));
-			var b = this.r.m != null;
-			if(b) {
-				this.r.s = s;
-			}
-			return b;
-		} else {
-			var b1 = this.match(len < 0 ? HxOverrides.substr(s,pos,null) : HxOverrides.substr(s,pos,len));
-			if(b1) {
-				this.r.s = s;
-				this.r.m.index += pos;
-			}
-			return b1;
-		}
-	}
-	,__class__: EReg
-};
 var h2d_Object = function(parent) {
 	this.alpha = 1.;
 	this.matA = 1;
@@ -2942,780 +2892,71 @@ h2d_Graphics.prototype = $extend(h2d_Drawable.prototype,{
 	}
 	,__class__: h2d_Graphics
 });
-var WindowBase = function(scene,x,y,width,height) {
-	h2d_Graphics.call(this,scene);
+var BaseBtn = function(parent,x,y,width,height) {
+	h2d_Graphics.call(this,parent);
 	this.posChanged = true;
 	this.x = x;
 	this.posChanged = true;
 	this.y = y;
 	this.width = width;
 	this.height = height;
+	this.interaction = new h2d_Interactive(this.width,this.height,this);
 	this.init();
 };
-$hxClasses["WindowBase"] = WindowBase;
-WindowBase.__name__ = "WindowBase";
-WindowBase.__super__ = h2d_Graphics;
-WindowBase.prototype = $extend(h2d_Graphics.prototype,{
+$hxClasses["BaseBtn"] = BaseBtn;
+BaseBtn.__name__ = "BaseBtn";
+BaseBtn.__super__ = h2d_Graphics;
+BaseBtn.prototype = $extend(h2d_Graphics.prototype,{
 	init: function() {
-		this.drawBorder(this.x,this.y,this.width,this.height);
+		this.createBackground(0,0);
+		this.createText(10,10);
 	}
-	,drawBorder: function(x,y,width,height) {
-		this.lineStyle(1,11184810);
-		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
-		var x1 = x + width;
-		this.addVertex(x1,y,this.curR,this.curG,this.curB,this.curA,x1 * this.ma + y * this.mc + this.mx,x1 * this.mb + y * this.md + this.my);
-		var x2 = x + width;
-		var y1 = y + height;
-		this.addVertex(x2,y1,this.curR,this.curG,this.curB,this.curA,x2 * this.ma + y1 * this.mc + this.mx,x2 * this.mb + y1 * this.md + this.my);
-		var y2 = y + height;
-		this.addVertex(x,y2,this.curR,this.curG,this.curB,this.curA,x * this.ma + y2 * this.mc + this.mx,x * this.mb + y2 * this.md + this.my);
-		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
-	}
-	,show: function(bool) {
-		this.set_visible(bool);
-	}
-	,__class__: WindowBase
-});
-var GraphicWindow = function(scene,x,y,width,height) {
-	WindowBase.call(this,scene,x,y,width,height);
-	this.init();
-};
-$hxClasses["GraphicWindow"] = GraphicWindow;
-GraphicWindow.__name__ = "GraphicWindow";
-GraphicWindow.__super__ = WindowBase;
-GraphicWindow.prototype = $extend(WindowBase.prototype,{
-	init: function() {
-		WindowBase.prototype.init.call(this);
-		this.drawBackground(this.x + 1,this.y + 1,11184810);
-		this.setupGraphic(this.x,this.y);
-		this.setupTextInput(this.x + 5,this.y + 10);
-	}
-	,drawBackground: function(x,y,color) {
-		this.beginFill(color);
-		this.drawRect(x,y,347,347);
-		this.endFill();
-	}
-	,setupGraphic: function(x,y) {
-		this.storyGraphic = new h2d_Graphics(this);
-		var _this = this.storyGraphic;
+	,createBackground: function(x,y) {
+		this.background = new h2d_Graphics(this);
+		var _this = this.background;
 		_this.posChanged = true;
 		_this.x = x;
-		var _this1 = this.storyGraphic;
+		var _this1 = this.background;
 		_this1.posChanged = true;
 		_this1.y = y;
 	}
-	,setupTextInput: function(x,y) {
+	,createText: function(x,y) {
 		var font = hxd_res_DefaultFont.get();
-		this.storyText = new h2d_Text(font,this);
-		var _this = this.storyText;
+		this.text = new h2d_Text(font,this);
+		var _this = this.text;
 		_this.posChanged = true;
 		_this.x = x;
-		var _this1 = this.storyText;
+		var _this1 = this.text;
 		_this1.posChanged = true;
 		_this1.y = y;
-		var _this2 = this.storyText;
+		var _this2 = this.text;
 		var _g = _this2;
 		_g.posChanged = true;
-		_g.scaleX *= 1.2;
+		_g.scaleX *= 1.5;
 		var _g1 = _this2;
 		_g1.posChanged = true;
-		_g1.scaleY *= 1.2;
-		this.storyText.set_textColor(16777215);
-	}
-	,setGraphic: function(image) {
-		this.storyGraphic.clear();
-		this.storyGraphic.drawTile(this.x,this.y,image);
-		var scaleAmount = this.width / this.storyGraphic.tile.width;
-		var _this = this.storyGraphic;
-		var v = scaleAmount / 2;
-		var _g = _this;
-		_g.posChanged = true;
-		_g.scaleX *= v;
-		var _g1 = _this;
-		_g1.posChanged = true;
-		_g1.scaleY *= v;
+		_g1.scaleY *= 1.5;
 	}
 	,setBackgroundColor: function(color) {
-		this.background.clear();
-		this.drawBackground(10,10,color);
+		this.backgroundColor = color;
+		this.drawBackground();
+		return this;
 	}
-	,clearWindow: function() {
-		this.storyText.set_text("");
-		this.storyGraphic.clear();
-	}
-	,setStoryText: function(text) {
-		this.storyText.set_text(text);
-	}
-	,__class__: GraphicWindow
-});
-var HudWindow = function(scene,x,y,width,height) {
-	WindowBase.call(this,scene,x,y,width,height);
-	this.init();
-};
-$hxClasses["HudWindow"] = HudWindow;
-HudWindow.__name__ = "HudWindow";
-HudWindow.__super__ = WindowBase;
-HudWindow.prototype = $extend(WindowBase.prototype,{
-	init: function() {
-		this.drawHUDBackground(this.x + 6,this.y + 6);
-		this.setupCondition(this.x + 10,this.y + 10);
-		this.setupDays(this.x + 50,0);
-	}
-	,drawHUDBackground: function(x,y) {
-		this.beginFill(2105376);
-		this.drawRect(x,y,this.width,this.height);
-		this.endFill();
-	}
-	,setupCondition: function(x,y) {
-		var font = hxd_res_DefaultFont.get();
-		this.conditionText = new h2d_Text(font,this);
-		var _this = this.conditionText;
-		_this.posChanged = true;
-		_this.x = x;
-		var _this1 = this.conditionText;
-		_this1.posChanged = true;
-		_this1.y = y;
-		var _this2 = this.conditionText;
-		var _g = _this2;
-		_g.posChanged = true;
-		_g.scaleX *= 1.5;
-		var _g1 = _this2;
-		_g1.posChanged = true;
-		_g1.scaleY *= 1.5;
-		this.conditionText.smooth = true;
-		this.setCondition(Condition.Good);
-	}
-	,setupDays: function(x,y) {
-		var font = hxd_res_DefaultFont.get();
-		this.dayText = new h2d_Text(font,this);
-		var _this = this.dayText;
-		_this.posChanged = true;
-		_this.x = this.conditionText.x + x;
-		var _this1 = this.dayText;
-		_this1.posChanged = true;
-		_this1.y = this.conditionText.y + y;
-		this.dayText.set_textColor(16777215);
-		this.dayText.smooth = true;
-		var _this2 = this.dayText;
-		var _g = _this2;
-		_g.posChanged = true;
-		_g.scaleX *= 1.5;
-		var _g1 = _this2;
-		_g1.posChanged = true;
-		_g1.scaleY *= 1.5;
-		this.setDays(0);
-	}
-	,setCondition: function(condition) {
-		switch(condition._hx_index) {
-		case 0:
-			this.conditionText.set_text("Good");
-			this.conditionText.set_textColor(14350246);
-			break;
-		case 1:
-			this.conditionText.set_text("Average");
-			this.conditionText.set_textColor(16761600);
-			break;
-		case 2:
-			this.conditionText.set_text("Bad");
-			this.conditionText.set_textColor(16734003);
-			break;
-		}
-		haxe_Log.trace(this.conditionText.textColor,{ fileName : "src/HudWindow.hx", lineNumber : 63, className : "HudWindow", methodName : "setCondition"});
-	}
-	,setDays: function(days) {
-		this.dayText.set_text("Days: " + days);
-	}
-	,hide: function(bool) {
-		this.conditionText.set_visible(bool);
-		this.dayText.set_visible(bool);
-		this.background.set_visible(bool);
-	}
-	,__class__: HudWindow
-});
-var HxOverrides = function() { };
-$hxClasses["HxOverrides"] = HxOverrides;
-HxOverrides.__name__ = "HxOverrides";
-HxOverrides.strDate = function(s) {
-	switch(s.length) {
-	case 8:
-		var k = s.split(":");
-		var d = new Date();
-		d["setTime"](0);
-		d["setUTCHours"](k[0]);
-		d["setUTCMinutes"](k[1]);
-		d["setUTCSeconds"](k[2]);
-		return d;
-	case 10:
-		var k1 = s.split("-");
-		return new Date(k1[0],k1[1] - 1,k1[2],0,0,0);
-	case 19:
-		var k2 = s.split(" ");
-		var y = k2[0].split("-");
-		var t = k2[1].split(":");
-		return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
-	default:
-		throw new js__$Boot_HaxeError("Invalid date format : " + s);
-	}
-};
-HxOverrides.cca = function(s,index) {
-	var x = s.charCodeAt(index);
-	if(x != x) {
-		return undefined;
-	}
-	return x;
-};
-HxOverrides.substr = function(s,pos,len) {
-	if(len == null) {
-		len = s.length;
-	} else if(len < 0) {
-		if(pos == 0) {
-			len = s.length + len;
-		} else {
-			return "";
-		}
-	}
-	return s.substr(pos,len);
-};
-HxOverrides.remove = function(a,obj) {
-	var i = a.indexOf(obj);
-	if(i == -1) {
-		return false;
-	}
-	a.splice(i,1);
-	return true;
-};
-HxOverrides.iter = function(a) {
-	return { cur : 0, arr : a, hasNext : function() {
-		return this.cur < this.arr.length;
-	}, next : function() {
-		return this.arr[this.cur++];
-	}};
-};
-var Lambda = function() { };
-$hxClasses["Lambda"] = Lambda;
-Lambda.__name__ = "Lambda";
-Lambda.array = function(it) {
-	var a = [];
-	var i = $getIterator(it);
-	while(i.hasNext()) {
-		var i1 = i.next();
-		a.push(i1);
-	}
-	return a;
-};
-var h3d_IDrawable = function() { };
-$hxClasses["h3d.IDrawable"] = h3d_IDrawable;
-h3d_IDrawable.__name__ = "h3d.IDrawable";
-h3d_IDrawable.__isInterface__ = true;
-h3d_IDrawable.prototype = {
-	__class__: h3d_IDrawable
-};
-var hxd_App = function() {
-	var _gthis = this;
-	var engine = h3d_Engine.CURRENT;
-	if(engine != null) {
-		this.engine = engine;
-		engine.onReady = $bind(this,this.setup);
-		haxe_Timer.delay($bind(this,this.setup),0);
-	} else {
-		hxd_System.start(function() {
-			engine = new h3d_Engine();
-			_gthis.engine = engine;
-			engine.onReady = $bind(_gthis,_gthis.setup);
-			engine.init();
-		});
-	}
-};
-$hxClasses["hxd.App"] = hxd_App;
-hxd_App.__name__ = "hxd.App";
-hxd_App.__interfaces__ = [h3d_IDrawable];
-hxd_App.staticHandler = function() {
-};
-hxd_App.prototype = {
-	onResize: function() {
-	}
-	,setScene: function(scene,disposePrevious) {
-		if(disposePrevious == null) {
-			disposePrevious = true;
-		}
-		var new2D = ((scene) instanceof h2d_Scene) ? scene : null;
-		var new3D = ((scene) instanceof h3d_scene_Scene) ? scene : null;
-		if(new2D != null) {
-			this.sevents.removeScene(this.s2d);
-			this.sevents.addScene(scene,0);
-		} else {
-			if(new3D != null) {
-				this.sevents.removeScene(this.s3d);
-			}
-			this.sevents.addScene(scene);
-		}
-		if(disposePrevious) {
-			if(new2D != null) {
-				this.s2d.dispose();
-			} else if(new3D != null) {
-				this.s3d.dispose();
-			} else {
-				throw new js__$Boot_HaxeError("Can't dispose previous scene");
-			}
-		}
-		if(new2D != null) {
-			this.s2d = new2D;
-		}
-		if(new3D != null) {
-			this.s3d = new3D;
-		}
-	}
-	,setCurrent: function() {
-		var _gthis = this;
-		this.engine = h3d_Engine.CURRENT;
-		this.isDisposed = false;
-		this.engine.onReady = hxd_App.staticHandler;
-		this.engine.onResized = function() {
-			if(_gthis.s2d == null) {
-				return;
-			}
-			_gthis.s2d.checkResize();
-			_gthis.onResize();
-		};
-		hxd_System.setLoop($bind(this,this.mainLoop));
-	}
-	,setScene2D: function(s2d,disposePrevious) {
-		if(disposePrevious == null) {
-			disposePrevious = true;
-		}
-		this.sevents.removeScene(this.s2d);
-		this.sevents.addScene(s2d,0);
-		if(disposePrevious) {
-			this.s2d.dispose();
-		}
-		this.s2d = s2d;
-	}
-	,setScene3D: function(s3d,disposePrevious) {
-		if(disposePrevious == null) {
-			disposePrevious = true;
-		}
-		this.sevents.removeScene(this.s3d);
-		this.sevents.addScene(s3d);
-		if(disposePrevious) {
-			this.s3d.dispose();
-		}
-		this.s3d = s3d;
-	}
-	,render: function(e) {
-		this.s3d.render(e);
-		this.s2d.render(e);
-	}
-	,setup: function() {
-		var _gthis = this;
-		var initDone = false;
-		this.engine.onReady = hxd_App.staticHandler;
-		this.engine.onResized = function() {
-			if(_gthis.s2d == null) {
-				return;
-			}
-			_gthis.s2d.checkResize();
-			if(initDone) {
-				_gthis.onResize();
-			}
-		};
-		this.s3d = new h3d_scene_Scene();
-		this.s2d = new h2d_Scene();
-		this.sevents = new hxd_SceneEvents();
-		this.sevents.addScene(this.s2d);
-		this.sevents.addScene(this.s3d);
-		this.loadAssets(function() {
-			initDone = true;
-			_gthis.init();
-			hxd_Timer.skip();
-			_gthis.mainLoop();
-			hxd_System.setLoop($bind(_gthis,_gthis.mainLoop));
-			hxd_Key.initialize();
-		});
-	}
-	,dispose: function() {
-		this.engine.onResized = hxd_App.staticHandler;
-		this.engine.onContextLost = hxd_App.staticHandler;
-		this.isDisposed = true;
-		this.s2d.dispose();
-		this.s3d.dispose();
-		this.sevents.dispose();
-	}
-	,loadAssets: function(onLoaded) {
-		onLoaded();
-	}
-	,init: function() {
-	}
-	,mainLoop: function() {
-		hxd_Timer.update();
-		this.sevents.checkEvents();
-		if(this.isDisposed) {
-			return;
-		}
-		this.update(hxd_Timer.dt);
-		if(this.isDisposed) {
-			return;
-		}
-		var dt = hxd_Timer.dt;
-		if(this.s2d != null) {
-			this.s2d.setElapsedTime(dt);
-		}
-		if(this.s3d != null) {
-			this.s3d.setElapsedTime(dt);
-		}
-		this.engine.render(this);
-	}
-	,update: function(dt) {
-	}
-	,__class__: hxd_App
-};
-var Main = function() {
-	hxd_App.call(this);
-};
-$hxClasses["Main"] = Main;
-Main.__name__ = "Main";
-Main.main = function() {
-	new Main();
-};
-Main.__super__ = hxd_App;
-Main.prototype = $extend(hxd_App.prototype,{
-	init: function() {
-		this.engine.backgroundColor = 2105376;
-		hxd_Res.set_loader(new hxd_res_Loader(new hxd_fs_EmbedFileSystem(haxe_Unserializer.run("oy11:zipper4.pngtg"))));
-		this.setScene2D(new TestScene());
-	}
-	,update: function(delta) {
-	}
-	,__class__: Main
-});
-var MainWindow = function(scene) {
-	this.messageWindow = new MessageWindow(scene,10,190,350,350);
-	this.graphicWindow = new GraphicWindow(scene,10,10,350,350);
-	this.hudWindow = new HudWindow(scene,8,8,344,50);
-	this.init();
-};
-$hxClasses["MainWindow"] = MainWindow;
-MainWindow.__name__ = "MainWindow";
-MainWindow.prototype = {
-	init: function() {
-		this.sendCommand(SysCommands.ShowText("Welcome to the show"));
-		this.sendCommand(SysCommands.ChangeGraphic(hxd_Res.get_loader().loadCache("zipper4.png",hxd_res_Image).toTile()));
-	}
-	,update: function() {
-	}
-	,sendCommand: function(command) {
-		switch(command._hx_index) {
-		case 0:
-			var str = command.str;
-			this.showStoryText(str);
-			break;
-		case 1:
-			var tile = command.tile;
-			this.showGraphic(tile);
-			break;
-		case 2:
-			this.show(false);
-			break;
-		case 3:
-			this.show(true);
-			break;
-		}
-	}
-	,setCondition: function(condition) {
-		this.hudWindow.setCondition(condition);
-	}
-	,showGraphic: function(image) {
-		this.graphicWindow.setGraphic(image);
-	}
-	,showStoryText: function(text) {
-		this.messageWindow.setText(text);
-	}
-	,show: function(bool) {
-		this.hudWindow.show(bool);
-		this.messageWindow.show(bool);
-		this.graphicWindow.show(bool);
-	}
-	,__class__: MainWindow
-};
-Math.__name__ = "Math";
-var MessageWindow = function(scene,x,y,width,height) {
-	WindowBase.call(this,scene,x,y,width,height);
-	this.init();
-};
-$hxClasses["MessageWindow"] = MessageWindow;
-MessageWindow.__name__ = "MessageWindow";
-MessageWindow.__super__ = WindowBase;
-MessageWindow.prototype = $extend(WindowBase.prototype,{
-	init: function() {
-		WindowBase.prototype.init.call(this);
-		this.drawBorder(this.x,this.y,this.width,this.height);
-		this.setupText(this.x + 30,this.y + 20);
-	}
-	,setupText: function(x,y) {
-		this.storyText = new h2d_Text(hxd_res_DefaultFont.get(),this);
-		var _this = this.storyText;
-		var _g = _this;
-		_g.posChanged = true;
-		_g.scaleX *= 1.2;
-		var _g1 = _this;
-		_g1.posChanged = true;
-		_g1.scaleY *= 1.2;
-		this.storyText.smooth = true;
-		var _this1 = this.storyText;
-		_this1.posChanged = true;
-		_this1.x = x;
-		var _this2 = this.storyText;
-		_this2.posChanged = true;
-		_this2.y = y;
-		this.storyText.set_textColor(16777215);
-	}
-	,setupTextInput: function(x,y) {
-		var _gthis = this;
-		var font = hxd_res_DefaultFont.get();
-		this.textInput = new h2d_TextInput(font,this);
-		this.textInput.set_backgroundColor(-2139062144);
-		this.textInput.set_text("This is a test message");
-		haxe_Log.trace("Added text input",{ fileName : "src/MessageWindow.hx", lineNumber : 39, className : "MessageWindow", methodName : "setupTextInput"});
-		var _this = this.textInput;
-		var _g = _this;
-		_g.posChanged = true;
-		_g.scaleX *= 2;
-		var _g1 = _this;
-		_g1.posChanged = true;
-		_g1.scaleY *= 2;
-		var _this1 = this.textInput;
-		_this1.posChanged = true;
-		_this1.x = x;
-		var _this2 = this.textInput;
-		_this2.posChanged = true;
-		_this2.y = y;
-		this.textInput.set_textColor(11184810);
-		this.textInput.onFocus = function(_) {
-			return _gthis.textInput.set_textColor(16777215);
-		};
-		this.textInput.onFocusLost = function(_1) {
-			return _gthis.textInput.set_textColor(11184810);
-		};
+	,drawBackground: function() {
+		this.background.beginFill(this.backgroundColor);
+		this.background.drawRect(this.background.x,this.background.y,this.width,this.height);
+		this.background.endFill();
 	}
 	,setText: function(text) {
-		this.storyText.set_text(text);
+		this.text.set_text(text);
+		return this;
 	}
-	,setInputText: function(text) {
-		this.textInput.set_text(text);
+	,setOnClick: function(fn) {
+		this.interaction.onClick = fn;
+		haxe_Log.trace(($_=this.interaction,$bind($_,$_.onClick)),{ fileName : "src/BaseBtn.hx", lineNumber : 62, className : "BaseBtn", methodName : "setOnClick"});
 	}
-	,hide: function(bool) {
-		this.textInput.set_visible(bool);
-		this.storyText.set_visible(bool);
-	}
-	,__class__: MessageWindow
+	,__class__: BaseBtn
 });
-var Reflect = function() { };
-$hxClasses["Reflect"] = Reflect;
-Reflect.__name__ = "Reflect";
-Reflect.field = function(o,field) {
-	try {
-		return o[field];
-	} catch( e ) {
-		var e1 = ((e) instanceof js__$Boot_HaxeError) ? e.val : e;
-		return null;
-	}
-};
-Reflect.fields = function(o) {
-	var a = [];
-	if(o != null) {
-		var hasOwnProperty = Object.prototype.hasOwnProperty;
-		for( var f in o ) {
-		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
-			a.push(f);
-		}
-		}
-	}
-	return a;
-};
-Reflect.isFunction = function(f) {
-	if(typeof(f) == "function") {
-		return !(f.__name__ || f.__ename__);
-	} else {
-		return false;
-	}
-};
-Reflect.compare = function(a,b) {
-	if(a == b) {
-		return 0;
-	} else if(a > b) {
-		return 1;
-	} else {
-		return -1;
-	}
-};
-Reflect.compareMethods = function(f1,f2) {
-	if(f1 == f2) {
-		return true;
-	}
-	if(!Reflect.isFunction(f1) || !Reflect.isFunction(f2)) {
-		return false;
-	}
-	if(f1.scope == f2.scope && f1.method == f2.method) {
-		return f1.method != null;
-	} else {
-		return false;
-	}
-};
-Reflect.isEnumValue = function(v) {
-	if(v != null) {
-		return v.__enum__ != null;
-	} else {
-		return false;
-	}
-};
-Reflect.deleteField = function(o,field) {
-	if(!Object.prototype.hasOwnProperty.call(o,field)) {
-		return false;
-	}
-	delete(o[field]);
-	return true;
-};
-var Std = function() { };
-$hxClasses["Std"] = Std;
-Std.__name__ = "Std";
-Std.string = function(s) {
-	return js_Boot.__string_rec(s,"");
-};
-Std.parseInt = function(x) {
-	if(x != null) {
-		var _g = 0;
-		var _g1 = x.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var c = x.charCodeAt(i);
-			if(c <= 8 || c >= 14 && c != 32 && c != 45) {
-				var v = parseInt(x, (x[(i + 1)]=="x" || x[(i + 1)]=="X") ? 16 : 10);
-				if(isNaN(v)) {
-					return null;
-				} else {
-					return v;
-				}
-			}
-		}
-	}
-	return null;
-};
-Std.random = function(x) {
-	if(x <= 0) {
-		return 0;
-	} else {
-		return Math.floor(Math.random() * x);
-	}
-};
-var StringBuf = function() {
-	this.b = "";
-};
-$hxClasses["StringBuf"] = StringBuf;
-StringBuf.__name__ = "StringBuf";
-StringBuf.prototype = {
-	__class__: StringBuf
-};
-var StringTools = function() { };
-$hxClasses["StringTools"] = StringTools;
-StringTools.__name__ = "StringTools";
-StringTools.htmlEscape = function(s,quotes) {
-	var buf_b = "";
-	var _g_offset = 0;
-	var _g_s = s;
-	while(_g_offset < _g_s.length) {
-		var s1 = _g_s;
-		var index = _g_offset++;
-		var c = s1.charCodeAt(index);
-		if(c >= 55296 && c <= 56319) {
-			c = c - 55232 << 10 | s1.charCodeAt(index + 1) & 1023;
-		}
-		var c1 = c;
-		if(c1 >= 65536) {
-			++_g_offset;
-		}
-		var code = c1;
-		switch(code) {
-		case 34:
-			if(quotes) {
-				buf_b += "&quot;";
-			} else {
-				buf_b += String.fromCodePoint(code);
-			}
-			break;
-		case 38:
-			buf_b += "&amp;";
-			break;
-		case 39:
-			if(quotes) {
-				buf_b += "&#039;";
-			} else {
-				buf_b += String.fromCodePoint(code);
-			}
-			break;
-		case 60:
-			buf_b += "&lt;";
-			break;
-		case 62:
-			buf_b += "&gt;";
-			break;
-		default:
-			buf_b += String.fromCodePoint(code);
-		}
-	}
-	return buf_b;
-};
-StringTools.startsWith = function(s,start) {
-	if(s.length >= start.length) {
-		return s.lastIndexOf(start,0) == 0;
-	} else {
-		return false;
-	}
-};
-StringTools.isSpace = function(s,pos) {
-	var c = HxOverrides.cca(s,pos);
-	if(!(c > 8 && c < 14)) {
-		return c == 32;
-	} else {
-		return true;
-	}
-};
-StringTools.ltrim = function(s) {
-	var l = s.length;
-	var r = 0;
-	while(r < l && StringTools.isSpace(s,r)) ++r;
-	if(r > 0) {
-		return HxOverrides.substr(s,r,l - r);
-	} else {
-		return s;
-	}
-};
-StringTools.rtrim = function(s) {
-	var l = s.length;
-	var r = 0;
-	while(r < l && StringTools.isSpace(s,l - r - 1)) ++r;
-	if(r > 0) {
-		return HxOverrides.substr(s,0,l - r);
-	} else {
-		return s;
-	}
-};
-StringTools.trim = function(s) {
-	return StringTools.ltrim(StringTools.rtrim(s));
-};
-StringTools.hex = function(n,digits) {
-	var s = "";
-	var hexChars = "0123456789ABCDEF";
-	while(true) {
-		s = hexChars.charAt(n & 15) + s;
-		n >>>= 4;
-		if(!(n > 0)) {
-			break;
-		}
-	}
-	if(digits != null) {
-		while(s.length < digits) s = "0" + s;
-	}
-	return s;
-};
 var h2d_Layers = function(parent) {
 	h2d_Object.call(this,parent);
 	this.layersIndexes = [];
@@ -3927,6 +3168,13 @@ hxd_InteractiveScene.__name__ = "hxd.InteractiveScene";
 hxd_InteractiveScene.__isInterface__ = true;
 hxd_InteractiveScene.prototype = {
 	__class__: hxd_InteractiveScene
+};
+var h3d_IDrawable = function() { };
+$hxClasses["h3d.IDrawable"] = h3d_IDrawable;
+h3d_IDrawable.__name__ = "h3d.IDrawable";
+h3d_IDrawable.__isInterface__ = true;
+h3d_IDrawable.prototype = {
+	__class__: h3d_IDrawable
 };
 var h2d_Scene = function() {
 	this.scaleMode = h2d_ScaleMode.Resize;
@@ -4565,6 +3813,916 @@ h2d_Scene.prototype = $extend(h2d_Layers.prototype,{
 	}
 	,__class__: h2d_Scene
 });
+var CreditsScene = function() {
+	h2d_Scene.call(this);
+	this.init();
+};
+$hxClasses["CreditsScene"] = CreditsScene;
+CreditsScene.__name__ = "CreditsScene";
+CreditsScene.__super__ = h2d_Scene;
+CreditsScene.prototype = $extend(h2d_Scene.prototype,{
+	init: function() {
+		var font = hxd_res_DefaultFont.get();
+		this.titleText = new h2d_Text(font,this);
+		var windowWidth = hxd_Window.getInstance().get_width();
+		var windowHeight = hxd_Window.getInstance().get_height();
+		haxe_Log.trace(windowWidth,{ fileName : "src/CreditsScene.hx", lineNumber : 25, className : "CreditsScene", methodName : "init"});
+		var _this = this.titleText;
+		_this.posChanged = true;
+		_this.x = windowWidth / 2 - 35;
+		var _this1 = this.titleText;
+		_this1.posChanged = true;
+		_this1.y = 140;
+		var _this2 = this.titleText;
+		var _g = _this2;
+		_g.posChanged = true;
+		_g.scaleX *= 2;
+		var _g1 = _this2;
+		_g1.posChanged = true;
+		_g1.scaleY *= 2;
+		this.titleText.set_text("Credits");
+		this.createNewGameBtn(windowWidth / 2,200);
+		this.createExitGameBtn(windowWidth / 2,250);
+	}
+	,createNewGameBtn: function(x,y) {
+		var _gthis = this;
+		this.returnToTitleBtn = new BaseBtn(this,x - 35,y,100,50);
+		this.returnToTitleBtn.setBackgroundColor(11184810).setText("Return To Title").setOnClick(function(event) {
+			haxe_Log.trace("Return To Title Pressed",{ fileName : "src/CreditsScene.hx", lineNumber : 39, className : "CreditsScene", methodName : "createNewGameBtn"});
+			_gthis.dispose();
+			SceneManager.changeScene(new TitleScene());
+			return;
+		});
+	}
+	,createExitGameBtn: function(x,y) {
+		this.exitGameBtn = new BaseBtn(this,x - 35,y,100,50);
+		this.exitGameBtn.setBackgroundColor(11184810).setText("Exit Game").setOnClick(function(event) {
+			haxe_Log.trace("Exit Game Pressed",{ fileName : "src/CreditsScene.hx", lineNumber : 50, className : "CreditsScene", methodName : "createExitGameBtn"});
+			return;
+		});
+	}
+	,__class__: CreditsScene
+});
+var EReg = function(r,opt) {
+	this.r = new RegExp(r,opt.split("u").join(""));
+};
+$hxClasses["EReg"] = EReg;
+EReg.__name__ = "EReg";
+EReg.prototype = {
+	match: function(s) {
+		if(this.r.global) {
+			this.r.lastIndex = 0;
+		}
+		this.r.m = this.r.exec(s);
+		this.r.s = s;
+		return this.r.m != null;
+	}
+	,matched: function(n) {
+		if(this.r.m != null && n >= 0 && n < this.r.m.length) {
+			return this.r.m[n];
+		} else {
+			throw new js__$Boot_HaxeError("EReg::matched");
+		}
+	}
+	,matchedPos: function() {
+		if(this.r.m == null) {
+			throw new js__$Boot_HaxeError("No string matched");
+		}
+		return { pos : this.r.m.index, len : this.r.m[0].length};
+	}
+	,matchSub: function(s,pos,len) {
+		if(len == null) {
+			len = -1;
+		}
+		if(this.r.global) {
+			this.r.lastIndex = pos;
+			this.r.m = this.r.exec(len < 0 ? s : HxOverrides.substr(s,0,pos + len));
+			var b = this.r.m != null;
+			if(b) {
+				this.r.s = s;
+			}
+			return b;
+		} else {
+			var b1 = this.match(len < 0 ? HxOverrides.substr(s,pos,null) : HxOverrides.substr(s,pos,len));
+			if(b1) {
+				this.r.s = s;
+				this.r.m.index += pos;
+			}
+			return b1;
+		}
+	}
+	,__class__: EReg
+};
+var GameData = function() { };
+$hxClasses["GameData"] = GameData;
+GameData.__name__ = "GameData";
+GameData.initializeGameData = function() {
+	var binary = new hxd_net_BinaryLoader("res/story.json");
+	binary.load();
+	binary.onLoaded = function(bytes) {
+		GameData.rawGameData = hxd_res_Any.fromBytes("story.json",bytes).toText();
+		GameData.parsedGameData = JSON.parse(GameData.rawGameData);
+		GameData.isLoaded = true;
+		GameData.onGameLoad();
+		return;
+	};
+	var content = "";
+};
+GameData.getGameData = function() {
+	return GameData.parsedGameData;
+};
+GameData.onGameLoad = function() {
+};
+var WindowBase = function(scene,x,y,width,height) {
+	h2d_Graphics.call(this,scene);
+	this.posChanged = true;
+	this.x = x;
+	this.posChanged = true;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+	this.init();
+};
+$hxClasses["WindowBase"] = WindowBase;
+WindowBase.__name__ = "WindowBase";
+WindowBase.__super__ = h2d_Graphics;
+WindowBase.prototype = $extend(h2d_Graphics.prototype,{
+	init: function() {
+		this.drawBorder(this.x,this.y,this.width,this.height);
+	}
+	,drawBorder: function(x,y,width,height) {
+		this.lineStyle(1,11184810);
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+		var x1 = x + width;
+		this.addVertex(x1,y,this.curR,this.curG,this.curB,this.curA,x1 * this.ma + y * this.mc + this.mx,x1 * this.mb + y * this.md + this.my);
+		var x2 = x + width;
+		var y1 = y + height;
+		this.addVertex(x2,y1,this.curR,this.curG,this.curB,this.curA,x2 * this.ma + y1 * this.mc + this.mx,x2 * this.mb + y1 * this.md + this.my);
+		var y2 = y + height;
+		this.addVertex(x,y2,this.curR,this.curG,this.curB,this.curA,x * this.ma + y2 * this.mc + this.mx,x * this.mb + y2 * this.md + this.my);
+		this.addVertex(x,y,this.curR,this.curG,this.curB,this.curA,x * this.ma + y * this.mc + this.mx,x * this.mb + y * this.md + this.my);
+	}
+	,show: function(bool) {
+		this.set_visible(bool);
+	}
+	,__class__: WindowBase
+});
+var GraphicWindow = function(scene,x,y,width,height) {
+	WindowBase.call(this,scene,x,y,width,height);
+	this.init();
+};
+$hxClasses["GraphicWindow"] = GraphicWindow;
+GraphicWindow.__name__ = "GraphicWindow";
+GraphicWindow.__super__ = WindowBase;
+GraphicWindow.prototype = $extend(WindowBase.prototype,{
+	init: function() {
+		WindowBase.prototype.init.call(this);
+		this.drawBackground(this.x + 1,this.y + 1,11184810);
+		this.setupGraphic(this.x,this.y);
+		this.setupTextInput(this.x + 5,this.y + 10);
+	}
+	,drawBackground: function(x,y,color) {
+		this.beginFill(color);
+		this.drawRect(x,y,347,347);
+		this.endFill();
+	}
+	,setupGraphic: function(x,y) {
+		this.storyGraphic = new h2d_Graphics(this);
+		var _this = this.storyGraphic;
+		_this.posChanged = true;
+		_this.x = x;
+		var _this1 = this.storyGraphic;
+		_this1.posChanged = true;
+		_this1.y = y;
+	}
+	,setupTextInput: function(x,y) {
+		var font = hxd_res_DefaultFont.get();
+		this.storyText = new h2d_Text(font,this);
+		var _this = this.storyText;
+		_this.posChanged = true;
+		_this.x = x;
+		var _this1 = this.storyText;
+		_this1.posChanged = true;
+		_this1.y = y;
+		var _this2 = this.storyText;
+		var _g = _this2;
+		_g.posChanged = true;
+		_g.scaleX *= 1.2;
+		var _g1 = _this2;
+		_g1.posChanged = true;
+		_g1.scaleY *= 1.2;
+		this.storyText.set_textColor(16777215);
+	}
+	,setGraphic: function(image) {
+		this.storyGraphic.clear();
+		this.storyGraphic.drawTile(this.x,this.y,image);
+		var scaleAmount = this.width / this.storyGraphic.tile.width;
+		var _this = this.storyGraphic;
+		var v = scaleAmount / 2;
+		var _g = _this;
+		_g.posChanged = true;
+		_g.scaleX *= v;
+		var _g1 = _this;
+		_g1.posChanged = true;
+		_g1.scaleY *= v;
+	}
+	,setBackgroundColor: function(color) {
+		this.background.clear();
+		this.drawBackground(10,10,color);
+	}
+	,clearWindow: function() {
+		this.storyText.set_text("");
+		this.storyGraphic.clear();
+	}
+	,setStoryText: function(text) {
+		this.storyText.set_text(text);
+	}
+	,__class__: GraphicWindow
+});
+var HudWindow = function(scene,x,y,width,height) {
+	WindowBase.call(this,scene,x,y,width,height);
+	this.init();
+};
+$hxClasses["HudWindow"] = HudWindow;
+HudWindow.__name__ = "HudWindow";
+HudWindow.__super__ = WindowBase;
+HudWindow.prototype = $extend(WindowBase.prototype,{
+	init: function() {
+		this.drawHUDBackground(this.x + 6,this.y + 6);
+		this.setupCondition(this.x + 10,this.y + 10);
+		this.setupDays(this.x + 50,0);
+	}
+	,drawHUDBackground: function(x,y) {
+		this.beginFill(2105376);
+		this.drawRect(x,y,this.width,this.height);
+		this.endFill();
+	}
+	,setupCondition: function(x,y) {
+		var font = hxd_res_DefaultFont.get();
+		this.conditionText = new h2d_Text(font,this);
+		var _this = this.conditionText;
+		_this.posChanged = true;
+		_this.x = x;
+		var _this1 = this.conditionText;
+		_this1.posChanged = true;
+		_this1.y = y;
+		var _this2 = this.conditionText;
+		var _g = _this2;
+		_g.posChanged = true;
+		_g.scaleX *= 1.5;
+		var _g1 = _this2;
+		_g1.posChanged = true;
+		_g1.scaleY *= 1.5;
+		this.conditionText.smooth = true;
+		this.setCondition(Condition.Good);
+	}
+	,setupDays: function(x,y) {
+		var font = hxd_res_DefaultFont.get();
+		this.dayText = new h2d_Text(font,this);
+		var _this = this.dayText;
+		_this.posChanged = true;
+		_this.x = this.conditionText.x + x;
+		var _this1 = this.dayText;
+		_this1.posChanged = true;
+		_this1.y = this.conditionText.y + y;
+		this.dayText.set_textColor(16777215);
+		this.dayText.smooth = true;
+		var _this2 = this.dayText;
+		var _g = _this2;
+		_g.posChanged = true;
+		_g.scaleX *= 1.5;
+		var _g1 = _this2;
+		_g1.posChanged = true;
+		_g1.scaleY *= 1.5;
+		this.setDays(0);
+	}
+	,setCondition: function(condition) {
+		switch(condition._hx_index) {
+		case 0:
+			this.conditionText.set_text("Good");
+			this.conditionText.set_textColor(14350246);
+			break;
+		case 1:
+			this.conditionText.set_text("Average");
+			this.conditionText.set_textColor(16761600);
+			break;
+		case 2:
+			this.conditionText.set_text("Bad");
+			this.conditionText.set_textColor(16734003);
+			break;
+		}
+		haxe_Log.trace(this.conditionText.textColor,{ fileName : "src/HudWindow.hx", lineNumber : 63, className : "HudWindow", methodName : "setCondition"});
+	}
+	,setDays: function(days) {
+		this.dayText.set_text("Days: " + days);
+	}
+	,hide: function(bool) {
+		this.conditionText.set_visible(bool);
+		this.dayText.set_visible(bool);
+		this.background.set_visible(bool);
+	}
+	,__class__: HudWindow
+});
+var HxOverrides = function() { };
+$hxClasses["HxOverrides"] = HxOverrides;
+HxOverrides.__name__ = "HxOverrides";
+HxOverrides.strDate = function(s) {
+	switch(s.length) {
+	case 8:
+		var k = s.split(":");
+		var d = new Date();
+		d["setTime"](0);
+		d["setUTCHours"](k[0]);
+		d["setUTCMinutes"](k[1]);
+		d["setUTCSeconds"](k[2]);
+		return d;
+	case 10:
+		var k1 = s.split("-");
+		return new Date(k1[0],k1[1] - 1,k1[2],0,0,0);
+	case 19:
+		var k2 = s.split(" ");
+		var y = k2[0].split("-");
+		var t = k2[1].split(":");
+		return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
+	default:
+		throw new js__$Boot_HaxeError("Invalid date format : " + s);
+	}
+};
+HxOverrides.cca = function(s,index) {
+	var x = s.charCodeAt(index);
+	if(x != x) {
+		return undefined;
+	}
+	return x;
+};
+HxOverrides.substr = function(s,pos,len) {
+	if(len == null) {
+		len = s.length;
+	} else if(len < 0) {
+		if(pos == 0) {
+			len = s.length + len;
+		} else {
+			return "";
+		}
+	}
+	return s.substr(pos,len);
+};
+HxOverrides.remove = function(a,obj) {
+	var i = a.indexOf(obj);
+	if(i == -1) {
+		return false;
+	}
+	a.splice(i,1);
+	return true;
+};
+HxOverrides.iter = function(a) {
+	return { cur : 0, arr : a, hasNext : function() {
+		return this.cur < this.arr.length;
+	}, next : function() {
+		return this.arr[this.cur++];
+	}};
+};
+var Lambda = function() { };
+$hxClasses["Lambda"] = Lambda;
+Lambda.__name__ = "Lambda";
+Lambda.array = function(it) {
+	var a = [];
+	var i = $getIterator(it);
+	while(i.hasNext()) {
+		var i1 = i.next();
+		a.push(i1);
+	}
+	return a;
+};
+var hxd_App = function() {
+	var _gthis = this;
+	var engine = h3d_Engine.CURRENT;
+	if(engine != null) {
+		this.engine = engine;
+		engine.onReady = $bind(this,this.setup);
+		haxe_Timer.delay($bind(this,this.setup),0);
+	} else {
+		hxd_System.start(function() {
+			engine = new h3d_Engine();
+			_gthis.engine = engine;
+			engine.onReady = $bind(_gthis,_gthis.setup);
+			engine.init();
+		});
+	}
+};
+$hxClasses["hxd.App"] = hxd_App;
+hxd_App.__name__ = "hxd.App";
+hxd_App.__interfaces__ = [h3d_IDrawable];
+hxd_App.staticHandler = function() {
+};
+hxd_App.prototype = {
+	onResize: function() {
+	}
+	,setScene: function(scene,disposePrevious) {
+		if(disposePrevious == null) {
+			disposePrevious = true;
+		}
+		var new2D = ((scene) instanceof h2d_Scene) ? scene : null;
+		var new3D = ((scene) instanceof h3d_scene_Scene) ? scene : null;
+		if(new2D != null) {
+			this.sevents.removeScene(this.s2d);
+			this.sevents.addScene(scene,0);
+		} else {
+			if(new3D != null) {
+				this.sevents.removeScene(this.s3d);
+			}
+			this.sevents.addScene(scene);
+		}
+		if(disposePrevious) {
+			if(new2D != null) {
+				this.s2d.dispose();
+			} else if(new3D != null) {
+				this.s3d.dispose();
+			} else {
+				throw new js__$Boot_HaxeError("Can't dispose previous scene");
+			}
+		}
+		if(new2D != null) {
+			this.s2d = new2D;
+		}
+		if(new3D != null) {
+			this.s3d = new3D;
+		}
+	}
+	,setCurrent: function() {
+		var _gthis = this;
+		this.engine = h3d_Engine.CURRENT;
+		this.isDisposed = false;
+		this.engine.onReady = hxd_App.staticHandler;
+		this.engine.onResized = function() {
+			if(_gthis.s2d == null) {
+				return;
+			}
+			_gthis.s2d.checkResize();
+			_gthis.onResize();
+		};
+		hxd_System.setLoop($bind(this,this.mainLoop));
+	}
+	,setScene2D: function(s2d,disposePrevious) {
+		if(disposePrevious == null) {
+			disposePrevious = true;
+		}
+		this.sevents.removeScene(this.s2d);
+		this.sevents.addScene(s2d,0);
+		if(disposePrevious) {
+			this.s2d.dispose();
+		}
+		this.s2d = s2d;
+	}
+	,setScene3D: function(s3d,disposePrevious) {
+		if(disposePrevious == null) {
+			disposePrevious = true;
+		}
+		this.sevents.removeScene(this.s3d);
+		this.sevents.addScene(s3d);
+		if(disposePrevious) {
+			this.s3d.dispose();
+		}
+		this.s3d = s3d;
+	}
+	,render: function(e) {
+		this.s3d.render(e);
+		this.s2d.render(e);
+	}
+	,setup: function() {
+		var _gthis = this;
+		var initDone = false;
+		this.engine.onReady = hxd_App.staticHandler;
+		this.engine.onResized = function() {
+			if(_gthis.s2d == null) {
+				return;
+			}
+			_gthis.s2d.checkResize();
+			if(initDone) {
+				_gthis.onResize();
+			}
+		};
+		this.s3d = new h3d_scene_Scene();
+		this.s2d = new h2d_Scene();
+		this.sevents = new hxd_SceneEvents();
+		this.sevents.addScene(this.s2d);
+		this.sevents.addScene(this.s3d);
+		this.loadAssets(function() {
+			initDone = true;
+			_gthis.init();
+			hxd_Timer.skip();
+			_gthis.mainLoop();
+			hxd_System.setLoop($bind(_gthis,_gthis.mainLoop));
+			hxd_Key.initialize();
+		});
+	}
+	,dispose: function() {
+		this.engine.onResized = hxd_App.staticHandler;
+		this.engine.onContextLost = hxd_App.staticHandler;
+		this.isDisposed = true;
+		this.s2d.dispose();
+		this.s3d.dispose();
+		this.sevents.dispose();
+	}
+	,loadAssets: function(onLoaded) {
+		onLoaded();
+	}
+	,init: function() {
+	}
+	,mainLoop: function() {
+		hxd_Timer.update();
+		this.sevents.checkEvents();
+		if(this.isDisposed) {
+			return;
+		}
+		this.update(hxd_Timer.dt);
+		if(this.isDisposed) {
+			return;
+		}
+		var dt = hxd_Timer.dt;
+		if(this.s2d != null) {
+			this.s2d.setElapsedTime(dt);
+		}
+		if(this.s3d != null) {
+			this.s3d.setElapsedTime(dt);
+		}
+		this.engine.render(this);
+	}
+	,update: function(dt) {
+	}
+	,__class__: hxd_App
+};
+var Main = function() {
+	hxd_App.call(this);
+};
+$hxClasses["Main"] = Main;
+Main.__name__ = "Main";
+Main.main = function() {
+	new Main();
+};
+Main.__super__ = hxd_App;
+Main.prototype = $extend(hxd_App.prototype,{
+	loadAssets: function(onLoaded) {
+		GameData.initializeGameData();
+		GameData.onGameLoad = function() {
+			onLoaded();
+			return;
+		};
+	}
+	,init: function() {
+		this.engine.backgroundColor = 2105376;
+		hxd_Window.getInstance().resize(500,500);
+		hxd_Res.set_loader(new hxd_res_Loader(new hxd_fs_EmbedFileSystem(haxe_Unserializer.run("oy10:story.jsonty12:example.jsonty12:DataFile.cdbty11:zipper4.pngtg"))));
+		SceneManager.changeScene = $bind(this,this.setScene2D);
+		this.createScenes();
+		SceneManager.changeScene(this.titleScene);
+	}
+	,createScenes: function() {
+		this.titleScene = new TitleScene();
+		this.creditsScene = new CreditsScene();
+	}
+	,update: function(delta) {
+	}
+	,__class__: Main
+});
+var MainWindow = function(scene) {
+	this.messageWindow = new MessageWindow(scene,10,190,350,350);
+	this.graphicWindow = new GraphicWindow(scene,10,10,350,350);
+	this.hudWindow = new HudWindow(scene,8,8,344,50);
+	this.init();
+};
+$hxClasses["MainWindow"] = MainWindow;
+MainWindow.__name__ = "MainWindow";
+MainWindow.prototype = {
+	init: function() {
+		this.sendCommand(SysCommands.ShowText("Welcome to the show"));
+		haxe_Log.trace(hxd_Res.get_loader().loadCache("example.json",hxd_res_Resource).entry,{ fileName : "src/MainWindow.hx", lineNumber : 21, className : "MainWindow", methodName : "init"});
+		this.sendCommand(SysCommands.ChangeGraphic(hxd_Res.get_loader().loadCache("zipper4.png",hxd_res_Image).toTile()));
+	}
+	,update: function() {
+	}
+	,sendCommand: function(command) {
+		switch(command._hx_index) {
+		case 0:
+			var str = command.str;
+			this.showStoryText(str);
+			break;
+		case 1:
+			var tile = command.tile;
+			this.showGraphic(tile);
+			break;
+		case 2:
+			var seconds = command.seconds;
+			break;
+		case 3:
+			this.show(false);
+			break;
+		case 4:
+			this.show(true);
+			break;
+		}
+	}
+	,setCondition: function(condition) {
+		this.hudWindow.setCondition(condition);
+	}
+	,showGraphic: function(image) {
+		this.graphicWindow.setGraphic(image);
+	}
+	,showStoryText: function(text) {
+		this.messageWindow.setText(text);
+	}
+	,show: function(bool) {
+		this.hudWindow.show(bool);
+		this.messageWindow.show(bool);
+		this.graphicWindow.show(bool);
+	}
+	,__class__: MainWindow
+};
+Math.__name__ = "Math";
+var MessageWindow = function(scene,x,y,width,height) {
+	WindowBase.call(this,scene,x,y,width,height);
+	this.init();
+};
+$hxClasses["MessageWindow"] = MessageWindow;
+MessageWindow.__name__ = "MessageWindow";
+MessageWindow.__super__ = WindowBase;
+MessageWindow.prototype = $extend(WindowBase.prototype,{
+	init: function() {
+		WindowBase.prototype.init.call(this);
+		this.drawBorder(this.x,this.y,this.width,this.height);
+		this.setupText(this.x + 30,this.y + 20);
+	}
+	,setupText: function(x,y) {
+		this.storyText = new h2d_Text(hxd_res_DefaultFont.get(),this);
+		var _this = this.storyText;
+		var _g = _this;
+		_g.posChanged = true;
+		_g.scaleX *= 1.2;
+		var _g1 = _this;
+		_g1.posChanged = true;
+		_g1.scaleY *= 1.2;
+		this.storyText.smooth = true;
+		var _this1 = this.storyText;
+		_this1.posChanged = true;
+		_this1.x = x;
+		var _this2 = this.storyText;
+		_this2.posChanged = true;
+		_this2.y = y;
+		this.storyText.set_textColor(16777215);
+	}
+	,setupTextInput: function(x,y) {
+		var _gthis = this;
+		var font = hxd_res_DefaultFont.get();
+		this.textInput = new h2d_TextInput(font,this);
+		this.textInput.set_backgroundColor(-2139062144);
+		this.textInput.set_text("This is a test message");
+		haxe_Log.trace("Added text input",{ fileName : "src/MessageWindow.hx", lineNumber : 39, className : "MessageWindow", methodName : "setupTextInput"});
+		var _this = this.textInput;
+		var _g = _this;
+		_g.posChanged = true;
+		_g.scaleX *= 2;
+		var _g1 = _this;
+		_g1.posChanged = true;
+		_g1.scaleY *= 2;
+		var _this1 = this.textInput;
+		_this1.posChanged = true;
+		_this1.x = x;
+		var _this2 = this.textInput;
+		_this2.posChanged = true;
+		_this2.y = y;
+		this.textInput.set_textColor(11184810);
+		this.textInput.onFocus = function(_) {
+			return _gthis.textInput.set_textColor(16777215);
+		};
+		this.textInput.onFocusLost = function(_1) {
+			return _gthis.textInput.set_textColor(11184810);
+		};
+	}
+	,setText: function(text) {
+		this.storyText.set_text(text);
+	}
+	,setInputText: function(text) {
+		this.textInput.set_text(text);
+	}
+	,hide: function(bool) {
+		this.textInput.set_visible(bool);
+		this.storyText.set_visible(bool);
+	}
+	,__class__: MessageWindow
+});
+var Reflect = function() { };
+$hxClasses["Reflect"] = Reflect;
+Reflect.__name__ = "Reflect";
+Reflect.field = function(o,field) {
+	try {
+		return o[field];
+	} catch( e ) {
+		var e1 = ((e) instanceof js__$Boot_HaxeError) ? e.val : e;
+		return null;
+	}
+};
+Reflect.fields = function(o) {
+	var a = [];
+	if(o != null) {
+		var hasOwnProperty = Object.prototype.hasOwnProperty;
+		for( var f in o ) {
+		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
+			a.push(f);
+		}
+		}
+	}
+	return a;
+};
+Reflect.isFunction = function(f) {
+	if(typeof(f) == "function") {
+		return !(f.__name__ || f.__ename__);
+	} else {
+		return false;
+	}
+};
+Reflect.compare = function(a,b) {
+	if(a == b) {
+		return 0;
+	} else if(a > b) {
+		return 1;
+	} else {
+		return -1;
+	}
+};
+Reflect.compareMethods = function(f1,f2) {
+	if(f1 == f2) {
+		return true;
+	}
+	if(!Reflect.isFunction(f1) || !Reflect.isFunction(f2)) {
+		return false;
+	}
+	if(f1.scope == f2.scope && f1.method == f2.method) {
+		return f1.method != null;
+	} else {
+		return false;
+	}
+};
+Reflect.isEnumValue = function(v) {
+	if(v != null) {
+		return v.__enum__ != null;
+	} else {
+		return false;
+	}
+};
+Reflect.deleteField = function(o,field) {
+	if(!Object.prototype.hasOwnProperty.call(o,field)) {
+		return false;
+	}
+	delete(o[field]);
+	return true;
+};
+var SceneManager = function() { };
+$hxClasses["SceneManager"] = SceneManager;
+SceneManager.__name__ = "SceneManager";
+SceneManager.changeScene = function(scene,dispose) {
+};
+var Std = function() { };
+$hxClasses["Std"] = Std;
+Std.__name__ = "Std";
+Std.string = function(s) {
+	return js_Boot.__string_rec(s,"");
+};
+Std.parseInt = function(x) {
+	if(x != null) {
+		var _g = 0;
+		var _g1 = x.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var c = x.charCodeAt(i);
+			if(c <= 8 || c >= 14 && c != 32 && c != 45) {
+				var v = parseInt(x, (x[(i + 1)]=="x" || x[(i + 1)]=="X") ? 16 : 10);
+				if(isNaN(v)) {
+					return null;
+				} else {
+					return v;
+				}
+			}
+		}
+	}
+	return null;
+};
+Std.random = function(x) {
+	if(x <= 0) {
+		return 0;
+	} else {
+		return Math.floor(Math.random() * x);
+	}
+};
+var StringBuf = function() {
+	this.b = "";
+};
+$hxClasses["StringBuf"] = StringBuf;
+StringBuf.__name__ = "StringBuf";
+StringBuf.prototype = {
+	__class__: StringBuf
+};
+var StringTools = function() { };
+$hxClasses["StringTools"] = StringTools;
+StringTools.__name__ = "StringTools";
+StringTools.htmlEscape = function(s,quotes) {
+	var buf_b = "";
+	var _g_offset = 0;
+	var _g_s = s;
+	while(_g_offset < _g_s.length) {
+		var s1 = _g_s;
+		var index = _g_offset++;
+		var c = s1.charCodeAt(index);
+		if(c >= 55296 && c <= 56319) {
+			c = c - 55232 << 10 | s1.charCodeAt(index + 1) & 1023;
+		}
+		var c1 = c;
+		if(c1 >= 65536) {
+			++_g_offset;
+		}
+		var code = c1;
+		switch(code) {
+		case 34:
+			if(quotes) {
+				buf_b += "&quot;";
+			} else {
+				buf_b += String.fromCodePoint(code);
+			}
+			break;
+		case 38:
+			buf_b += "&amp;";
+			break;
+		case 39:
+			if(quotes) {
+				buf_b += "&#039;";
+			} else {
+				buf_b += String.fromCodePoint(code);
+			}
+			break;
+		case 60:
+			buf_b += "&lt;";
+			break;
+		case 62:
+			buf_b += "&gt;";
+			break;
+		default:
+			buf_b += String.fromCodePoint(code);
+		}
+	}
+	return buf_b;
+};
+StringTools.startsWith = function(s,start) {
+	if(s.length >= start.length) {
+		return s.lastIndexOf(start,0) == 0;
+	} else {
+		return false;
+	}
+};
+StringTools.isSpace = function(s,pos) {
+	var c = HxOverrides.cca(s,pos);
+	if(!(c > 8 && c < 14)) {
+		return c == 32;
+	} else {
+		return true;
+	}
+};
+StringTools.ltrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,r)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,r,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.rtrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l && StringTools.isSpace(s,l - r - 1)) ++r;
+	if(r > 0) {
+		return HxOverrides.substr(s,0,l - r);
+	} else {
+		return s;
+	}
+};
+StringTools.trim = function(s) {
+	return StringTools.ltrim(StringTools.rtrim(s));
+};
+StringTools.hex = function(n,digits) {
+	var s = "";
+	var hexChars = "0123456789ABCDEF";
+	while(true) {
+		s = hexChars.charAt(n & 15) + s;
+		n >>>= 4;
+		if(!(n > 0)) {
+			break;
+		}
+	}
+	if(digits != null) {
+		while(s.length < digits) s = "0" + s;
+	}
+	return s;
+};
 var TestScene = function() {
 	this.startRotation = false;
 	h2d_Scene.call(this);
@@ -4595,6 +4753,65 @@ TestScene.prototype = $extend(h2d_Scene.prototype,{
 		};
 	}
 	,__class__: TestScene
+});
+var TitleScene = function() {
+	h2d_Scene.call(this);
+	this.init();
+};
+$hxClasses["TitleScene"] = TitleScene;
+TitleScene.__name__ = "TitleScene";
+TitleScene.__super__ = h2d_Scene;
+TitleScene.prototype = $extend(h2d_Scene.prototype,{
+	init: function() {
+		var font = hxd_res_DefaultFont.get();
+		this.titleText = new h2d_Text(font,this);
+		var windowWidth = hxd_Window.getInstance().get_width();
+		var windowHeight = hxd_Window.getInstance().get_height();
+		haxe_Log.trace(windowWidth,{ fileName : "src/TitleScene.hx", lineNumber : 27, className : "TitleScene", methodName : "init"});
+		var _this = this.titleText;
+		_this.posChanged = true;
+		_this.x = windowWidth / 2 - 35;
+		var _this1 = this.titleText;
+		_this1.posChanged = true;
+		_this1.y = 140;
+		var _this2 = this.titleText;
+		var _g = _this2;
+		_g.posChanged = true;
+		_g.scaleX *= 2;
+		var _g1 = _this2;
+		_g1.posChanged = true;
+		_g1.scaleY *= 2;
+		this.titleText.set_text(GameData.getGameData().title);
+		this.createNewGameBtn(windowWidth / 2,200);
+		this.createCreditsBtn(windowWidth / 2,250);
+		this.createExitGameBtn(windowWidth / 2,300);
+	}
+	,createNewGameBtn: function(x,y) {
+		var _gthis = this;
+		this.newGameBtn = new BaseBtn(this,x - 35,y,100,50);
+		this.newGameBtn.setBackgroundColor(11184810).setText("New Game").setOnClick(function(event) {
+			haxe_Log.trace("New Game Pressed",{ fileName : "src/TitleScene.hx", lineNumber : 42, className : "TitleScene", methodName : "createNewGameBtn"});
+			_gthis.dispose();
+			SceneManager.changeScene(new TestScene());
+			return;
+		});
+	}
+	,createCreditsBtn: function(x,y) {
+		this.creditsBtn = new BaseBtn(this,x - 35,y,100,50);
+		this.creditsBtn.setBackgroundColor(11184810).setText("Credits").setOnClick(function(event) {
+			haxe_Log.trace("Credits Pressed",{ fileName : "src/TitleScene.hx", lineNumber : 53, className : "TitleScene", methodName : "createCreditsBtn"});
+			SceneManager.changeScene(new CreditsScene());
+			return;
+		});
+	}
+	,createExitGameBtn: function(x,y) {
+		this.exitGameBtn = new BaseBtn(this,x - 35,y,100,50);
+		this.exitGameBtn.setBackgroundColor(11184810).setText("Exit Game").setOnClick(function(event) {
+			haxe_Log.trace("Exit Game Pressed",{ fileName : "src/TitleScene.hx", lineNumber : 63, className : "TitleScene", methodName : "createExitGameBtn"});
+			return;
+		});
+	}
+	,__class__: TitleScene
 });
 var Type = function() { };
 $hxClasses["Type"] = Type;
@@ -4677,11 +4894,12 @@ var Condition = $hxEnums["Condition"] = { __ename__ : true, __constructs__ : ["G
 	,Bad: {_hx_index:2,__enum__:"Condition",toString:$estr}
 };
 Condition.__empty_constructs__ = [Condition.Good,Condition.Average,Condition.Bad];
-var SysCommands = $hxEnums["SysCommands"] = { __ename__ : true, __constructs__ : ["ShowText","ChangeGraphic","CloseWindow","ShowWindow"]
+var SysCommands = $hxEnums["SysCommands"] = { __ename__ : true, __constructs__ : ["ShowText","ChangeGraphic","Wait","CloseWindow","ShowWindow"]
 	,ShowText: ($_=function(str) { return {_hx_index:0,str:str,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["str"],$_)
 	,ChangeGraphic: ($_=function(tile) { return {_hx_index:1,tile:tile,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["tile"],$_)
-	,CloseWindow: {_hx_index:2,__enum__:"SysCommands",toString:$estr}
-	,ShowWindow: {_hx_index:3,__enum__:"SysCommands",toString:$estr}
+	,Wait: ($_=function(seconds) { return {_hx_index:2,seconds:seconds,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["seconds"],$_)
+	,CloseWindow: {_hx_index:3,__enum__:"SysCommands",toString:$estr}
+	,ShowWindow: {_hx_index:4,__enum__:"SysCommands",toString:$estr}
 };
 SysCommands.__empty_constructs__ = [SysCommands.CloseWindow,SysCommands.ShowWindow];
 var _$Xml_XmlType_$Impl_$ = {};
@@ -4889,6 +5107,235 @@ Xml.prototype = {
 	}
 	,__class__: Xml
 };
+var format_abc__$Data_Index_$Impl_$ = {};
+$hxClasses["format.abc._Data.Index_Impl_"] = format_abc__$Data_Index_$Impl_$;
+format_abc__$Data_Index_$Impl_$.__name__ = "format.abc._Data.Index_Impl_";
+format_abc__$Data_Index_$Impl_$._new = function(i) {
+	var this1 = i;
+	return this1;
+};
+format_abc__$Data_Index_$Impl_$.asInt = function(this1) {
+	return this1;
+};
+var format_abc_Namespace = $hxEnums["format.abc.Namespace"] = { __ename__ : true, __constructs__ : ["NPrivate","NNamespace","NPublic","NInternal","NProtected","NExplicit","NStaticProtected"]
+	,NPrivate: ($_=function(ns) { return {_hx_index:0,ns:ns,__enum__:"format.abc.Namespace",toString:$estr}; },$_.__params__ = ["ns"],$_)
+	,NNamespace: ($_=function(ns) { return {_hx_index:1,ns:ns,__enum__:"format.abc.Namespace",toString:$estr}; },$_.__params__ = ["ns"],$_)
+	,NPublic: ($_=function(ns) { return {_hx_index:2,ns:ns,__enum__:"format.abc.Namespace",toString:$estr}; },$_.__params__ = ["ns"],$_)
+	,NInternal: ($_=function(ns) { return {_hx_index:3,ns:ns,__enum__:"format.abc.Namespace",toString:$estr}; },$_.__params__ = ["ns"],$_)
+	,NProtected: ($_=function(ns) { return {_hx_index:4,ns:ns,__enum__:"format.abc.Namespace",toString:$estr}; },$_.__params__ = ["ns"],$_)
+	,NExplicit: ($_=function(ns) { return {_hx_index:5,ns:ns,__enum__:"format.abc.Namespace",toString:$estr}; },$_.__params__ = ["ns"],$_)
+	,NStaticProtected: ($_=function(ns) { return {_hx_index:6,ns:ns,__enum__:"format.abc.Namespace",toString:$estr}; },$_.__params__ = ["ns"],$_)
+};
+format_abc_Namespace.__empty_constructs__ = [];
+var format_abc_Name = $hxEnums["format.abc.Name"] = { __ename__ : true, __constructs__ : ["NName","NMulti","NRuntime","NRuntimeLate","NMultiLate","NAttrib","NParams"]
+	,NName: ($_=function(name,ns) { return {_hx_index:0,name:name,ns:ns,__enum__:"format.abc.Name",toString:$estr}; },$_.__params__ = ["name","ns"],$_)
+	,NMulti: ($_=function(name,ns) { return {_hx_index:1,name:name,ns:ns,__enum__:"format.abc.Name",toString:$estr}; },$_.__params__ = ["name","ns"],$_)
+	,NRuntime: ($_=function(name) { return {_hx_index:2,name:name,__enum__:"format.abc.Name",toString:$estr}; },$_.__params__ = ["name"],$_)
+	,NRuntimeLate: {_hx_index:3,__enum__:"format.abc.Name",toString:$estr}
+	,NMultiLate: ($_=function(nset) { return {_hx_index:4,nset:nset,__enum__:"format.abc.Name",toString:$estr}; },$_.__params__ = ["nset"],$_)
+	,NAttrib: ($_=function(n) { return {_hx_index:5,n:n,__enum__:"format.abc.Name",toString:$estr}; },$_.__params__ = ["n"],$_)
+	,NParams: ($_=function(n,params) { return {_hx_index:6,n:n,params:params,__enum__:"format.abc.Name",toString:$estr}; },$_.__params__ = ["n","params"],$_)
+};
+format_abc_Name.__empty_constructs__ = [format_abc_Name.NRuntimeLate];
+var format_abc_Value = $hxEnums["format.abc.Value"] = { __ename__ : true, __constructs__ : ["VNull","VBool","VString","VInt","VUInt","VFloat","VNamespace"]
+	,VNull: {_hx_index:0,__enum__:"format.abc.Value",toString:$estr}
+	,VBool: ($_=function(b) { return {_hx_index:1,b:b,__enum__:"format.abc.Value",toString:$estr}; },$_.__params__ = ["b"],$_)
+	,VString: ($_=function(i) { return {_hx_index:2,i:i,__enum__:"format.abc.Value",toString:$estr}; },$_.__params__ = ["i"],$_)
+	,VInt: ($_=function(i) { return {_hx_index:3,i:i,__enum__:"format.abc.Value",toString:$estr}; },$_.__params__ = ["i"],$_)
+	,VUInt: ($_=function(i) { return {_hx_index:4,i:i,__enum__:"format.abc.Value",toString:$estr}; },$_.__params__ = ["i"],$_)
+	,VFloat: ($_=function(f) { return {_hx_index:5,f:f,__enum__:"format.abc.Value",toString:$estr}; },$_.__params__ = ["f"],$_)
+	,VNamespace: ($_=function(kind,ns) { return {_hx_index:6,kind:kind,ns:ns,__enum__:"format.abc.Value",toString:$estr}; },$_.__params__ = ["kind","ns"],$_)
+};
+format_abc_Value.__empty_constructs__ = [format_abc_Value.VNull];
+var format_abc_MethodKind = $hxEnums["format.abc.MethodKind"] = { __ename__ : true, __constructs__ : ["KNormal","KGetter","KSetter"]
+	,KNormal: {_hx_index:0,__enum__:"format.abc.MethodKind",toString:$estr}
+	,KGetter: {_hx_index:1,__enum__:"format.abc.MethodKind",toString:$estr}
+	,KSetter: {_hx_index:2,__enum__:"format.abc.MethodKind",toString:$estr}
+};
+format_abc_MethodKind.__empty_constructs__ = [format_abc_MethodKind.KNormal,format_abc_MethodKind.KGetter,format_abc_MethodKind.KSetter];
+var format_abc_FieldKind = $hxEnums["format.abc.FieldKind"] = { __ename__ : true, __constructs__ : ["FVar","FMethod","FClass","FFunction"]
+	,FVar: ($_=function(type,value,$const) { return {_hx_index:0,type:type,value:value,$const:$const,__enum__:"format.abc.FieldKind",toString:$estr}; },$_.__params__ = ["type","value","$const"],$_)
+	,FMethod: ($_=function(type,k,isFinal,isOverride) { return {_hx_index:1,type:type,k:k,isFinal:isFinal,isOverride:isOverride,__enum__:"format.abc.FieldKind",toString:$estr}; },$_.__params__ = ["type","k","isFinal","isOverride"],$_)
+	,FClass: ($_=function(c) { return {_hx_index:2,c:c,__enum__:"format.abc.FieldKind",toString:$estr}; },$_.__params__ = ["c"],$_)
+	,FFunction: ($_=function(f) { return {_hx_index:3,f:f,__enum__:"format.abc.FieldKind",toString:$estr}; },$_.__params__ = ["f"],$_)
+};
+format_abc_FieldKind.__empty_constructs__ = [];
+var format_abc_ABCData = function() {
+};
+$hxClasses["format.abc.ABCData"] = format_abc_ABCData;
+format_abc_ABCData.__name__ = "format.abc.ABCData";
+format_abc_ABCData.prototype = {
+	get: function(t,i) {
+		return t[i - 1];
+	}
+	,__class__: format_abc_ABCData
+};
+var format_abc_OpCode = $hxEnums["format.abc.OpCode"] = { __ename__ : true, __constructs__ : ["OBreakPoint","ONop","OThrow","OGetSuper","OSetSuper","ODxNs","ODxNsLate","ORegKill","OLabel","OJump","OSwitch","OPushWith","OPopScope","OForIn","OHasNext","ONull","OUndefined","OForEach","OSmallInt","OInt","OTrue","OFalse","ONaN","OPop","ODup","OSwap","OString","OIntRef","OUIntRef","OFloat","OScope","ONamespace","ONext","OFunction","OCallStack","OConstruct","OCallMethod","OCallStatic","OCallSuper","OCallProperty","ORetVoid","ORet","OConstructSuper","OConstructProperty","OCallPropLex","OCallSuperVoid","OCallPropVoid","OApplyType","OObject","OArray","ONewBlock","OClassDef","OGetDescendants","OCatch","OFindPropStrict","OFindProp","OFindDefinition","OGetLex","OSetProp","OReg","OSetReg","OGetGlobalScope","OGetScope","OGetProp","OInitProp","ODeleteProp","OGetSlot","OSetSlot","OToString","OToXml","OToXmlAttr","OToInt","OToUInt","OToNumber","OToBool","OToObject","OCheckIsXml","OCast","OAsAny","OAsString","OAsType","OAsObject","OIncrReg","ODecrReg","OTypeof","OInstanceOf","OIsType","OIncrIReg","ODecrIReg","OThis","OSetThis","ODebugReg","ODebugLine","ODebugFile","OBreakPointLine","OTimestamp","OOp","OUnknown"]
+	,OBreakPoint: {_hx_index:0,__enum__:"format.abc.OpCode",toString:$estr}
+	,ONop: {_hx_index:1,__enum__:"format.abc.OpCode",toString:$estr}
+	,OThrow: {_hx_index:2,__enum__:"format.abc.OpCode",toString:$estr}
+	,OGetSuper: ($_=function(v) { return {_hx_index:3,v:v,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["v"],$_)
+	,OSetSuper: ($_=function(v) { return {_hx_index:4,v:v,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["v"],$_)
+	,ODxNs: ($_=function(v) { return {_hx_index:5,v:v,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["v"],$_)
+	,ODxNsLate: {_hx_index:6,__enum__:"format.abc.OpCode",toString:$estr}
+	,ORegKill: ($_=function(r) { return {_hx_index:7,r:r,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["r"],$_)
+	,OLabel: {_hx_index:8,__enum__:"format.abc.OpCode",toString:$estr}
+	,OJump: ($_=function(j,delta) { return {_hx_index:9,j:j,delta:delta,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["j","delta"],$_)
+	,OSwitch: ($_=function(def,deltas) { return {_hx_index:10,def:def,deltas:deltas,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["def","deltas"],$_)
+	,OPushWith: {_hx_index:11,__enum__:"format.abc.OpCode",toString:$estr}
+	,OPopScope: {_hx_index:12,__enum__:"format.abc.OpCode",toString:$estr}
+	,OForIn: {_hx_index:13,__enum__:"format.abc.OpCode",toString:$estr}
+	,OHasNext: {_hx_index:14,__enum__:"format.abc.OpCode",toString:$estr}
+	,ONull: {_hx_index:15,__enum__:"format.abc.OpCode",toString:$estr}
+	,OUndefined: {_hx_index:16,__enum__:"format.abc.OpCode",toString:$estr}
+	,OForEach: {_hx_index:17,__enum__:"format.abc.OpCode",toString:$estr}
+	,OSmallInt: ($_=function(v) { return {_hx_index:18,v:v,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["v"],$_)
+	,OInt: ($_=function(v) { return {_hx_index:19,v:v,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["v"],$_)
+	,OTrue: {_hx_index:20,__enum__:"format.abc.OpCode",toString:$estr}
+	,OFalse: {_hx_index:21,__enum__:"format.abc.OpCode",toString:$estr}
+	,ONaN: {_hx_index:22,__enum__:"format.abc.OpCode",toString:$estr}
+	,OPop: {_hx_index:23,__enum__:"format.abc.OpCode",toString:$estr}
+	,ODup: {_hx_index:24,__enum__:"format.abc.OpCode",toString:$estr}
+	,OSwap: {_hx_index:25,__enum__:"format.abc.OpCode",toString:$estr}
+	,OString: ($_=function(v) { return {_hx_index:26,v:v,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["v"],$_)
+	,OIntRef: ($_=function(v) { return {_hx_index:27,v:v,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["v"],$_)
+	,OUIntRef: ($_=function(v) { return {_hx_index:28,v:v,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["v"],$_)
+	,OFloat: ($_=function(v) { return {_hx_index:29,v:v,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["v"],$_)
+	,OScope: {_hx_index:30,__enum__:"format.abc.OpCode",toString:$estr}
+	,ONamespace: ($_=function(v) { return {_hx_index:31,v:v,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["v"],$_)
+	,ONext: ($_=function(r1,r2) { return {_hx_index:32,r1:r1,r2:r2,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["r1","r2"],$_)
+	,OFunction: ($_=function(f) { return {_hx_index:33,f:f,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["f"],$_)
+	,OCallStack: ($_=function(nargs) { return {_hx_index:34,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["nargs"],$_)
+	,OConstruct: ($_=function(nargs) { return {_hx_index:35,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["nargs"],$_)
+	,OCallMethod: ($_=function(slot,nargs) { return {_hx_index:36,slot:slot,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["slot","nargs"],$_)
+	,OCallStatic: ($_=function(meth,nargs) { return {_hx_index:37,meth:meth,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["meth","nargs"],$_)
+	,OCallSuper: ($_=function(name,nargs) { return {_hx_index:38,name:name,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["name","nargs"],$_)
+	,OCallProperty: ($_=function(name,nargs) { return {_hx_index:39,name:name,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["name","nargs"],$_)
+	,ORetVoid: {_hx_index:40,__enum__:"format.abc.OpCode",toString:$estr}
+	,ORet: {_hx_index:41,__enum__:"format.abc.OpCode",toString:$estr}
+	,OConstructSuper: ($_=function(nargs) { return {_hx_index:42,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["nargs"],$_)
+	,OConstructProperty: ($_=function(name,nargs) { return {_hx_index:43,name:name,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["name","nargs"],$_)
+	,OCallPropLex: ($_=function(name,nargs) { return {_hx_index:44,name:name,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["name","nargs"],$_)
+	,OCallSuperVoid: ($_=function(name,nargs) { return {_hx_index:45,name:name,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["name","nargs"],$_)
+	,OCallPropVoid: ($_=function(name,nargs) { return {_hx_index:46,name:name,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["name","nargs"],$_)
+	,OApplyType: ($_=function(nargs) { return {_hx_index:47,nargs:nargs,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["nargs"],$_)
+	,OObject: ($_=function(nfields) { return {_hx_index:48,nfields:nfields,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["nfields"],$_)
+	,OArray: ($_=function(nvalues) { return {_hx_index:49,nvalues:nvalues,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["nvalues"],$_)
+	,ONewBlock: {_hx_index:50,__enum__:"format.abc.OpCode",toString:$estr}
+	,OClassDef: ($_=function(c) { return {_hx_index:51,c:c,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["c"],$_)
+	,OGetDescendants: ($_=function(c) { return {_hx_index:52,c:c,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["c"],$_)
+	,OCatch: ($_=function(c) { return {_hx_index:53,c:c,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["c"],$_)
+	,OFindPropStrict: ($_=function(p) { return {_hx_index:54,p:p,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["p"],$_)
+	,OFindProp: ($_=function(p) { return {_hx_index:55,p:p,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["p"],$_)
+	,OFindDefinition: ($_=function(d) { return {_hx_index:56,d:d,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["d"],$_)
+	,OGetLex: ($_=function(p) { return {_hx_index:57,p:p,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["p"],$_)
+	,OSetProp: ($_=function(p) { return {_hx_index:58,p:p,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["p"],$_)
+	,OReg: ($_=function(r) { return {_hx_index:59,r:r,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["r"],$_)
+	,OSetReg: ($_=function(r) { return {_hx_index:60,r:r,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["r"],$_)
+	,OGetGlobalScope: {_hx_index:61,__enum__:"format.abc.OpCode",toString:$estr}
+	,OGetScope: ($_=function(n) { return {_hx_index:62,n:n,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["n"],$_)
+	,OGetProp: ($_=function(p) { return {_hx_index:63,p:p,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["p"],$_)
+	,OInitProp: ($_=function(p) { return {_hx_index:64,p:p,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["p"],$_)
+	,ODeleteProp: ($_=function(p) { return {_hx_index:65,p:p,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["p"],$_)
+	,OGetSlot: ($_=function(s) { return {_hx_index:66,s:s,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["s"],$_)
+	,OSetSlot: ($_=function(s) { return {_hx_index:67,s:s,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["s"],$_)
+	,OToString: {_hx_index:68,__enum__:"format.abc.OpCode",toString:$estr}
+	,OToXml: {_hx_index:69,__enum__:"format.abc.OpCode",toString:$estr}
+	,OToXmlAttr: {_hx_index:70,__enum__:"format.abc.OpCode",toString:$estr}
+	,OToInt: {_hx_index:71,__enum__:"format.abc.OpCode",toString:$estr}
+	,OToUInt: {_hx_index:72,__enum__:"format.abc.OpCode",toString:$estr}
+	,OToNumber: {_hx_index:73,__enum__:"format.abc.OpCode",toString:$estr}
+	,OToBool: {_hx_index:74,__enum__:"format.abc.OpCode",toString:$estr}
+	,OToObject: {_hx_index:75,__enum__:"format.abc.OpCode",toString:$estr}
+	,OCheckIsXml: {_hx_index:76,__enum__:"format.abc.OpCode",toString:$estr}
+	,OCast: ($_=function(t) { return {_hx_index:77,t:t,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["t"],$_)
+	,OAsAny: {_hx_index:78,__enum__:"format.abc.OpCode",toString:$estr}
+	,OAsString: {_hx_index:79,__enum__:"format.abc.OpCode",toString:$estr}
+	,OAsType: ($_=function(t) { return {_hx_index:80,t:t,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["t"],$_)
+	,OAsObject: {_hx_index:81,__enum__:"format.abc.OpCode",toString:$estr}
+	,OIncrReg: ($_=function(r) { return {_hx_index:82,r:r,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["r"],$_)
+	,ODecrReg: ($_=function(r) { return {_hx_index:83,r:r,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["r"],$_)
+	,OTypeof: {_hx_index:84,__enum__:"format.abc.OpCode",toString:$estr}
+	,OInstanceOf: {_hx_index:85,__enum__:"format.abc.OpCode",toString:$estr}
+	,OIsType: ($_=function(t) { return {_hx_index:86,t:t,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["t"],$_)
+	,OIncrIReg: ($_=function(r) { return {_hx_index:87,r:r,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["r"],$_)
+	,ODecrIReg: ($_=function(r) { return {_hx_index:88,r:r,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["r"],$_)
+	,OThis: {_hx_index:89,__enum__:"format.abc.OpCode",toString:$estr}
+	,OSetThis: {_hx_index:90,__enum__:"format.abc.OpCode",toString:$estr}
+	,ODebugReg: ($_=function(name,r,line) { return {_hx_index:91,name:name,r:r,line:line,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["name","r","line"],$_)
+	,ODebugLine: ($_=function(line) { return {_hx_index:92,line:line,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["line"],$_)
+	,ODebugFile: ($_=function(file) { return {_hx_index:93,file:file,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["file"],$_)
+	,OBreakPointLine: ($_=function(n) { return {_hx_index:94,n:n,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["n"],$_)
+	,OTimestamp: {_hx_index:95,__enum__:"format.abc.OpCode",toString:$estr}
+	,OOp: ($_=function(op) { return {_hx_index:96,op:op,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["op"],$_)
+	,OUnknown: ($_=function(byte) { return {_hx_index:97,byte:byte,__enum__:"format.abc.OpCode",toString:$estr}; },$_.__params__ = ["byte"],$_)
+};
+format_abc_OpCode.__empty_constructs__ = [format_abc_OpCode.OBreakPoint,format_abc_OpCode.ONop,format_abc_OpCode.OThrow,format_abc_OpCode.ODxNsLate,format_abc_OpCode.OLabel,format_abc_OpCode.OPushWith,format_abc_OpCode.OPopScope,format_abc_OpCode.OForIn,format_abc_OpCode.OHasNext,format_abc_OpCode.ONull,format_abc_OpCode.OUndefined,format_abc_OpCode.OForEach,format_abc_OpCode.OTrue,format_abc_OpCode.OFalse,format_abc_OpCode.ONaN,format_abc_OpCode.OPop,format_abc_OpCode.ODup,format_abc_OpCode.OSwap,format_abc_OpCode.OScope,format_abc_OpCode.ORetVoid,format_abc_OpCode.ORet,format_abc_OpCode.ONewBlock,format_abc_OpCode.OGetGlobalScope,format_abc_OpCode.OToString,format_abc_OpCode.OToXml,format_abc_OpCode.OToXmlAttr,format_abc_OpCode.OToInt,format_abc_OpCode.OToUInt,format_abc_OpCode.OToNumber,format_abc_OpCode.OToBool,format_abc_OpCode.OToObject,format_abc_OpCode.OCheckIsXml,format_abc_OpCode.OAsAny,format_abc_OpCode.OAsString,format_abc_OpCode.OAsObject,format_abc_OpCode.OTypeof,format_abc_OpCode.OInstanceOf,format_abc_OpCode.OThis,format_abc_OpCode.OSetThis,format_abc_OpCode.OTimestamp];
+var format_abc_JumpStyle = $hxEnums["format.abc.JumpStyle"] = { __ename__ : true, __constructs__ : ["JNotLt","JNotLte","JNotGt","JNotGte","JAlways","JTrue","JFalse","JEq","JNeq","JLt","JLte","JGt","JGte","JPhysEq","JPhysNeq"]
+	,JNotLt: {_hx_index:0,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JNotLte: {_hx_index:1,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JNotGt: {_hx_index:2,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JNotGte: {_hx_index:3,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JAlways: {_hx_index:4,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JTrue: {_hx_index:5,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JFalse: {_hx_index:6,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JEq: {_hx_index:7,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JNeq: {_hx_index:8,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JLt: {_hx_index:9,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JLte: {_hx_index:10,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JGt: {_hx_index:11,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JGte: {_hx_index:12,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JPhysEq: {_hx_index:13,__enum__:"format.abc.JumpStyle",toString:$estr}
+	,JPhysNeq: {_hx_index:14,__enum__:"format.abc.JumpStyle",toString:$estr}
+};
+format_abc_JumpStyle.__empty_constructs__ = [format_abc_JumpStyle.JNotLt,format_abc_JumpStyle.JNotLte,format_abc_JumpStyle.JNotGt,format_abc_JumpStyle.JNotGte,format_abc_JumpStyle.JAlways,format_abc_JumpStyle.JTrue,format_abc_JumpStyle.JFalse,format_abc_JumpStyle.JEq,format_abc_JumpStyle.JNeq,format_abc_JumpStyle.JLt,format_abc_JumpStyle.JLte,format_abc_JumpStyle.JGt,format_abc_JumpStyle.JGte,format_abc_JumpStyle.JPhysEq,format_abc_JumpStyle.JPhysNeq];
+var format_abc_Operation = $hxEnums["format.abc.Operation"] = { __ename__ : true, __constructs__ : ["OpAs","OpNeg","OpIncr","OpDecr","OpNot","OpBitNot","OpAdd","OpSub","OpMul","OpDiv","OpMod","OpShl","OpShr","OpUShr","OpAnd","OpOr","OpXor","OpEq","OpPhysEq","OpLt","OpLte","OpGt","OpGte","OpIs","OpIn","OpIIncr","OpIDecr","OpINeg","OpIAdd","OpISub","OpIMul","OpMemGet8","OpMemGet16","OpMemGet32","OpMemGetFloat","OpMemGetDouble","OpMemSet8","OpMemSet16","OpMemSet32","OpMemSetFloat","OpMemSetDouble","OpSign1","OpSign8","OpSign16"]
+	,OpAs: {_hx_index:0,__enum__:"format.abc.Operation",toString:$estr}
+	,OpNeg: {_hx_index:1,__enum__:"format.abc.Operation",toString:$estr}
+	,OpIncr: {_hx_index:2,__enum__:"format.abc.Operation",toString:$estr}
+	,OpDecr: {_hx_index:3,__enum__:"format.abc.Operation",toString:$estr}
+	,OpNot: {_hx_index:4,__enum__:"format.abc.Operation",toString:$estr}
+	,OpBitNot: {_hx_index:5,__enum__:"format.abc.Operation",toString:$estr}
+	,OpAdd: {_hx_index:6,__enum__:"format.abc.Operation",toString:$estr}
+	,OpSub: {_hx_index:7,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMul: {_hx_index:8,__enum__:"format.abc.Operation",toString:$estr}
+	,OpDiv: {_hx_index:9,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMod: {_hx_index:10,__enum__:"format.abc.Operation",toString:$estr}
+	,OpShl: {_hx_index:11,__enum__:"format.abc.Operation",toString:$estr}
+	,OpShr: {_hx_index:12,__enum__:"format.abc.Operation",toString:$estr}
+	,OpUShr: {_hx_index:13,__enum__:"format.abc.Operation",toString:$estr}
+	,OpAnd: {_hx_index:14,__enum__:"format.abc.Operation",toString:$estr}
+	,OpOr: {_hx_index:15,__enum__:"format.abc.Operation",toString:$estr}
+	,OpXor: {_hx_index:16,__enum__:"format.abc.Operation",toString:$estr}
+	,OpEq: {_hx_index:17,__enum__:"format.abc.Operation",toString:$estr}
+	,OpPhysEq: {_hx_index:18,__enum__:"format.abc.Operation",toString:$estr}
+	,OpLt: {_hx_index:19,__enum__:"format.abc.Operation",toString:$estr}
+	,OpLte: {_hx_index:20,__enum__:"format.abc.Operation",toString:$estr}
+	,OpGt: {_hx_index:21,__enum__:"format.abc.Operation",toString:$estr}
+	,OpGte: {_hx_index:22,__enum__:"format.abc.Operation",toString:$estr}
+	,OpIs: {_hx_index:23,__enum__:"format.abc.Operation",toString:$estr}
+	,OpIn: {_hx_index:24,__enum__:"format.abc.Operation",toString:$estr}
+	,OpIIncr: {_hx_index:25,__enum__:"format.abc.Operation",toString:$estr}
+	,OpIDecr: {_hx_index:26,__enum__:"format.abc.Operation",toString:$estr}
+	,OpINeg: {_hx_index:27,__enum__:"format.abc.Operation",toString:$estr}
+	,OpIAdd: {_hx_index:28,__enum__:"format.abc.Operation",toString:$estr}
+	,OpISub: {_hx_index:29,__enum__:"format.abc.Operation",toString:$estr}
+	,OpIMul: {_hx_index:30,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMemGet8: {_hx_index:31,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMemGet16: {_hx_index:32,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMemGet32: {_hx_index:33,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMemGetFloat: {_hx_index:34,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMemGetDouble: {_hx_index:35,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMemSet8: {_hx_index:36,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMemSet16: {_hx_index:37,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMemSet32: {_hx_index:38,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMemSetFloat: {_hx_index:39,__enum__:"format.abc.Operation",toString:$estr}
+	,OpMemSetDouble: {_hx_index:40,__enum__:"format.abc.Operation",toString:$estr}
+	,OpSign1: {_hx_index:41,__enum__:"format.abc.Operation",toString:$estr}
+	,OpSign8: {_hx_index:42,__enum__:"format.abc.Operation",toString:$estr}
+	,OpSign16: {_hx_index:43,__enum__:"format.abc.Operation",toString:$estr}
+};
+format_abc_Operation.__empty_constructs__ = [format_abc_Operation.OpAs,format_abc_Operation.OpNeg,format_abc_Operation.OpIncr,format_abc_Operation.OpDecr,format_abc_Operation.OpNot,format_abc_Operation.OpBitNot,format_abc_Operation.OpAdd,format_abc_Operation.OpSub,format_abc_Operation.OpMul,format_abc_Operation.OpDiv,format_abc_Operation.OpMod,format_abc_Operation.OpShl,format_abc_Operation.OpShr,format_abc_Operation.OpUShr,format_abc_Operation.OpAnd,format_abc_Operation.OpOr,format_abc_Operation.OpXor,format_abc_Operation.OpEq,format_abc_Operation.OpPhysEq,format_abc_Operation.OpLt,format_abc_Operation.OpLte,format_abc_Operation.OpGt,format_abc_Operation.OpGte,format_abc_Operation.OpIs,format_abc_Operation.OpIn,format_abc_Operation.OpIIncr,format_abc_Operation.OpIDecr,format_abc_Operation.OpINeg,format_abc_Operation.OpIAdd,format_abc_Operation.OpISub,format_abc_Operation.OpIMul,format_abc_Operation.OpMemGet8,format_abc_Operation.OpMemGet16,format_abc_Operation.OpMemGet32,format_abc_Operation.OpMemGetFloat,format_abc_Operation.OpMemGetDouble,format_abc_Operation.OpMemSet8,format_abc_Operation.OpMemSet16,format_abc_Operation.OpMemSet32,format_abc_Operation.OpMemSetFloat,format_abc_Operation.OpMemSetDouble,format_abc_Operation.OpSign1,format_abc_Operation.OpSign8,format_abc_Operation.OpSign16];
 var format_gif_Block = $hxEnums["format.gif.Block"] = { __ename__ : true, __constructs__ : ["BFrame","BExtension","BEOF"]
 	,BFrame: ($_=function(frame) { return {_hx_index:0,frame:frame,__enum__:"format.gif.Block",toString:$estr}; },$_.__params__ = ["frame"],$_)
 	,BExtension: ($_=function(extension) { return {_hx_index:1,extension:extension,__enum__:"format.gif.Block",toString:$estr}; },$_.__params__ = ["extension"],$_)
@@ -49518,6 +49965,41 @@ hxd_impl__$UncheckedBytes_UncheckedBytes_$Impl_$.fromBytes = function(b) {
 	var this1 = b.b;
 	return this1;
 };
+var hxd_net_BinaryLoader = function(url) {
+	this.url = url;
+};
+$hxClasses["hxd.net.BinaryLoader"] = hxd_net_BinaryLoader;
+hxd_net_BinaryLoader.__name__ = "hxd.net.BinaryLoader";
+hxd_net_BinaryLoader.prototype = {
+	onLoaded: function(bytes) {
+	}
+	,onProgress: function(cur,max) {
+	}
+	,onError: function(msg) {
+		throw new js__$Boot_HaxeError(msg);
+	}
+	,load: function() {
+		var _gthis = this;
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET",this.url,true);
+		xhr.responseType = "arraybuffer";
+		xhr.onerror = function(e) {
+			_gthis.onError(xhr.statusText);
+		};
+		xhr.onload = function(e1) {
+			if(xhr.status != 200) {
+				_gthis.onError(xhr.statusText);
+				return;
+			}
+			_gthis.onLoaded(haxe_io_Bytes.ofData(xhr.response));
+		};
+		xhr.onprogress = function(e2) {
+			_gthis.onProgress(e2.loaded || e2.position | 0,e2.total || e2.totalSize | 0);
+		};
+		xhr.send();
+	}
+	,__class__: hxd_net_BinaryLoader
+};
 var hxd_poly2tri_Edge = function(p1,p2) {
 	if(p1 == null || p2 == null) {
 		throw new js__$Boot_HaxeError("Edge::new p1 or p2 is null");
@@ -58100,9 +58582,6 @@ hxsl_Eval.prototype = {
 					d = hxsl_TExprDef.TBinop(op,e12,e22);
 				}
 				break;
-			case 4:case 21:
-				d = hxsl_TExprDef.TBinop(op,e12,e22);
-				break;
 			case 5:
 				var _g10 = e22.e;
 				var _g18 = e12.e;
@@ -58948,6 +59427,9 @@ hxsl_Eval.prototype = {
 				break;
 			case 20:
 				var _g57 = op.op;
+				d = hxsl_TExprDef.TBinop(op,e12,e22);
+				break;
+			case 4:case 21:
 				d = hxsl_TExprDef.TBinop(op,e12,e22);
 				break;
 			case 22:
@@ -61176,10 +61658,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 5:
 				if(_g11._hx_index == 5) {
-					var _g24 = _g11.t;
+					var _g31 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g26 = _g2.t;
-						var _g25 = _g2.size;
+						var _g5 = _g2.t;
+						var _g4 = _g2.size;
 						var n = _g11.size;
 						this.buf.b += Std.string("vec" + n + "(");
 						var v9;
@@ -61230,10 +61712,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 6:
 				if(_g11._hx_index == 5) {
-					var _g13 = _g11.t;
+					var _g10 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g15 = _g2.t;
-						var _g14 = _g2.size;
+						var _g12 = _g2.t;
+						var _g111 = _g2.size;
 						var n1 = _g11.size;
 						this.buf.b += Std.string("vec" + n1 + "(");
 						var v12;
@@ -61284,10 +61766,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 7:
 				if(_g11._hx_index == 5) {
-					var _g17 = _g11.t;
+					var _g28 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g19 = _g2.t;
-						var _g18 = _g2.size;
+						var _g30 = _g2.t;
+						var _g29 = _g2.size;
 						var n2 = _g11.size;
 						this.buf.b += Std.string("vec" + n2 + "(");
 						var v15;
@@ -61338,10 +61820,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 8:
 				if(_g11._hx_index == 5) {
-					var _g9 = _g11.t;
+					var _g22 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g111 = _g2.t;
-						var _g10 = _g2.size;
+						var _g24 = _g2.t;
+						var _g23 = _g2.size;
 						var n3 = _g11.size;
 						this.buf.b += Std.string("vec" + n3 + "(");
 						var v18;
@@ -61392,10 +61874,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 9:
 				if(_g11._hx_index == 5) {
-					var _g28 = _g11.t;
+					var _g14 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g30 = _g2.t;
-						var _g29 = _g2.size;
+						var _g16 = _g2.t;
+						var _g15 = _g2.size;
 						var n4 = _g11.size;
 						this.buf.b += Std.string("vec" + n4 + "(");
 						var v21;
@@ -61446,10 +61928,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 10:
 				if(_g11._hx_index == 5) {
-					var _g31 = _g11.t;
+					var _g18 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g5 = _g2.t;
-						var _g4 = _g2.size;
+						var _g20 = _g2.t;
+						var _g19 = _g2.size;
 						var n5 = _g11.size;
 						this.buf.b += Std.string("vec" + n5 + "(");
 						var v24;
@@ -61682,10 +62164,10 @@ hxsl_GlslOut.prototype = {
 					var v37 = this.getFunName(g1,args,e.t);
 					this.buf.b += Std.string(v37);
 					this.buf.b += Std.string("(");
-					var _g12 = 0;
-					while(_g12 < args.length) {
-						var e3 = args[_g12];
-						++_g12;
+					var _g9 = 0;
+					while(_g9 < args.length) {
+						var e3 = args[_g9];
+						++_g9;
 						this.addValue(e3,tabs);
 						this.buf.b += Std.string(", ");
 					}
@@ -61700,9 +62182,9 @@ hxsl_GlslOut.prototype = {
 					} else {
 						var v38 = _g34;
 						var args1 = _g35;
-						var _g16 = v38.e;
-						if(_g16._hx_index == 2) {
-							var g2 = _g16.g;
+						var _g13 = v38.e;
+						if(_g13._hx_index == 2) {
+							var g2 = _g13.g;
 							var v39 = this.getFunName(g2,args1,e.t);
 							this.buf.b += Std.string(v39);
 						} else {
@@ -61727,9 +62209,9 @@ hxsl_GlslOut.prototype = {
 				default:
 					var args2 = _g35;
 					var v40 = _g34;
-					var _g20 = v40.e;
-					if(_g20._hx_index == 2) {
-						var g3 = _g20.g;
+					var _g17 = v40.e;
+					if(_g17._hx_index == 2) {
+						var g3 = _g17.g;
 						var v41 = this.getFunName(g3,args2,e.t);
 						this.buf.b += Std.string(v41);
 					} else {
@@ -61737,10 +62219,10 @@ hxsl_GlslOut.prototype = {
 					}
 					this.buf.b += Std.string("(");
 					var first1 = true;
-					var _g22 = 0;
-					while(_g22 < args2.length) {
-						var e6 = args2[_g22];
-						++_g22;
+					var _g25 = 0;
+					while(_g25 < args2.length) {
+						var e6 = args2[_g25];
+						++_g25;
 						if(first1) {
 							first1 = false;
 						} else {
@@ -61753,9 +62235,9 @@ hxsl_GlslOut.prototype = {
 			} else {
 				var args3 = _g35;
 				var v42 = _g34;
-				var _g23 = v42.e;
-				if(_g23._hx_index == 2) {
-					var g4 = _g23.g;
+				var _g26 = v42.e;
+				if(_g26._hx_index == 2) {
+					var g4 = _g26.g;
 					var v43 = this.getFunName(g4,args3,e.t);
 					this.buf.b += Std.string(v43);
 				} else {
@@ -65173,7 +65655,7 @@ var Bool = Boolean;
 var Class = { };
 var Enum = { };
 var __map_reserved = {};
-haxe_Resource.content = [{ name : "R_zipper4_png", data : "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAJlJREFUOI2tkt0NwyAQgz+YJMoIKGK5rJQJukj34JUH56FNC4SfpKoldMhg31kAL4gv0v0QtiG8bGIBnusDgHlalO6vGJhBR9Pg8wkAYvBZHeDT0PZuDcSC+xGU8EonOGXdnGt1NkXNRIrBa3NOb0FtpYanyRWD74lVilsZezjyG/jtFbrN1Dis8ar91jsGQBFhnpasjvi/YAfM5EP3lBA0cgAAAABJRU5ErkJggg"}];
+haxe_Resource.content = [{ name : "R_example_json", data : "ewogICJ0aXRsZSI6ICJUcmFwcGVkIiwKICAic3RvcnkiOiBbCgogIF0KfQ"},{ name : "R_story_json", data : "ewogICJ0aXRsZSI6ICJUcmFwcGVkIiwKICAic2NlbmVzIjogWwogICAgewogICAgICAibmFtZSI6ICJUaGUgQmVnaW5uaW5nIiwKICAgICAgImNvbW1hbmRzIjogWwogICAgICAgIHsKICAgICAgICAgICJuYW1lIjogIlNob3dUZXh0IiwKICAgICAgICAgICJhcmdzIjogWyJUaGUgZGF5cyBkcmFnZ2VkIG9uIGxpa2UgdXN1YWwsIGJ1dCB0aGluZ3Mgd2VyZSBzdGFydGluZyB0byBjaGFuZ2UuIl0KICAgICAgICB9CiAgICAgIF0KICAgIH0KICBdCn0"},{ name : "R_DataFile_cdb", data : "ewoJInNoZWV0cyI6IFsKCQl7CgkJCSJuYW1lIjogInNjZW5lIiwKCQkJImNvbHVtbnMiOiBbCgkJCQl7CgkJCQkJInR5cGVTdHIiOiAiMCIsCgkJCQkJIm5hbWUiOiAiaWQiCgkJCQl9LAoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjEiLAoJCQkJCSJuYW1lIjogIm5hbWUiCgkJCQl9CgkJCV0sCgkJCSJsaW5lcyI6IFsKCQkJCXsKCQkJCQkiaWQiOiAiSW50cm9TY2VuZSIsCgkJCQkJIm5hbWUiOiAiSW50cm9kdWN0aW9uIgoJCQkJfSwKCQkJCXsKCQkJCQkiaWQiOiAiIiwKCQkJCQkibmFtZSI6ICIiCgkJCQl9CgkJCV0sCgkJCSJzZXBhcmF0b3JzIjogW10sCgkJCSJwcm9wcyI6IHt9CgkJfSwKCQl7CgkJCSJuYW1lIjogInNjZW5lRXZlbnRzIiwKCQkJImNvbHVtbnMiOiBbCgkJCQl7CgkJCQkJInR5cGVTdHIiOiAiNjpzY2VuZSIsCgkJCQkJIm5hbWUiOiAic2NlbmUiLAoJCQkJCSJkaXNwbGF5IjogbnVsbAoJCQkJfQoJCQldLAoJCQkibGluZXMiOiBbCgkJCQl7CgkJCQkJInNjZW5lIjogIkludHJvU2NlbmUiCgkJCQl9CgkJCV0sCgkJCSJzZXBhcmF0b3JzIjogW10sCgkJCSJwcm9wcyI6IHt9CgkJfQoJXSwKCSJjdXN0b21UeXBlcyI6IFsKCQl7CgkJCSJuYW1lIjogIlN5c0NvbW1hbmRzIiwKCQkJImNhc2VzIjogWwoJCQkJewoJCQkJCSJuYW1lIjogIlNob3dUZXh0IiwKCQkJCQkiYXJncyI6IFsKCQkJCQkJewoJCQkJCQkJIm5hbWUiOiAic3RyIiwKCQkJCQkJCSJ0eXBlU3RyIjogIjEiCgkJCQkJCX0KCQkJCQldCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIkNoYW5nZUdyYXBoaWMiLAoJCQkJCSJhcmdzIjogWwoJCQkJCQl7CgkJCQkJCQkibmFtZSI6ICJ0aWxlIiwKCQkJCQkJCSJ0eXBlU3RyIjogIjEiCgkJCQkJCX0KCQkJCQldCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIldhaXQiLAoJCQkJCSJhcmdzIjogWwoJCQkJCQl7CgkJCQkJCQkibmFtZSI6ICJzZWNvbmRzIiwKCQkJCQkJCSJ0eXBlU3RyIjogIjMiCgkJCQkJCX0KCQkJCQldCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIkNsb3NlV2luZG93IiwKCQkJCQkiYXJncyI6IFtdCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIlNob3dXaW5kb3ciLAoJCQkJCSJhcmdzIjogW10KCQkJCX0KCQkJXQoJCX0KCV0sCgkiY29tcHJlc3MiOiBmYWxzZQp9"},{ name : "R_zipper4_png", data : "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAJlJREFUOI2tkt0NwyAQgz+YJMoIKGK5rJQJukj34JUH56FNC4SfpKoldMhg31kAL4gv0v0QtiG8bGIBnusDgHlalO6vGJhBR9Pg8wkAYvBZHeDT0PZuDcSC+xGU8EonOGXdnGt1NkXNRIrBa3NOb0FtpYanyRWD74lVilsZezjyG/jtFbrN1Dis8ar91jsGQBFhnpasjvi/YAfM5EP3lBA0cgAAAABJRU5ErkJggg"}];
 haxe_ds_ObjectMap.count = 0;
 Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function() {
 	return String(this.val);
@@ -65198,6 +65680,7 @@ hx__registerFont = function(name,data) {
 	window.document.body.appendChild(div);
 };
 js_Boot.__toStr = ({ }).toString;
+GameData.isLoaded = false;
 Xml.Element = 0;
 Xml.PCData = 1;
 Xml.CData = 2;

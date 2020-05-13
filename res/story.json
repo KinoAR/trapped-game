@@ -1,0 +1,14 @@
+{
+  "title": "Trapped",
+  "scenes": [
+    {
+      "name": "The Beginning",
+      "commands": [
+        {
+          "name": "ShowText",
+          "args": ["The days dragged on like usual, but things were starting to change."]
+        }
+      ]
+    }
+  ]
+}
