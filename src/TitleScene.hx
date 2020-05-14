@@ -6,7 +6,8 @@ import h2d.Font;
 import BaseBtn;
 import GameData;
 import SceneManager;
-import TestScene;
+import MainScene;
+import CreditsScene;
 
 class TitleScene extends h2d.Scene {
   var titleText: h2d.Text;
@@ -41,7 +42,7 @@ class TitleScene extends h2d.Scene {
       .setOnClick( (event) -> {
         trace("New Game Pressed");
         this.dispose();
-        SceneManager.changeScene(new TestScene());
+        SceneManager.changeScene(new MainScene());
       });
   }
 

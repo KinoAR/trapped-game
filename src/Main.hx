@@ -5,7 +5,6 @@ import h2d.filter.Ambient;
 import h2d.filter.Group;
 import h2d.filter.Glow;
 import hxd.Math;  
-import TestScene;
 import TitleScene;
 import CreditsScene;
 import GameData;

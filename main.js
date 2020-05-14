@@ -3826,7 +3826,7 @@ CreditsScene.prototype = $extend(h2d_Scene.prototype,{
 		this.titleText = new h2d_Text(font,this);
 		var windowWidth = hxd_Window.getInstance().get_width();
 		var windowHeight = hxd_Window.getInstance().get_height();
-		haxe_Log.trace(windowWidth,{ fileName : "src/CreditsScene.hx", lineNumber : 25, className : "CreditsScene", methodName : "init"});
+		haxe_Log.trace(windowWidth,{ fileName : "/Users/kinor/Documents/development/nier-pixel/haxe-games/trapped/src/CreditsScene.hx", lineNumber : 25, className : "CreditsScene", methodName : "init"});
 		var _this = this.titleText;
 		_this.posChanged = true;
 		_this.x = windowWidth / 2 - 35;
@@ -3848,7 +3848,7 @@ CreditsScene.prototype = $extend(h2d_Scene.prototype,{
 		var _gthis = this;
 		this.returnToTitleBtn = new BaseBtn(this,x - 35,y,100,50);
 		this.returnToTitleBtn.setBackgroundColor(11184810).setText("Return To Title").setOnClick(function(event) {
-			haxe_Log.trace("Return To Title Pressed",{ fileName : "src/CreditsScene.hx", lineNumber : 39, className : "CreditsScene", methodName : "createNewGameBtn"});
+			haxe_Log.trace("Return To Title Pressed",{ fileName : "/Users/kinor/Documents/development/nier-pixel/haxe-games/trapped/src/CreditsScene.hx", lineNumber : 39, className : "CreditsScene", methodName : "createNewGameBtn"});
 			_gthis.dispose();
 			SceneManager.changeScene(new TitleScene());
 			return;
@@ -3857,7 +3857,7 @@ CreditsScene.prototype = $extend(h2d_Scene.prototype,{
 	,createExitGameBtn: function(x,y) {
 		this.exitGameBtn = new BaseBtn(this,x - 35,y,100,50);
 		this.exitGameBtn.setBackgroundColor(11184810).setText("Exit Game").setOnClick(function(event) {
-			haxe_Log.trace("Exit Game Pressed",{ fileName : "src/CreditsScene.hx", lineNumber : 50, className : "CreditsScene", methodName : "createExitGameBtn"});
+			haxe_Log.trace("Exit Game Pressed",{ fileName : "/Users/kinor/Documents/development/nier-pixel/haxe-games/trapped/src/CreditsScene.hx", lineNumber : 50, className : "CreditsScene", methodName : "createExitGameBtn"});
 			return;
 		});
 	}
@@ -4385,6 +4385,31 @@ Main.prototype = $extend(hxd_App.prototype,{
 	}
 	,__class__: Main
 });
+var MainScene = function() {
+	h2d_Scene.call(this);
+	this.init();
+};
+$hxClasses["MainScene"] = MainScene;
+MainScene.__name__ = "MainScene";
+MainScene.__super__ = h2d_Scene;
+MainScene.prototype = $extend(h2d_Scene.prototype,{
+	init: function() {
+		this.mainWindow = new MainWindow(this);
+		var width = this.mainWindow.messageWindow.width;
+		var height = this.mainWindow.messageWindow.height;
+		this.interaction = new h2d_Interactive(width,height,this.mainWindow.messageWindow);
+		this.setupOnClick();
+	}
+	,setupOnClick: function() {
+		hxd_Window.getInstance().addEventTarget(function(event) {
+			if(event.kind._hx_index == 0) {
+				haxe_Log.trace("Clicked message window",{ fileName : "src/MainScene.hx", lineNumber : 29, className : "MainScene", methodName : "setupOnClick"});
+			}
+			return;
+		});
+	}
+	,__class__: MainScene
+});
 var MainWindow = function(scene) {
 	this.messageWindow = new MessageWindow(scene,10,190,350,350);
 	this.graphicWindow = new GraphicWindow(scene,10,10,350,350);
@@ -4723,37 +4748,6 @@ StringTools.hex = function(n,digits) {
 	}
 	return s;
 };
-var TestScene = function() {
-	this.startRotation = false;
-	h2d_Scene.call(this);
-	this.init();
-};
-$hxClasses["TestScene"] = TestScene;
-TestScene.__name__ = "TestScene";
-TestScene.__super__ = h2d_Scene;
-TestScene.prototype = $extend(h2d_Scene.prototype,{
-	init: function() {
-		var mainWindow = new MainWindow(this);
-	}
-	,addEventToBitmap: function(bitmap) {
-		var _gthis = this;
-		var interaction = new h2d_Interactive(bitmap.tile.width,bitmap.tile.height,bitmap);
-		interaction.onClick = function(event) {
-			bitmap.alpha = 0.5;
-			var tmp = h2d_Tile.fromColor(16711680,100,100);
-			bitmap.set_tile(tmp);
-			_gthis.bmp.tile.dx = -50;
-			_gthis.bmp.tile.dy = -50;
-			return _gthis.startRotation = !_gthis.startRotation;
-		};
-		interaction.onOut = function(event1) {
-			bitmap.alpha = 1.0;
-			_gthis.bmp.tile.dx = -50;
-			return _gthis.bmp.tile.dy = -50;
-		};
-	}
-	,__class__: TestScene
-});
 var TitleScene = function() {
 	h2d_Scene.call(this);
 	this.init();
@@ -4767,7 +4761,7 @@ TitleScene.prototype = $extend(h2d_Scene.prototype,{
 		this.titleText = new h2d_Text(font,this);
 		var windowWidth = hxd_Window.getInstance().get_width();
 		var windowHeight = hxd_Window.getInstance().get_height();
-		haxe_Log.trace(windowWidth,{ fileName : "src/TitleScene.hx", lineNumber : 27, className : "TitleScene", methodName : "init"});
+		haxe_Log.trace(windowWidth,{ fileName : "src/TitleScene.hx", lineNumber : 28, className : "TitleScene", methodName : "init"});
 		var _this = this.titleText;
 		_this.posChanged = true;
 		_this.x = windowWidth / 2 - 35;
@@ -4790,16 +4784,16 @@ TitleScene.prototype = $extend(h2d_Scene.prototype,{
 		var _gthis = this;
 		this.newGameBtn = new BaseBtn(this,x - 35,y,100,50);
 		this.newGameBtn.setBackgroundColor(11184810).setText("New Game").setOnClick(function(event) {
-			haxe_Log.trace("New Game Pressed",{ fileName : "src/TitleScene.hx", lineNumber : 42, className : "TitleScene", methodName : "createNewGameBtn"});
+			haxe_Log.trace("New Game Pressed",{ fileName : "src/TitleScene.hx", lineNumber : 43, className : "TitleScene", methodName : "createNewGameBtn"});
 			_gthis.dispose();
-			SceneManager.changeScene(new TestScene());
+			SceneManager.changeScene(new MainScene());
 			return;
 		});
 	}
 	,createCreditsBtn: function(x,y) {
 		this.creditsBtn = new BaseBtn(this,x - 35,y,100,50);
 		this.creditsBtn.setBackgroundColor(11184810).setText("Credits").setOnClick(function(event) {
-			haxe_Log.trace("Credits Pressed",{ fileName : "src/TitleScene.hx", lineNumber : 53, className : "TitleScene", methodName : "createCreditsBtn"});
+			haxe_Log.trace("Credits Pressed",{ fileName : "src/TitleScene.hx", lineNumber : 54, className : "TitleScene", methodName : "createCreditsBtn"});
 			SceneManager.changeScene(new CreditsScene());
 			return;
 		});
@@ -4807,7 +4801,7 @@ TitleScene.prototype = $extend(h2d_Scene.prototype,{
 	,createExitGameBtn: function(x,y) {
 		this.exitGameBtn = new BaseBtn(this,x - 35,y,100,50);
 		this.exitGameBtn.setBackgroundColor(11184810).setText("Exit Game").setOnClick(function(event) {
-			haxe_Log.trace("Exit Game Pressed",{ fileName : "src/TitleScene.hx", lineNumber : 63, className : "TitleScene", methodName : "createExitGameBtn"});
+			haxe_Log.trace("Exit Game Pressed",{ fileName : "src/TitleScene.hx", lineNumber : 64, className : "TitleScene", methodName : "createExitGameBtn"});
 			return;
 		});
 	}

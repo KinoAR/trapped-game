@@ -1,8 +1,8 @@
 package;
 
 class WindowBase extends h2d.Graphics {
-  var width: Float;
-  var height: Float;
+  public var width: Float;
+  public var height: Float;
   public function new(scene:h2d.Scene, x:Float, y:Float, width:Float, height:Float) {
     super(scene);
     this.x = x;

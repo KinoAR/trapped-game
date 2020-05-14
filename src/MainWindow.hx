@@ -5,9 +5,9 @@ import HudWindow;
 import Types;
 
 class MainWindow {
-  var hudWindow:HudWindow;
-  var messageWindow:MessageWindow;
-  var graphicWindow:GraphicWindow;
+  public var hudWindow:HudWindow;
+  public var messageWindow:MessageWindow;
+  public var graphicWindow:GraphicWindow;
 
   public function new(scene: h2d.Scene) {
     messageWindow = new MessageWindow(scene, 10, 190, 350, 350);
