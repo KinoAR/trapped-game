@@ -9,6 +9,7 @@ import TitleScene;
 
 class CreditsScene extends h2d.Scene {
   var titleText: h2d.Text;
+  var creditsText: h2d.Text;
   var returnToTitleBtn:BaseBtn; 
   var exitGameBtn:BaseBtn;
 
@@ -20,6 +21,7 @@ class CreditsScene extends h2d.Scene {
   private function init() {
     var font = DefaultFont.get();
     this.titleText = new h2d.Text(font, this);
+    this.creditsText = new h2d.Text(font, this);
     var windowWidth = hxd.Window.getInstance().width;
     var windowHeight = hxd.Window.getInstance().height;
     trace(windowWidth);
@@ -29,10 +31,17 @@ class CreditsScene extends h2d.Scene {
     this.titleText.text = "Credits";
     createNewGameBtn(windowWidth / 2, 200);
     createExitGameBtn(windowWidth / 2, 250);
+    setCreditsText(windowWidth / 2 - 35, 300);
+  }
+
+  private function setCreditsText(x:Float, y:Float) {
+    this.creditsText.text = "Nier Pixel\nMade by Kino Rose";
+    this.creditsText.x = x;
+    this.creditsText.y = y;
   }
 
   private function createNewGameBtn(x:Float, y:Float) {
-    this.returnToTitleBtn = new BaseBtn(this, x - 35, y, 100, 50);
+    this.returnToTitleBtn = new BaseBtn(this, x - 55, y, 150, 50);
     this.returnToTitleBtn.setBackgroundColor(0xAAAAAA)
       .setText("Return To Title")
       .setOnClick( (event) -> {

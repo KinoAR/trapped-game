@@ -10,9 +10,8 @@ class HudWindow  extends WindowBase {
   var background: h2d.Graphics;
 
 
-  public function new(scene:h2d.Scene, x:Float, y:Float, width:Float, height:Float) {
+  public function new(parent:h2d.Object, x:Float, y:Float, width:Float, height:Float) {
     super(scene, x, y, width, height);
-    init();
   }
 
   override function init() {

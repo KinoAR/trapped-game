@@ -15,7 +15,8 @@ class MainScene extends h2d.Scene {
   }
 
   private function init() {
-    this.mainWindow = new MainWindow(this);
+    var windowWidth = hxd.Window.getInstance().width;
+    this.mainWindow = new MainWindow(this, windowWidth / 2 - 175, 0, 0, 0 );
     var width = this.mainWindow.messageWindow.width;
     var height = this.mainWindow.messageWindow.height;
     this.interaction = new h2d.Interactive(width, height, this.mainWindow.messageWindow);

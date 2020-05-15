@@ -9,9 +9,8 @@ class GraphicWindow extends WindowBase {
   var storyGraphic: h2d.Graphics;
   var background: h2d.Graphics;
 
-  public function new(scene:h2d.Scene, x:Float, y:Float, width:Float, height:Float) {
-    super(scene, x, y, width, height);
-    init();
+  public function new(parent:h2d.Object, x:Float, y:Float, width:Float, height:Float) {
+    super(parent, x, y, width, height);
   }
 
    override function init() {
