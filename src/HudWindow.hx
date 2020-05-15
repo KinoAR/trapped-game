@@ -11,7 +11,7 @@ class HudWindow  extends WindowBase {
 
 
   public function new(parent:h2d.Object, x:Float, y:Float, width:Float, height:Float) {
-    super(scene, x, y, width, height);
+    super(parent, x, y, width, height);
   }
 
   override function init() {
@@ -59,7 +59,6 @@ class HudWindow  extends WindowBase {
         conditionText.text  = "Bad";
         conditionText.textColor = 0xFF5733;
     }
-    trace(conditionText.textColor);
   }
 
   public function setDays(days:Int) {

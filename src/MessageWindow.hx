@@ -24,6 +24,7 @@ class MessageWindow  extends WindowBase{
     storyText = new h2d.Text(DefaultFont.get(), this);
     storyText.scale(1.2);
     storyText.smooth = true;
+    storyText.maxWidth = 260;
     storyText.x = x;
     storyText.y = y;
     storyText.textColor = 0xFFFFFF;

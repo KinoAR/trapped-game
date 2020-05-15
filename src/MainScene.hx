@@ -8,6 +8,7 @@ import MainWindow;
 class MainScene extends h2d.Scene {
   var mainWindow:MainWindow; 
   var interaction:h2d.Interactive;
+  var commands:Array<Command>;
 
   public function new() {
     super();
@@ -20,6 +21,8 @@ class MainScene extends h2d.Scene {
     var width = this.mainWindow.messageWindow.width;
     var height = this.mainWindow.messageWindow.height;
     this.interaction = new h2d.Interactive(width, height, this.mainWindow.messageWindow);
+    this.commands = GameData.getGameData().scenes[0].commands;
+    this.mainWindow.setCommands(this.commands);
     setupOnClick();
   }
 
@@ -28,6 +31,7 @@ class MainScene extends h2d.Scene {
       switch(event.kind) {
         case EPush:
           trace("Clicked message window");
+          this.mainWindow.updateCommand();
         case _:
       }
     });

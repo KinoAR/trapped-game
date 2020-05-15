@@ -59,6 +59,5 @@ class BaseBtn extends h2d.Graphics {
 
   public function setOnClick(fn: (e:hxd.Event) -> Void) {
     this.interaction.onClick = fn;
-    trace(this.interaction.onClick);
   }
 }
