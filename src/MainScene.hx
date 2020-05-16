@@ -1,4 +1,6 @@
 package;
+import hxd.Key;
+import hxd.Event;
 import SceneManager;
 import GameData;
 import h2d.Text;
@@ -29,10 +31,17 @@ class MainScene extends h2d.Scene {
   private function setupOnClick() {
     hxd.Window.getInstance().addEventTarget((event) -> {
       switch(event.kind) {
-        case EPush:
-          trace("Clicked message window");
-          this.mainWindow.updateCommand();
+        case ERelease:
+          switch(event.button) {
+            case hxd.Key.MOUSE_LEFT:
+              this.mainWindow.updateCommand(1);
+            case hxd.Key.MOUSE_RIGHT:
+              this.mainWindow.updateCommand(-1);
+            case _:
+              //Do nothing
+          }
         case _:
+         //Do nothing
       }
     });
   }

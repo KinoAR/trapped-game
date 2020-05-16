@@ -30,14 +30,16 @@ class MainWindow extends WindowBase {
 
   }
 
-  public function updateCommand() {
-    this.commandIndex++;
+  public function updateCommand(value:Int) {
+    this.commandIndex+=value;
     if(this.commandIndex > -1 
       && this.commandIndex < this.commands.length) {
         var command = this.commands[this.commandIndex];
-        trace("Updated Command");
+        trace("Updated Command - index: " + this.commandIndex);
         sendCommand(Utilities.createCommand(command));
       }
+   this.commandIndex = cast(Utilities.clamp(this.commandIndex, 0, this.commands.length), Int);
+   trace(this.commandIndex);
   }
 
   public function sendCommand(command:SysCommands) {
@@ -46,6 +48,10 @@ class MainWindow extends WindowBase {
         showStoryText(str);
       case ChangeGraphic(tile):
         showGraphic(tile);
+        updateCommand(1);
+      case SetDays(days):
+        this.hudWindow.setDays(days);
+        updateCommand(1);
       case Wait(seconds):
         //Pass
       case CloseWindow:

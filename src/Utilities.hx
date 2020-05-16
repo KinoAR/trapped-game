@@ -10,9 +10,17 @@ class Utilities {
         ShowText(args.join(" "));
       case "WAIT":
         Wait( Std.parseInt(args[0]));
+      case "CLOSEWINDOW":
+        CloseWindow;
+      case "SHOWWINDOW":
+        ShowWindow;
       case _:
         None;
         //Do nothing
     }
+  }
+
+  public static function clamp(num:Float, min:Float, max:Float):Float {
+    return Math.min(Math.max(num, min), max);
   }
 }

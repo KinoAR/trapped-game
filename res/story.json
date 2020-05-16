@@ -6,7 +6,19 @@
       "commands": [
         {
           "name": "ShowText",
-          "args": ["The days dragged on like usual, but things were starting to change."]
+          "args": ["The days dragged on like usual. Work was a pain as always; the boss breathing down my neck as I contemplate why I'm still working here."]
+        },
+        {
+          "name": "ShowText",
+          "args": ["\"2020 is my year...\" I mumbled to myself while pounding the keys as if I had cinderblocks for fingers. This year I made a vow to myself to grow more as a person and finally change my life. This year is going to be different."]
+        },
+        {
+          "name": "ShowText",
+          "args": ["Last year I made a name for myself at the company, bringing them a lot of business, but for me this wasn't something I always wanted to do. I felt there was more to my life than a 9-5 job and developing software."]
+        },
+        {
+          "name":"ShowText",
+          "args":["I knew I wanted to live outside the box, but there was something...something hold me back from that."]
         }
       ]
     }
