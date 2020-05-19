@@ -9,6 +9,7 @@ import TitleScene;
 import CreditsScene;
 import GameData;
 import SceneManager;
+import EventListener;
 
 class Main extends hxd.App {
   var gameData:GameData;
@@ -19,7 +20,8 @@ class Main extends hxd.App {
     GameData.initializeGameData();
     GameData.onGameLoad = () -> {
       onLoaded();
-    }
+      trace(GameData.getGameData());
+    };
   }
 
   override function init() {
@@ -29,7 +31,6 @@ class Main extends hxd.App {
     SceneManager.changeScene = setScene2D;
     createScenes();
     SceneManager.changeScene(titleScene);
- 
     //Create a custom graphics object by passing a 2d scene reference
     //Graphics, act like containers, can have colors, gradients or custom bitmaps
    
@@ -41,6 +42,7 @@ class Main extends hxd.App {
   }
   //On each Frame
   override function update(delta: Float) {
+    EventListener.emitSignal("update");
     // increment the display bitmap rotation by 0.1 radians
     
   }

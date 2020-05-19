@@ -22,7 +22,6 @@ class MainWindow extends WindowBase {
     graphicWindow = new GraphicWindow(this, 10, 10, 350, 350);
     hudWindow = new HudWindow(this, 8, 8 , 344, 50);
     sendCommand(ShowText("Welcome to the show"));
-    trace(hxd.Res.example.entry);
     sendCommand(ChangeGraphic(hxd.Res.zipper4.toTile()));
   }
 
@@ -48,7 +47,8 @@ class MainWindow extends WindowBase {
         showStoryText(str);
       case ChangeGraphic(tile):
         showGraphic(tile);
-        updateCommand(1);
+        if (this.commands != null)
+          updateCommand(1);
       case SetDays(days):
         this.hudWindow.setDays(days);
         updateCommand(1);
@@ -64,6 +64,7 @@ class MainWindow extends WindowBase {
   }
 
   public function setCommands(commands: Array<Command>) {
+    trace(this.commands);
     this.commands = commands;
   }
 

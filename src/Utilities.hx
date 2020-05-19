@@ -23,4 +23,8 @@ class Utilities {
   public static function clamp(num:Float, min:Float, max:Float):Float {
     return Math.min(Math.max(num, min), max);
   }
+
+  public static function lerp(start:Float, end:Float, lerpAmt:Float) {
+    return (1 - lerpAmt) * start + lerpAmt * end;
+  }
 }
