@@ -4137,12 +4137,11 @@ GraphicWindow.prototype = $extend(WindowBase.prototype,{
 		this.storyGraphic.clear();
 		this.storyGraphic.drawTile(this.x,this.y,image);
 		this.storyGraphic.alpha = 0;
-		EventListener.addEvent("update",function() {
+		EventListener.addEvent("graphicUpdate",function() {
 			if(_gthis.storyGraphic.alpha < 1.0) {
-				haxe_Log.trace("Tweening in image " + _gthis.storyGraphic.alpha,{ fileName : "src/GraphicWindow.hx", lineNumber : 50, className : "GraphicWindow", methodName : "setGraphic"});
 				_gthis.storyGraphic.alpha = Utilities.lerp(_gthis.storyGraphic.alpha,1.1,.01);
 			} else {
-				EventListener.clearHooks("update");
+				EventListener.clearHooks("graphicUpdate");
 			}
 			return;
 		});
@@ -4518,7 +4517,8 @@ Main.prototype = $extend(hxd_App.prototype,{
 		this.creditsScene = new CreditsScene();
 	}
 	,update: function(delta) {
-		EventListener.emitSignal("update");
+		EventListener.emitSignal("graphicUpdate");
+		EventListener.emitSignal("textUpdate");
 	}
 	,__class__: Main
 });
@@ -4675,7 +4675,7 @@ MessageWindow.prototype = $extend(WindowBase.prototype,{
 		this.textInput = new h2d_TextInput(font,this);
 		this.textInput.set_backgroundColor(-2139062144);
 		this.textInput.set_text("This is a test message");
-		haxe_Log.trace("Added text input",{ fileName : "src/MessageWindow.hx", lineNumber : 39, className : "MessageWindow", methodName : "setupTextInput"});
+		haxe_Log.trace("Added text input",{ fileName : "src/MessageWindow.hx", lineNumber : 40, className : "MessageWindow", methodName : "setupTextInput"});
 		var _this = this.textInput;
 		var _g = _this;
 		_g.posChanged = true;
@@ -4698,7 +4698,26 @@ MessageWindow.prototype = $extend(WindowBase.prototype,{
 		};
 	}
 	,setText: function(text) {
-		this.storyText.set_text(text);
+		var _gthis = this;
+		this.textData = text;
+		this.storyText.set_text("");
+		var timeFrame = .0125;
+		var seconds = timeFrame;
+		var index = 0;
+		EventListener.addEvent("textUpdate",function() {
+			if(_gthis.storyText.text == _gthis.textData) {
+				EventListener.clearHooks("textUpdate");
+			} else if(seconds <= 0) {
+				var _g = _gthis.storyText;
+				_g.set_text(_g.text + _gthis.textData.charAt(index));
+				seconds = timeFrame;
+				index += 1;
+			} else {
+				seconds -= hxd_Timer.elapsedTime;
+				haxe_Log.trace(seconds,{ fileName : "src/MessageWindow.hx", lineNumber : 75, className : "MessageWindow", methodName : "setText"});
+			}
+			return;
+		});
 	}
 	,setInputText: function(text) {
 		this.textInput.set_text(text);

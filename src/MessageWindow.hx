@@ -5,6 +5,7 @@ import hxd.res.DefaultFont;
 
 class MessageWindow  extends WindowBase{
   var storyText: h2d.Text;
+  var textData:String;
   var textInput: h2d.TextInput;
   var debug: h2d.Text;
   var scene: h2d.Scene;
@@ -55,7 +56,26 @@ class MessageWindow  extends WindowBase{
 
 
   public function setText(text:String) {
-    storyText.text = text;
+    EventListener.clearHooks("textUpdate");
+    textData = text;
+    storyText.text = "";
+    var timeFrame = .0125;
+    var seconds = timeFrame;
+    var index = 0;
+    EventListener.addEvent("textUpdate", () -> {
+      if(storyText.text == textData)  {
+        EventListener.clearHooks("textUpdate");
+      }
+       else {
+        if(seconds <= 0) {
+          storyText.text += textData.charAt(index);
+          seconds = timeFrame;
+          index++;
+        } else {
+          seconds-= hxd.Timer.elapsedTime;
+        }
+       }
+    });
   }
 
   public function setInputText(text:String) {

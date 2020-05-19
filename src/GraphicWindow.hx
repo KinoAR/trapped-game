@@ -42,16 +42,17 @@ class GraphicWindow extends WindowBase {
   }
 
   public function setGraphic(image: h2d.Tile) {
+    EventListener.clearHooks("graphicUpdate");
     storyGraphic.clear();
     storyGraphic.drawTile(this.x, this.y, image);
     storyGraphic.alpha = 0;
-    EventListener.addEvent("update", () -> {
+    EventListener.addEvent("graphicUpdate", () -> {
       if (storyGraphic.alpha < 1.0) {
         // trace('Tweening in image ${storyGraphic.alpha}');
        storyGraphic.alpha = Utilities.lerp(storyGraphic.alpha, 1.1, .01);
       } else {
         //Remove if multiple hooks to update
-        EventListener.clearHooks("update");
+        EventListener.clearHooks("graphicUpdate");
       }
     });
     var scaleAmount = this.width / storyGraphic.tile.width;

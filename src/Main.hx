@@ -42,7 +42,8 @@ class Main extends hxd.App {
   }
   //On each Frame
   override function update(delta: Float) {
-    EventListener.emitSignal("update");
+    EventListener.emitSignal("graphicUpdate");
+    EventListener.emitSignal("textUpdate");
     // increment the display bitmap rotation by 0.1 radians
     
   }
