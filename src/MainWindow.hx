@@ -54,6 +54,8 @@ class MainWindow extends WindowBase {
     switch(command) {
       case ShowText(str):
         showStoryText(str);
+      case ShowTextPrsn(name, str):
+        showTextPerson(name, str);
       case ChangeGraphic(tile):
         showGraphic(tile);
         if (this.commands != null)
@@ -85,7 +87,13 @@ class MainWindow extends WindowBase {
     graphicWindow.setGraphic(image);
   }
 
+  public function showTextPerson(name:String, text:String) {
+    messageWindow.setNameText(name);
+    messageWindow.startText(text);
+  }
+
   public function showStoryText(text:String) {
+    messageWindow.clearNameText();
     messageWindow.startText(text);
   }
 

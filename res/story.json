@@ -6,7 +6,22 @@
       "commands": [
         {
           "name": "ShowText",
-          "args": ["The days dragged on like usual. Work was a pain as always; the boss breathing down my neck as I contemplate why I'm still working here."]
+          "args": ["The days drag on as usual; the sounds of keyboards click-clacking away to provide value to our corporate overlords."]
+        },
+        {
+          "name": "ShowText",
+          "args": ["I'm no different; I'm still working hard to make a name for myself at the company. My team and I did amazing job last year, and as a result we've been working on project after project. My name is established...but could always could be better."]
+        },
+        { "name": "ShowText",
+          "args": ["Tap, tap, tap, the sound of reality bringing me back to Earth."]
+        },
+        {
+          "name": "ShowTextP",
+          "args": ["???", "Things are starting to get crazy; we have cases in the US now! You think we'll get to stay at home? I'll finally have time to catch up on all my Netflix series."]
+        },
+        {
+          "name": "ShowTextP",
+          "args": ["Me", "It shouldn't be a big deal; I'm sure that it won't get out of hand. Even if it does, there's no way it'll touch us in Connecticut. Everything is happening on the West Coast. Again, it's not that serious. Anyway, let's finish work for today."]
         },
         {
           "name": "ShowText",

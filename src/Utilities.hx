@@ -8,6 +8,9 @@ class Utilities {
     return switch(commandName.toUpperCase()) {
       case "SHOWTEXT":
         ShowText(args.join(" "));
+      case "SHOWTEXTP":
+        var person = args.shift();
+        ShowTextPrsn(person, args.join(" ") );
       case "WAIT":
         Wait( Std.parseInt(args[0]));
       case "CLOSEWINDOW":

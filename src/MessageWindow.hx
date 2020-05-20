@@ -5,6 +5,7 @@ import hxd.res.DefaultFont;
 
 class MessageWindow  extends WindowBase{
   var storyText: h2d.Text;
+  var nameText: h2d.Text;
   public var textData:String;
   var textInput: h2d.TextInput;
   var debug: h2d.Text;
@@ -18,9 +19,20 @@ class MessageWindow  extends WindowBase{
   override function init() {
     super.init();
     drawBorder(this.x, this.y, this.width, this.height);
-    setupText(this.x + 30, this.y + 20);
+    setupNameText(this.x + 30, this.y + 20);
+    setupText(this.x + 30, this.y + 45);
     this.isPlayingText = false;
     // setupTextInput(30, 420);
+  }
+
+  function setupNameText(x:Float, y:Float) {
+    nameText = new h2d.Text(DefaultFont.get(), this);
+    nameText.scale(1.5);
+    nameText.smooth = true;
+    nameText.maxWidth = 20;
+    nameText.x = x;
+    nameText.y = y;
+    nameText.textColor = 0xFFFFFF;
   }
 
   function setupText(x:Float, y:Float) {
@@ -56,6 +68,13 @@ class MessageWindow  extends WindowBase{
 
   }
 
+  public function setNameText(text:String) {
+    this.nameText.text = '${text}:';
+  }
+  
+  public function clearNameText() {
+    this.nameText.text = "";
+  }
 
   public function setText(text:String) {
     this.storyText.text = text;

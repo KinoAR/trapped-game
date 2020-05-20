@@ -4632,31 +4632,36 @@ MainWindow.prototype = $extend(WindowBase.prototype,{
 			this.showStoryText(str);
 			break;
 		case 1:
+			var str1 = command.str;
+			var name = command.name;
+			this.showTextPerson(name,str1);
+			break;
+		case 2:
 			var tile = command.tile;
 			this.showGraphic(tile);
 			if(this.commands != null) {
 				this.updateCommand(1);
 			}
 			break;
-		case 2:
+		case 3:
 			var seconds = command.seconds;
 			break;
-		case 3:
+		case 4:
 			var days = command.days;
 			this.hudWindow.setDays(days);
 			this.updateCommand(1);
 			break;
-		case 5:
+		case 6:
 			this.show(false);
 			break;
-		case 6:
+		case 7:
 			this.show(true);
 			break;
 		default:
 		}
 	}
 	,setCommands: function(commands) {
-		haxe_Log.trace(this.commands,{ fileName : "src/MainWindow.hx", lineNumber : 76, className : "MainWindow", methodName : "setCommands"});
+		haxe_Log.trace(this.commands,{ fileName : "src/MainWindow.hx", lineNumber : 78, className : "MainWindow", methodName : "setCommands"});
 		this.commands = commands;
 	}
 	,setCondition: function(condition) {
@@ -4665,7 +4670,12 @@ MainWindow.prototype = $extend(WindowBase.prototype,{
 	,showGraphic: function(image) {
 		this.graphicWindow.setGraphic(image);
 	}
+	,showTextPerson: function(name,text) {
+		this.messageWindow.setNameText(name);
+		this.messageWindow.startText(text);
+	}
 	,showStoryText: function(text) {
+		this.messageWindow.clearNameText();
 		this.messageWindow.startText(text);
 	}
 	,show: function(bool) {
@@ -4686,8 +4696,28 @@ MessageWindow.prototype = $extend(WindowBase.prototype,{
 	init: function() {
 		WindowBase.prototype.init.call(this);
 		this.drawBorder(this.x,this.y,this.width,this.height);
-		this.setupText(this.x + 30,this.y + 20);
+		this.setupNameText(this.x + 30,this.y + 20);
+		this.setupText(this.x + 30,this.y + 45);
 		this.isPlayingText = false;
+	}
+	,setupNameText: function(x,y) {
+		this.nameText = new h2d_Text(hxd_res_DefaultFont.get(),this);
+		var _this = this.nameText;
+		var _g = _this;
+		_g.posChanged = true;
+		_g.scaleX *= 1.5;
+		var _g1 = _this;
+		_g1.posChanged = true;
+		_g1.scaleY *= 1.5;
+		this.nameText.smooth = true;
+		this.nameText.set_maxWidth(20);
+		var _this1 = this.nameText;
+		_this1.posChanged = true;
+		_this1.x = x;
+		var _this2 = this.nameText;
+		_this2.posChanged = true;
+		_this2.y = y;
+		this.nameText.set_textColor(16777215);
 	}
 	,setupText: function(x,y) {
 		this.storyText = new h2d_Text(hxd_res_DefaultFont.get(),this);
@@ -4714,7 +4744,7 @@ MessageWindow.prototype = $extend(WindowBase.prototype,{
 		this.textInput = new h2d_TextInput(font,this);
 		this.textInput.set_backgroundColor(-2139062144);
 		this.textInput.set_text("This is a test message");
-		haxe_Log.trace("Added text input",{ fileName : "src/MessageWindow.hx", lineNumber : 42, className : "MessageWindow", methodName : "setupTextInput"});
+		haxe_Log.trace("Added text input",{ fileName : "src/MessageWindow.hx", lineNumber : 54, className : "MessageWindow", methodName : "setupTextInput"});
 		var _this = this.textInput;
 		var _g = _this;
 		_g.posChanged = true;
@@ -4735,6 +4765,12 @@ MessageWindow.prototype = $extend(WindowBase.prototype,{
 		this.textInput.onFocusLost = function(_1) {
 			return _gthis.textInput.set_textColor(11184810);
 		};
+	}
+	,setNameText: function(text) {
+		this.nameText.set_text("" + text + ":");
+	}
+	,clearNameText: function() {
+		this.nameText.set_text("");
 	}
 	,setText: function(text) {
 		this.storyText.set_text(text);
@@ -5128,14 +5164,15 @@ var Condition = $hxEnums["Condition"] = { __ename__ : true, __constructs__ : ["G
 	,Bad: {_hx_index:2,__enum__:"Condition",toString:$estr}
 };
 Condition.__empty_constructs__ = [Condition.Good,Condition.Average,Condition.Bad];
-var SysCommands = $hxEnums["SysCommands"] = { __ename__ : true, __constructs__ : ["ShowText","ChangeGraphic","Wait","SetDays","None","CloseWindow","ShowWindow"]
+var SysCommands = $hxEnums["SysCommands"] = { __ename__ : true, __constructs__ : ["ShowText","ShowTextPrsn","ChangeGraphic","Wait","SetDays","None","CloseWindow","ShowWindow"]
 	,ShowText: ($_=function(str) { return {_hx_index:0,str:str,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["str"],$_)
-	,ChangeGraphic: ($_=function(tile) { return {_hx_index:1,tile:tile,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["tile"],$_)
-	,Wait: ($_=function(seconds) { return {_hx_index:2,seconds:seconds,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["seconds"],$_)
-	,SetDays: ($_=function(days) { return {_hx_index:3,days:days,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["days"],$_)
-	,None: {_hx_index:4,__enum__:"SysCommands",toString:$estr}
-	,CloseWindow: {_hx_index:5,__enum__:"SysCommands",toString:$estr}
-	,ShowWindow: {_hx_index:6,__enum__:"SysCommands",toString:$estr}
+	,ShowTextPrsn: ($_=function(name,str) { return {_hx_index:1,name:name,str:str,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["name","str"],$_)
+	,ChangeGraphic: ($_=function(tile) { return {_hx_index:2,tile:tile,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["tile"],$_)
+	,Wait: ($_=function(seconds) { return {_hx_index:3,seconds:seconds,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["seconds"],$_)
+	,SetDays: ($_=function(days) { return {_hx_index:4,days:days,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["days"],$_)
+	,None: {_hx_index:5,__enum__:"SysCommands",toString:$estr}
+	,CloseWindow: {_hx_index:6,__enum__:"SysCommands",toString:$estr}
+	,ShowWindow: {_hx_index:7,__enum__:"SysCommands",toString:$estr}
 };
 SysCommands.__empty_constructs__ = [SysCommands.None,SysCommands.CloseWindow,SysCommands.ShowWindow];
 var Utilities = function() { };
@@ -5149,6 +5186,9 @@ Utilities.createCommand = function(command) {
 		return SysCommands.CloseWindow;
 	case "SHOWTEXT":
 		return SysCommands.ShowText(args.join(" "));
+	case "SHOWTEXTP":
+		var person = args.shift();
+		return SysCommands.ShowTextPrsn(person,args.join(" "));
 	case "SHOWWINDOW":
 		return SysCommands.ShowWindow;
 	case "WAIT":
@@ -65849,7 +65889,7 @@ var Float = Number;
 var Bool = Boolean;
 var Class = { };
 var Enum = { };
-haxe_Resource.content = [{ name : "R_example_json", data : "ewogICJ0aXRsZSI6ICJUcmFwcGVkIiwKICAic3RvcnkiOiBbCgogIF0KfQ"},{ name : "R_story_json", data : "ewogICJ0aXRsZSI6ICJUcmFwcGVkIiwKICAic2NlbmVzIjogWwogICAgewogICAgICAibmFtZSI6ICJUaGUgQmVnaW5uaW5nIiwKICAgICAgImNvbW1hbmRzIjogWwogICAgICAgIHsKICAgICAgICAgICJuYW1lIjogIlNob3dUZXh0IiwKICAgICAgICAgICJhcmdzIjogWyJUaGUgZGF5cyBkcmFnZ2VkIG9uIGxpa2UgdXN1YWwuIFdvcmsgd2FzIGEgcGFpbiBhcyBhbHdheXM7IHRoZSBib3NzIGJyZWF0aGluZyBkb3duIG15IG5lY2sgYXMgSSBjb250ZW1wbGF0ZSB3aHkgSSdtIHN0aWxsIHdvcmtpbmcgaGVyZS4iXQogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgIm5hbWUiOiAiU2hvd1RleHQiLAogICAgICAgICAgImFyZ3MiOiBbIlwiMjAyMCBpcyBteSB5ZWFyLi4uXCIgSSBtdW1ibGVkIHRvIG15c2VsZiB3aGlsZSBwb3VuZGluZyB0aGUga2V5cyBhcyBpZiBJIGhhZCBjaW5kZXJibG9ja3MgZm9yIGZpbmdlcnMuIFRoaXMgeWVhciBJIG1hZGUgYSB2b3cgdG8gbXlzZWxmIHRvIGdyb3cgbW9yZSBhcyBhIHBlcnNvbiBhbmQgZmluYWxseSBjaGFuZ2UgbXkgbGlmZS4gVGhpcyB5ZWFyIGlzIGdvaW5nIHRvIGJlIGRpZmZlcmVudC4iXQogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgIm5hbWUiOiAiU2hvd1RleHQiLAogICAgICAgICAgImFyZ3MiOiBbIkxhc3QgeWVhciBJIG1hZGUgYSBuYW1lIGZvciBteXNlbGYgYXQgdGhlIGNvbXBhbnksIGJyaW5naW5nIHRoZW0gYSBsb3Qgb2YgYnVzaW5lc3MsIGJ1dCBmb3IgbWUgdGhpcyB3YXNuJ3Qgc29tZXRoaW5nIEkgYWx3YXlzIHdhbnRlZCB0byBkby4gSSBmZWx0IHRoZXJlIHdhcyBtb3JlIHRvIG15IGxpZmUgdGhhbiBhIDktNSBqb2IgYW5kIGRldmVsb3Bpbmcgc29mdHdhcmUuIl0KICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICJuYW1lIjoiU2hvd1RleHQiLAogICAgICAgICAgImFyZ3MiOlsiSSBrbmV3IEkgd2FudGVkIHRvIGxpdmUgb3V0c2lkZSB0aGUgYm94LCBidXQgdGhlcmUgd2FzIHNvbWV0aGluZy4uLnNvbWV0aGluZyBob2xkIG1lIGJhY2sgZnJvbSB0aGF0LiJdCiAgICAgICAgfQogICAgICBdCiAgICB9CiAgXQp9"},{ name : "R_DataFile_cdb", data : "ewoJInNoZWV0cyI6IFsKCQl7CgkJCSJuYW1lIjogInNjZW5lIiwKCQkJImNvbHVtbnMiOiBbCgkJCQl7CgkJCQkJInR5cGVTdHIiOiAiMCIsCgkJCQkJIm5hbWUiOiAiaWQiCgkJCQl9LAoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjEiLAoJCQkJCSJuYW1lIjogIm5hbWUiCgkJCQl9CgkJCV0sCgkJCSJsaW5lcyI6IFsKCQkJCXsKCQkJCQkiaWQiOiAiSW50cm9TY2VuZSIsCgkJCQkJIm5hbWUiOiAiSW50cm9kdWN0aW9uIgoJCQkJfSwKCQkJCXsKCQkJCQkiaWQiOiAiIiwKCQkJCQkibmFtZSI6ICIiCgkJCQl9CgkJCV0sCgkJCSJzZXBhcmF0b3JzIjogW10sCgkJCSJwcm9wcyI6IHt9CgkJfSwKCQl7CgkJCSJuYW1lIjogInNjZW5lRXZlbnRzIiwKCQkJImNvbHVtbnMiOiBbCgkJCQl7CgkJCQkJInR5cGVTdHIiOiAiNjpzY2VuZSIsCgkJCQkJIm5hbWUiOiAic2NlbmUiLAoJCQkJCSJkaXNwbGF5IjogbnVsbAoJCQkJfQoJCQldLAoJCQkibGluZXMiOiBbCgkJCQl7CgkJCQkJInNjZW5lIjogIkludHJvU2NlbmUiCgkJCQl9CgkJCV0sCgkJCSJzZXBhcmF0b3JzIjogW10sCgkJCSJwcm9wcyI6IHt9CgkJfQoJXSwKCSJjdXN0b21UeXBlcyI6IFsKCQl7CgkJCSJuYW1lIjogIlN5c0NvbW1hbmRzIiwKCQkJImNhc2VzIjogWwoJCQkJewoJCQkJCSJuYW1lIjogIlNob3dUZXh0IiwKCQkJCQkiYXJncyI6IFsKCQkJCQkJewoJCQkJCQkJIm5hbWUiOiAic3RyIiwKCQkJCQkJCSJ0eXBlU3RyIjogIjEiCgkJCQkJCX0KCQkJCQldCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIkNoYW5nZUdyYXBoaWMiLAoJCQkJCSJhcmdzIjogWwoJCQkJCQl7CgkJCQkJCQkibmFtZSI6ICJ0aWxlIiwKCQkJCQkJCSJ0eXBlU3RyIjogIjEiCgkJCQkJCX0KCQkJCQldCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIldhaXQiLAoJCQkJCSJhcmdzIjogWwoJCQkJCQl7CgkJCQkJCQkibmFtZSI6ICJzZWNvbmRzIiwKCQkJCQkJCSJ0eXBlU3RyIjogIjMiCgkJCQkJCX0KCQkJCQldCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIkNsb3NlV2luZG93IiwKCQkJCQkiYXJncyI6IFtdCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIlNob3dXaW5kb3ciLAoJCQkJCSJhcmdzIjogW10KCQkJCX0KCQkJXQoJCX0KCV0sCgkiY29tcHJlc3MiOiBmYWxzZQp9"},{ name : "R_zipper4_png", data : "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAJlJREFUOI2tkt0NwyAQgz+YJMoIKGK5rJQJukj34JUH56FNC4SfpKoldMhg31kAL4gv0v0QtiG8bGIBnusDgHlalO6vGJhBR9Pg8wkAYvBZHeDT0PZuDcSC+xGU8EonOGXdnGt1NkXNRIrBa3NOb0FtpYanyRWD74lVilsZezjyG/jtFbrN1Dis8ar91jsGQBFhnpasjvi/YAfM5EP3lBA0cgAAAABJRU5ErkJggg"}];
+haxe_Resource.content = [{ name : "R_example_json", data : "ewogICJ0aXRsZSI6ICJUcmFwcGVkIiwKICAic3RvcnkiOiBbCgogIF0KfQ"},{ name : "R_story_json", data : "ewogICJ0aXRsZSI6ICJUcmFwcGVkIiwKICAic2NlbmVzIjogWwogICAgewogICAgICAibmFtZSI6ICJUaGUgQmVnaW5uaW5nIiwKICAgICAgImNvbW1hbmRzIjogWwogICAgICAgIHsKICAgICAgICAgICJuYW1lIjogIlNob3dUZXh0IiwKICAgICAgICAgICJhcmdzIjogWyJUaGUgZGF5cyBkcmFnIG9uIGFzIHVzdWFsOyB0aGUgc291bmRzIG9mIGtleWJvYXJkcyBjbGljay1jbGFja2luZyBhd2F5IHRvIHByb3ZpZGUgdmFsdWUgdG8gb3VyIGNvcnBvcmF0ZSBvdmVybG9yZHMuIl0KICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICJuYW1lIjogIlNob3dUZXh0IiwKICAgICAgICAgICJhcmdzIjogWyJJJ20gbm8gZGlmZmVyZW50OyBJJ20gc3RpbGwgd29ya2luZyBoYXJkIHRvIG1ha2UgYSBuYW1lIGZvciBteXNlbGYgYXQgdGhlIGNvbXBhbnkuIE15IHRlYW0gYW5kIEkgZGlkIGFtYXppbmcgam9iIGxhc3QgeWVhciwgYW5kIGFzIGEgcmVzdWx0IHdlJ3ZlIGJlZW4gd29ya2luZyBvbiBwcm9qZWN0IGFmdGVyIHByb2plY3QuIE15IG5hbWUgaXMgZXN0YWJsaXNoZWQuLi5idXQgY291bGQgYWx3YXlzIGNvdWxkIGJlIGJldHRlci4iXQogICAgICAgIH0sCiAgICAgICAgeyAibmFtZSI6ICJTaG93VGV4dCIsCiAgICAgICAgICAiYXJncyI6IFsiVGFwLCB0YXAsIHRhcCwgdGhlIHNvdW5kIG9mIHJlYWxpdHkgYnJpbmdpbmcgbWUgYmFjayB0byBFYXJ0aC4iXQogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgIm5hbWUiOiAiU2hvd1RleHRQIiwKICAgICAgICAgICJhcmdzIjogWyI/Pz8iLCAiVGhpbmdzIGFyZSBzdGFydGluZyB0byBnZXQgY3Jhenk7IHdlIGhhdmUgY2FzZXMgaW4gdGhlIFVTIG5vdyEgWW91IHRoaW5rIHdlJ2xsIGdldCB0byBzdGF5IGF0IGhvbWU/IEknbGwgZmluYWxseSBoYXZlIHRpbWUgdG8gY2F0Y2ggdXAgb24gYWxsIG15IE5ldGZsaXggc2VyaWVzLiJdCiAgICAgICAgfSwKICAgICAgICB7CiAgICAgICAgICAibmFtZSI6ICJTaG93VGV4dFAiLAogICAgICAgICAgImFyZ3MiOiBbIk1lIiwgIkl0IHNob3VsZG4ndCBiZSBhIGJpZyBkZWFsOyBJJ20gc3VyZSB0aGF0IGl0IHdvbid0IGdldCBvdXQgb2YgaGFuZC4gRXZlbiBpZiBpdCBkb2VzLCB0aGVyZSdzIG5vIHdheSBpdCdsbCB0b3VjaCB1cyBpbiBDb25uZWN0aWN1dC4gRXZlcnl0aGluZyBpcyBoYXBwZW5pbmcgb24gdGhlIFdlc3QgQ29hc3QuIEFnYWluLCBpdCdzIG5vdCB0aGF0IHNlcmlvdXMuIEFueXdheSwgbGV0J3MgZmluaXNoIHdvcmsgZm9yIHRvZGF5LiJdCiAgICAgICAgfSwKICAgICAgICB7CiAgICAgICAgICAibmFtZSI6ICJTaG93VGV4dCIsCiAgICAgICAgICAiYXJncyI6IFsiXCIyMDIwIGlzIG15IHllYXIuLi5cIiBJIG11bWJsZWQgdG8gbXlzZWxmIHdoaWxlIHBvdW5kaW5nIHRoZSBrZXlzIGFzIGlmIEkgaGFkIGNpbmRlcmJsb2NrcyBmb3IgZmluZ2Vycy4gVGhpcyB5ZWFyIEkgbWFkZSBhIHZvdyB0byBteXNlbGYgdG8gZ3JvdyBtb3JlIGFzIGEgcGVyc29uIGFuZCBmaW5hbGx5IGNoYW5nZSBteSBsaWZlLiBUaGlzIHllYXIgaXMgZ29pbmcgdG8gYmUgZGlmZmVyZW50LiJdCiAgICAgICAgfSwKICAgICAgICB7CiAgICAgICAgICAibmFtZSI6ICJTaG93VGV4dCIsCiAgICAgICAgICAiYXJncyI6IFsiTGFzdCB5ZWFyIEkgbWFkZSBhIG5hbWUgZm9yIG15c2VsZiBhdCB0aGUgY29tcGFueSwgYnJpbmdpbmcgdGhlbSBhIGxvdCBvZiBidXNpbmVzcywgYnV0IGZvciBtZSB0aGlzIHdhc24ndCBzb21ldGhpbmcgSSBhbHdheXMgd2FudGVkIHRvIGRvLiBJIGZlbHQgdGhlcmUgd2FzIG1vcmUgdG8gbXkgbGlmZSB0aGFuIGEgOS01IGpvYiBhbmQgZGV2ZWxvcGluZyBzb2Z0d2FyZS4iXQogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgIm5hbWUiOiJTaG93VGV4dCIsCiAgICAgICAgICAiYXJncyI6WyJJIGtuZXcgSSB3YW50ZWQgdG8gbGl2ZSBvdXRzaWRlIHRoZSBib3gsIGJ1dCB0aGVyZSB3YXMgc29tZXRoaW5nLi4uc29tZXRoaW5nIGhvbGQgbWUgYmFjayBmcm9tIHRoYXQuIl0KICAgICAgICB9CiAgICAgIF0KICAgIH0KICBdCn0"},{ name : "R_DataFile_cdb", data : "ewoJInNoZWV0cyI6IFsKCQl7CgkJCSJuYW1lIjogInNjZW5lIiwKCQkJImNvbHVtbnMiOiBbCgkJCQl7CgkJCQkJInR5cGVTdHIiOiAiMCIsCgkJCQkJIm5hbWUiOiAiaWQiCgkJCQl9LAoJCQkJewoJCQkJCSJ0eXBlU3RyIjogIjEiLAoJCQkJCSJuYW1lIjogIm5hbWUiCgkJCQl9CgkJCV0sCgkJCSJsaW5lcyI6IFsKCQkJCXsKCQkJCQkiaWQiOiAiSW50cm9TY2VuZSIsCgkJCQkJIm5hbWUiOiAiSW50cm9kdWN0aW9uIgoJCQkJfSwKCQkJCXsKCQkJCQkiaWQiOiAiIiwKCQkJCQkibmFtZSI6ICIiCgkJCQl9CgkJCV0sCgkJCSJzZXBhcmF0b3JzIjogW10sCgkJCSJwcm9wcyI6IHt9CgkJfSwKCQl7CgkJCSJuYW1lIjogInNjZW5lRXZlbnRzIiwKCQkJImNvbHVtbnMiOiBbCgkJCQl7CgkJCQkJInR5cGVTdHIiOiAiNjpzY2VuZSIsCgkJCQkJIm5hbWUiOiAic2NlbmUiLAoJCQkJCSJkaXNwbGF5IjogbnVsbAoJCQkJfQoJCQldLAoJCQkibGluZXMiOiBbCgkJCQl7CgkJCQkJInNjZW5lIjogIkludHJvU2NlbmUiCgkJCQl9CgkJCV0sCgkJCSJzZXBhcmF0b3JzIjogW10sCgkJCSJwcm9wcyI6IHt9CgkJfQoJXSwKCSJjdXN0b21UeXBlcyI6IFsKCQl7CgkJCSJuYW1lIjogIlN5c0NvbW1hbmRzIiwKCQkJImNhc2VzIjogWwoJCQkJewoJCQkJCSJuYW1lIjogIlNob3dUZXh0IiwKCQkJCQkiYXJncyI6IFsKCQkJCQkJewoJCQkJCQkJIm5hbWUiOiAic3RyIiwKCQkJCQkJCSJ0eXBlU3RyIjogIjEiCgkJCQkJCX0KCQkJCQldCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIkNoYW5nZUdyYXBoaWMiLAoJCQkJCSJhcmdzIjogWwoJCQkJCQl7CgkJCQkJCQkibmFtZSI6ICJ0aWxlIiwKCQkJCQkJCSJ0eXBlU3RyIjogIjEiCgkJCQkJCX0KCQkJCQldCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIldhaXQiLAoJCQkJCSJhcmdzIjogWwoJCQkJCQl7CgkJCQkJCQkibmFtZSI6ICJzZWNvbmRzIiwKCQkJCQkJCSJ0eXBlU3RyIjogIjMiCgkJCQkJCX0KCQkJCQldCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIkNsb3NlV2luZG93IiwKCQkJCQkiYXJncyI6IFtdCgkJCQl9LAoJCQkJewoJCQkJCSJuYW1lIjogIlNob3dXaW5kb3ciLAoJCQkJCSJhcmdzIjogW10KCQkJCX0KCQkJXQoJCX0KCV0sCgkiY29tcHJlc3MiOiBmYWxzZQp9"},{ name : "R_zipper4_png", data : "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAJlJREFUOI2tkt0NwyAQgz+YJMoIKGK5rJQJukj34JUH56FNC4SfpKoldMhg31kAL4gv0v0QtiG8bGIBnusDgHlalO6vGJhBR9Pg8wkAYvBZHeDT0PZuDcSC+xGU8EonOGXdnGt1NkXNRIrBa3NOb0FtpYanyRWD74lVilsZezjyG/jtFbrN1Dis8ar91jsGQBFhnpasjvi/YAfM5EP3lBA0cgAAAABJRU5ErkJggg"}];
 haxe_ds_ObjectMap.count = 0;
 Object.defineProperty(js__$Boot_HaxeError.prototype,"message",{ get : function() {
 	return String(this.val);
