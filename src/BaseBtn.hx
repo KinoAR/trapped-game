@@ -22,6 +22,7 @@ class BaseBtn extends h2d.Graphics {
   }
   
   private function init() {
+    drawBorder(0, 0, this.width, this.height);
     createBackground(0, 0);
     createText(10,10);
   }
@@ -40,6 +41,15 @@ class BaseBtn extends h2d.Graphics {
     this.text.scale(1.5);
   }
 
+  function drawBorder(x:Float, y:Float, width:Float, height:Float) {
+    this.lineStyle(1, 0xAAAAAA);
+    this.lineTo(x, y);
+    this.lineTo(x + width, y);
+    this.lineTo(x+ width, y + height);
+    this.lineTo(x, y + height);
+    this.lineTo(x, y);
+  }
+
   public function setBackgroundColor(color:Int) {
     this.backgroundColor =  color;
     drawBackground();
@@ -48,7 +58,7 @@ class BaseBtn extends h2d.Graphics {
 
   public function drawBackground() {
     this.background.beginFill(this.backgroundColor);
-    this.background.drawRect(this.background.x, this.background.y, this.width, this.height);
+    this.background.drawRect(this.background.x, this.background.y, this.width - 1, this.height - 1);
     this.background.endFill();
   }
 

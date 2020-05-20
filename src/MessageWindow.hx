@@ -62,6 +62,8 @@ class MessageWindow  extends WindowBase{
     var timeFrame = .0125;
     var seconds = timeFrame;
     var index = 0;
+    //Should track input and if user clicks again, show all Text
+    // Will have to change input event tracking and add indicator
     EventListener.addEvent("textUpdate", () -> {
       if(storyText.text == textData)  {
         EventListener.clearHooks("textUpdate");

@@ -12,6 +12,7 @@ class CreditsScene extends h2d.Scene {
   var creditsText: h2d.Text;
   var returnToTitleBtn:BaseBtn; 
   var exitGameBtn:BaseBtn;
+  var buttonColor:Int = 0x000000;
 
   public function new() {
     super();
@@ -42,7 +43,7 @@ class CreditsScene extends h2d.Scene {
 
   private function createNewGameBtn(x:Float, y:Float) {
     this.returnToTitleBtn = new BaseBtn(this, x - 55, y, 150, 50);
-    this.returnToTitleBtn.setBackgroundColor(0xAAAAAA)
+    this.returnToTitleBtn.setBackgroundColor(buttonColor)
       .setText("Return To Title")
       .setOnClick( (event) -> {
         trace("Return To Title Pressed");
@@ -53,7 +54,7 @@ class CreditsScene extends h2d.Scene {
 
   private function createExitGameBtn(x:Float, y:Float) {
     this.exitGameBtn = new BaseBtn(this, x - 35, y, 100, 50);
-    this.exitGameBtn.setBackgroundColor(0xAAAAAA)
+    this.exitGameBtn.setBackgroundColor(buttonColor)
       .setText("Exit Game")
       .setOnClick((event) -> {
         trace("Exit Game Pressed");
