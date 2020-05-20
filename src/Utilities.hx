@@ -11,6 +11,9 @@ class Utilities {
       case "SHOWTEXTP":
         var person = args.shift();
         ShowTextPrsn(person, args.join(" ") );
+      case "SETDAYS":
+        trace(args[0]);
+        SetDays(args[0]);
       case "WAIT":
         Wait( Std.parseInt(args[0]));
       case "CLOSEWINDOW":

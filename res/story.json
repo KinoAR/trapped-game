@@ -24,6 +24,10 @@
           "args": ["Me", "It shouldn't be a big deal; I'm sure that it won't get out of hand. Even if it does, there's no way it'll touch us in Connecticut. Everything is happening on the West Coast. Again, it's not that serious. Anyway, let's finish work for today."]
         },
         {
+          "name": "SetDays",
+          "args": [3]
+        },
+        {
           "name": "ShowText",
           "args": ["\"2020 is my year...\" I mumbled to myself while pounding the keys as if I had cinderblocks for fingers. This year I made a vow to myself to grow more as a person and finally change my life. This year is going to be different."]
         },

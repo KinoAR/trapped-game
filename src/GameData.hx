@@ -1,6 +1,5 @@
 import haxe.io.Bytes;
 import hxd.net.BinaryLoader;
-import haxe.macro.MacroType;
 import  haxe.Json;
 typedef Story = {
   var title:String;
@@ -14,7 +13,7 @@ typedef Scene = {
 
 typedef Command = {
   var name:String;
-  var args: Array<String>;
+  var args: Array<Dynamic>; //Dynamic so we can handle the commands without conversions
 }
 
 
