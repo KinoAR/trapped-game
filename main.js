@@ -2908,9 +2908,21 @@ BaseBtn.__name__ = "BaseBtn";
 BaseBtn.__super__ = h2d_Graphics;
 BaseBtn.prototype = $extend(h2d_Graphics.prototype,{
 	init: function() {
+		var _gthis = this;
 		this.drawBorder(0,0,this.width,this.height);
 		this.createBackground(0,0);
 		this.createText(10,10);
+		this.interaction.onOver = function(event) {
+			_gthis.initialBackgroundColor = _gthis.backgroundColor;
+			_gthis.backgroundColor = 3092271;
+			_gthis.drawBackground();
+			return;
+		};
+		this.interaction.onOut = function(event1) {
+			_gthis.backgroundColor = _gthis.initialBackgroundColor;
+			_gthis.drawBackground();
+			return;
+		};
 	}
 	,createBackground: function(x,y) {
 		this.background = new h2d_Graphics(this);
@@ -2966,6 +2978,7 @@ BaseBtn.prototype = $extend(h2d_Graphics.prototype,{
 	}
 	,setOnClick: function(fn) {
 		this.interaction.onClick = fn;
+		return this;
 	}
 	,__class__: BaseBtn
 });

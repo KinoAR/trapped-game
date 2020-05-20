@@ -6,6 +6,7 @@ class BaseBtn extends h2d.Graphics {
   var text: h2d.Text;
   var background: h2d.Graphics;
   var textColor:Int;
+  var initialBackgroundColor:Int;
   var backgroundColor:Int;
   var width:Float;
   var height:Float;
@@ -25,6 +26,15 @@ class BaseBtn extends h2d.Graphics {
     drawBorder(0, 0, this.width, this.height);
     createBackground(0, 0);
     createText(10,10);
+    this.interaction.onOver = (event) -> {
+      this.initialBackgroundColor = this.backgroundColor;
+      this.backgroundColor = 0x2F2F2F;
+      this.drawBackground();
+    };
+    this.interaction.onOut = (event) -> {
+      this.backgroundColor = this.initialBackgroundColor;
+      this.drawBackground();
+    };
   }
 
   private function createBackground(x:Float, y:Float) {
@@ -69,5 +79,6 @@ class BaseBtn extends h2d.Graphics {
 
   public function setOnClick(fn: (e:hxd.Event) -> Void) {
     this.interaction.onClick = fn;
+    return this;
   }
 }
