@@ -35,7 +35,12 @@ class MainScene extends h2d.Scene {
         case ERelease:
           switch(event.button) {
             case hxd.Key.MOUSE_LEFT:
-              this.mainWindow.updateCommand(1);
+              //Prevents Text Advancement Unless All Text Shown
+              if(this.mainWindow.isPlayingText()) {
+                this.mainWindow.showAllText();
+              } else {
+                this.mainWindow.updateCommand(1);
+              }
             case hxd.Key.MOUSE_RIGHT:
               this.mainWindow.updateCommand(-1);
             case _:

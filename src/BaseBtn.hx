@@ -24,7 +24,7 @@ class BaseBtn extends h2d.Graphics {
   
   private function init() {
     drawBorder(0, 0, this.width, this.height);
-    createBackground(0, 0);
+    createBackground(1, 0);
     createText(10,10);
     this.interaction.onOver = (event) -> {
       this.initialBackgroundColor = this.backgroundColor;
@@ -68,7 +68,7 @@ class BaseBtn extends h2d.Graphics {
 
   public function drawBackground() {
     this.background.beginFill(this.backgroundColor);
-    this.background.drawRect(this.background.x, this.background.y, this.width - 1, this.height - 1);
+    this.background.drawRect(this.background.x, this.background.y, this.width - 2, this.height - 1);
     this.background.endFill();
   }
 

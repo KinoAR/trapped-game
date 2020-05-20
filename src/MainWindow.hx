@@ -29,14 +29,23 @@ class MainWindow extends WindowBase {
 
   }
 
+  public function isPlayingText() {
+    return this.messageWindow.isPlayingText;
+  }
+  
+  public function showAllText() {
+    this.messageWindow.showAllText();
+  }
+
   public function updateCommand(value:Int) {
     this.commandIndex+=value;
     if(this.commandIndex > -1 
       && this.commandIndex < this.commands.length) {
         var command = this.commands[this.commandIndex];
         trace("Updated Command - index: " + this.commandIndex);
-        sendCommand(Utilities.createCommand(command));
-      }
+          sendCommand(Utilities.createCommand(command)); 
+    }
+      
    this.commandIndex = cast(Utilities.clamp(this.commandIndex, 0, this.commands.length), Int);
    trace(this.commandIndex);
   }
@@ -77,7 +86,7 @@ class MainWindow extends WindowBase {
   }
 
   public function showStoryText(text:String) {
-    messageWindow.setText(text);
+    messageWindow.startText(text);
   }
 
   public override function show(bool:Bool) {

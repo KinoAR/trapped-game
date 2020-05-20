@@ -5,10 +5,11 @@ import hxd.res.DefaultFont;
 
 class MessageWindow  extends WindowBase{
   var storyText: h2d.Text;
-  var textData:String;
+  public var textData:String;
   var textInput: h2d.TextInput;
   var debug: h2d.Text;
   var scene: h2d.Scene;
+  public var isPlayingText:Bool;
 
   public function new(parent: h2d.Object, x:Float, y:Float, width:Float, height:Float) {
     super(parent, x, y, width, height);
@@ -18,6 +19,7 @@ class MessageWindow  extends WindowBase{
     super.init();
     drawBorder(this.x, this.y, this.width, this.height);
     setupText(this.x + 30, this.y + 20);
+    this.isPlayingText = false;
     // setupTextInput(30, 420);
   }
 
@@ -56,6 +58,15 @@ class MessageWindow  extends WindowBase{
 
 
   public function setText(text:String) {
+    this.storyText.text = text;
+  }
+
+  public function showAllText() {
+    this.setText(this.textData);
+  }
+
+
+  public function startText(text:String) {
     EventListener.clearHooks("textUpdate");
     textData = text;
     storyText.text = "";
@@ -65,7 +76,9 @@ class MessageWindow  extends WindowBase{
     //Should track input and if user clicks again, show all Text
     // Will have to change input event tracking and add indicator
     EventListener.addEvent("textUpdate", () -> {
+      this.isPlayingText = true;
       if(storyText.text == textData)  {
+        this.isPlayingText = false;
         EventListener.clearHooks("textUpdate");
       }
        else {

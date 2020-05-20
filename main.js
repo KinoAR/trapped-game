@@ -2910,7 +2910,7 @@ BaseBtn.prototype = $extend(h2d_Graphics.prototype,{
 	init: function() {
 		var _gthis = this;
 		this.drawBorder(0,0,this.width,this.height);
-		this.createBackground(0,0);
+		this.createBackground(1,0);
 		this.createText(10,10);
 		this.interaction.onOver = function(event) {
 			_gthis.initialBackgroundColor = _gthis.backgroundColor;
@@ -2969,7 +2969,7 @@ BaseBtn.prototype = $extend(h2d_Graphics.prototype,{
 	}
 	,drawBackground: function() {
 		this.background.beginFill(this.backgroundColor);
-		this.background.drawRect(this.background.x,this.background.y,this.width - 1,this.height - 1);
+		this.background.drawRect(this.background.x,this.background.y,this.width - 2,this.height - 1);
 		this.background.endFill();
 	}
 	,setText: function(text) {
@@ -4575,7 +4575,11 @@ MainScene.prototype = $extend(h2d_Scene.prototype,{
 			if(event.kind._hx_index == 1) {
 				switch(event.button) {
 				case 0:
-					_gthis.mainWindow.updateCommand(1);
+					if(_gthis.mainWindow.isPlayingText()) {
+						_gthis.mainWindow.showAllText();
+					} else {
+						_gthis.mainWindow.updateCommand(1);
+					}
 					break;
 				case 1:
 					_gthis.mainWindow.updateCommand(-1);
@@ -4605,15 +4609,21 @@ MainWindow.prototype = $extend(WindowBase.prototype,{
 	}
 	,update: function() {
 	}
+	,isPlayingText: function() {
+		return this.messageWindow.isPlayingText;
+	}
+	,showAllText: function() {
+		this.messageWindow.showAllText();
+	}
 	,updateCommand: function(value) {
 		this.commandIndex += value;
 		if(this.commandIndex > -1 && this.commandIndex < this.commands.length) {
 			var command = this.commands[this.commandIndex];
-			haxe_Log.trace("Updated Command - index: " + this.commandIndex,{ fileName : "src/MainWindow.hx", lineNumber : 37, className : "MainWindow", methodName : "updateCommand"});
+			haxe_Log.trace("Updated Command - index: " + this.commandIndex,{ fileName : "src/MainWindow.hx", lineNumber : 45, className : "MainWindow", methodName : "updateCommand"});
 			this.sendCommand(Utilities.createCommand(command));
 		}
 		this.commandIndex = js_Boot.__cast(Utilities.clamp(this.commandIndex,0,this.commands.length) , Int);
-		haxe_Log.trace(this.commandIndex,{ fileName : "src/MainWindow.hx", lineNumber : 41, className : "MainWindow", methodName : "updateCommand"});
+		haxe_Log.trace(this.commandIndex,{ fileName : "src/MainWindow.hx", lineNumber : 50, className : "MainWindow", methodName : "updateCommand"});
 	}
 	,sendCommand: function(command) {
 		switch(command._hx_index) {
@@ -4646,7 +4656,7 @@ MainWindow.prototype = $extend(WindowBase.prototype,{
 		}
 	}
 	,setCommands: function(commands) {
-		haxe_Log.trace(this.commands,{ fileName : "src/MainWindow.hx", lineNumber : 67, className : "MainWindow", methodName : "setCommands"});
+		haxe_Log.trace(this.commands,{ fileName : "src/MainWindow.hx", lineNumber : 76, className : "MainWindow", methodName : "setCommands"});
 		this.commands = commands;
 	}
 	,setCondition: function(condition) {
@@ -4656,7 +4666,7 @@ MainWindow.prototype = $extend(WindowBase.prototype,{
 		this.graphicWindow.setGraphic(image);
 	}
 	,showStoryText: function(text) {
-		this.messageWindow.setText(text);
+		this.messageWindow.startText(text);
 	}
 	,show: function(bool) {
 		this.hudWindow.show(bool);
@@ -4677,6 +4687,7 @@ MessageWindow.prototype = $extend(WindowBase.prototype,{
 		WindowBase.prototype.init.call(this);
 		this.drawBorder(this.x,this.y,this.width,this.height);
 		this.setupText(this.x + 30,this.y + 20);
+		this.isPlayingText = false;
 	}
 	,setupText: function(x,y) {
 		this.storyText = new h2d_Text(hxd_res_DefaultFont.get(),this);
@@ -4703,7 +4714,7 @@ MessageWindow.prototype = $extend(WindowBase.prototype,{
 		this.textInput = new h2d_TextInput(font,this);
 		this.textInput.set_backgroundColor(-2139062144);
 		this.textInput.set_text("This is a test message");
-		haxe_Log.trace("Added text input",{ fileName : "src/MessageWindow.hx", lineNumber : 40, className : "MessageWindow", methodName : "setupTextInput"});
+		haxe_Log.trace("Added text input",{ fileName : "src/MessageWindow.hx", lineNumber : 42, className : "MessageWindow", methodName : "setupTextInput"});
 		var _this = this.textInput;
 		var _g = _this;
 		_g.posChanged = true;
@@ -4726,6 +4737,12 @@ MessageWindow.prototype = $extend(WindowBase.prototype,{
 		};
 	}
 	,setText: function(text) {
+		this.storyText.set_text(text);
+	}
+	,showAllText: function() {
+		this.setText(this.textData);
+	}
+	,startText: function(text) {
 		var _gthis = this;
 		EventListener.clearHooks("textUpdate");
 		this.textData = text;
@@ -4734,7 +4751,9 @@ MessageWindow.prototype = $extend(WindowBase.prototype,{
 		var seconds = timeFrame;
 		var index = 0;
 		EventListener.addEvent("textUpdate",function() {
+			_gthis.isPlayingText = true;
 			if(_gthis.storyText.text == _gthis.textData) {
+				_gthis.isPlayingText = false;
 				EventListener.clearHooks("textUpdate");
 			} else if(seconds <= 0) {
 				var _g = _gthis.storyText;
