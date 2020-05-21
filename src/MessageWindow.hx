@@ -10,6 +10,9 @@ class MessageWindow  extends WindowBase{
   var textInput: h2d.TextInput;
   var debug: h2d.Text;
   var scene: h2d.Scene;
+  var nextArrow: h2d.Bitmap;
+  var accumulator: Float;
+  var arrowPosX:Float;
   public var isPlayingText:Bool;
 
   public function new(parent: h2d.Object, x:Float, y:Float, width:Float, height:Float) {
@@ -21,6 +24,7 @@ class MessageWindow  extends WindowBase{
     drawBorder(this.x, this.y, this.width, this.height);
     setupNameText(this.x + 30, this.y + 20);
     setupText(this.x + 30, this.y + 45);
+    setupNextArrow(this.x + 305, this.y + 300);
     this.isPlayingText = false;
     // setupTextInput(30, 420);
   }
@@ -46,12 +50,18 @@ class MessageWindow  extends WindowBase{
     // storyText.dropShadow = {dx: 2, dy:2, color:0xAAAAAA, alpha:255};
   }
 
+  function setupNextArrow(x:Float, y:Float) {
+     nextArrow = new h2d.Bitmap(hxd.Res.next_arrow2x.toTile(), this);
+     nextArrow.x = x;
+     nextArrow.y = y;
+     arrowPosX = nextArrow.x;
+     nextArrow.visible = false;
+  }
+
   function setupTextInput(x:Float, y:Float) {
     var font = DefaultFont.get();
     textInput = new h2d.TextInput(font, this);
     textInput.backgroundColor = 0x80808080;
-    textInput.text = "This is a test message";
-    trace("Added text input");
     textInput.scale(2);
     textInput.x = x;
     textInput.y = y;
@@ -84,6 +94,25 @@ class MessageWindow  extends WindowBase{
     this.setText(this.textData);
   }
 
+  public function stopNextArrow() {
+    this.nextArrow.visible = false;
+  }
+
+  public function startNextArrow() {
+    this.nextArrow.visible = true;
+    EventListener.clearHooks("nextArrowUpdate");
+    accumulator = 0.0;
+    EventListener.addEvent("nextArrowUpdate", () -> {
+      if(nextArrow.visible == false) {
+        EventListener.clearHooks("nextArrowUpdate");
+      } else {
+        accumulator += hxd.Timer.elapsedTime * 6;
+        nextArrow.x = arrowPosX + Math.sin(accumulator) * 5;
+      }
+    });
+
+  }
+
 
   public function startText(text:String) {
     EventListener.clearHooks("textUpdate");
@@ -98,6 +127,7 @@ class MessageWindow  extends WindowBase{
       this.isPlayingText = true;
       if(storyText.text == textData)  {
         this.isPlayingText = false;
+        this.startNextArrow();
         EventListener.clearHooks("textUpdate");
       }
        else {

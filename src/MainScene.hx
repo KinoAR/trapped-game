@@ -25,8 +25,9 @@ class MainScene extends h2d.Scene {
     this.interaction = new h2d.Interactive(width, height, this.mainWindow.messageWindow);
     this.commands = GameData.getGameData().scenes[0].commands;
     this.mainWindow.setCommands(this.commands);
-    trace(this.commands);
     setupOnClick();
+    //Start Up Commands
+    this.mainWindow.updateCommand(1);
   }
 
   private function setupOnClick() {

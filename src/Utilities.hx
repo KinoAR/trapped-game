@@ -14,6 +14,9 @@ class Utilities {
       case "SETDAYS":
         trace(args[0]);
         SetDays(args[0]);
+      case "CHANGEGRAPHIC":
+        var imageBytes = hxd.Res.loader.fs.get(args[0]).getBytes();
+        ChangeGraphic(hxd.res.Any.fromBytes(args[0], imageBytes).toTile());
       case "WAIT":
         Wait( Std.parseInt(args[0]));
       case "CLOSEWINDOW":

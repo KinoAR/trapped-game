@@ -20,7 +20,7 @@ class Main extends hxd.App {
     GameData.initializeGameData();
     GameData.onGameLoad = () -> {
       onLoaded();
-      trace(GameData.getGameData());
+      trace("Game Data Loaded");
     };
   }
 
@@ -44,6 +44,7 @@ class Main extends hxd.App {
   override function update(delta: Float) {
     EventListener.emitSignal("graphicUpdate");
     EventListener.emitSignal("textUpdate");
+    EventListener.emitSignal("nextArrowUpdate");
     // increment the display bitmap rotation by 0.1 radians
     
   }

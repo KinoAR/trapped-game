@@ -68,7 +68,7 @@ class BaseBtn extends h2d.Graphics {
 
   public function drawBackground() {
     this.background.beginFill(this.backgroundColor);
-    this.background.drawRect(this.background.x, this.background.y, this.width - 2, this.height - 1);
+    this.background.drawRect(this.background.x, this.background.y, this.width - 4, this.height - 1);
     this.background.endFill();
   }
 

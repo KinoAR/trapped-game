@@ -1,4 +1,5 @@
 
+import hxd.Res;
 import GameData.Command;
 import MessageWindow;
 import GraphicWindow;
@@ -21,8 +22,8 @@ class MainWindow extends WindowBase {
     messageWindow = new MessageWindow(this, 10, 190, 350, 350);
     graphicWindow = new GraphicWindow(this, 10, 10, 350, 350);
     hudWindow = new HudWindow(this, 8, 8 , 344, 50);
-    sendCommand(ShowText("Welcome to the show"));
-    sendCommand(ChangeGraphic(hxd.Res.zipper4.toTile()));
+   
+    // sendCommand(ChangeGraphic(hxd.Res.zipper4.toTile()));
   }
 
   function update() {
@@ -42,7 +43,7 @@ class MainWindow extends WindowBase {
     if(this.commandIndex > -1 
       && this.commandIndex < this.commands.length) {
         var command = this.commands[this.commandIndex];
-        trace("Updated Command - index: " + this.commandIndex);
+        // trace("Updated Command - index: " + this.commandIndex);
           sendCommand(Utilities.createCommand(command)); 
     }
       
@@ -75,7 +76,6 @@ class MainWindow extends WindowBase {
   }
 
   public function setCommands(commands: Array<Command>) {
-    trace(this.commands);
     this.commands = commands;
   }
 
@@ -89,11 +89,13 @@ class MainWindow extends WindowBase {
 
   public function showTextPerson(name:String, text:String) {
     messageWindow.setNameText(name);
+    messageWindow.stopNextArrow();
     messageWindow.startText(text);
   }
 
   public function showStoryText(text:String) {
     messageWindow.clearNameText();
+    messageWindow.stopNextArrow();
     messageWindow.startText(text);
   }
 

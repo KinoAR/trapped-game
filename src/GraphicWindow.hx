@@ -55,8 +55,6 @@ class GraphicWindow extends WindowBase {
         EventListener.clearHooks("graphicUpdate");
       }
     });
-    var scaleAmount = this.width / storyGraphic.tile.width;
-    storyGraphic.scale(scaleAmount / 2);
   }
 
   public function setBackgroundColor(color:Int) {

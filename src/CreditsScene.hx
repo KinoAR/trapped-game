@@ -25,7 +25,6 @@ class CreditsScene extends h2d.Scene {
     this.creditsText = new h2d.Text(font, this);
     var windowWidth = hxd.Window.getInstance().width;
     var windowHeight = hxd.Window.getInstance().height;
-    trace(windowWidth);
     this.titleText.x = (windowWidth / 2) - 35;
     this.titleText.y = 140;
     this.titleText.scale(2);
