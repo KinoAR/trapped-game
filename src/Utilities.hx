@@ -1,5 +1,7 @@
 import GameData.Command;
 import Types.SysCommands;
+import Types.Tuple;
+using Lambda;
 
 class Utilities {
   public static function createCommand(command:Command) : SysCommands {
@@ -23,6 +25,15 @@ class Utilities {
         CloseWindow;
       case "SHOWWINDOW":
         ShowWindow;
+      case "SETSWITCH":
+        SetSwitch(args[0], args[1]);
+      case "SWITCHTEXT":
+        SwitchText(args[0], args.join(" "));
+      case "SHOWCHOICE":
+        var choices = args.map(element -> {
+          return {first:element[0], second:element[1]}
+        });
+        ShowChoice(choices);
       case _:
         None;
         //Do nothing

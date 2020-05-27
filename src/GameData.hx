@@ -1,6 +1,8 @@
 import haxe.io.Bytes;
 import hxd.net.BinaryLoader;
 import  haxe.Json;
+import haxe.ds.Option;
+
 typedef Story = {
   var title:String;
   var scenes:Array<Scene>;
@@ -22,6 +24,7 @@ class GameData {
   public static var parsedGameData:Story;
   public static var scenes: Array<Scene>;
   public static var isLoaded = false;
+  public static var switches: Map<String, Bool>;
 
   public static function initializeGameData() {
     var binary = new BinaryLoader("res/story.json");
@@ -33,6 +36,7 @@ class GameData {
       onGameLoad();
     }
     var content : String = "";
+    switches = [];
   }
 
   public static function getGameData() {
@@ -41,5 +45,29 @@ class GameData {
 
   public static dynamic function onGameLoad() {
 
+  }
+
+  public static function handleChoice(switchName:String) {
+    setSwitch(switchName, true);
+  }
+
+  public static function setSwitch(name:String, value:Bool) {
+    switches.set(name, value);
+  }
+
+  public static function getSwitchValue(name:String):Bool {
+    if(switches.exists(name)) {
+      return switches.get(name);
+    } else {
+      return false;
+    }
+  }
+
+  public static function clearSwitches() {
+    switches.clear();
+  }
+
+  public static function clearSwitch(name:String) {
+    switches.remove(name);
   }
 }

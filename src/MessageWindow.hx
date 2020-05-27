@@ -2,6 +2,7 @@ package;
 import WindowBase;
 
 import hxd.res.DefaultFont;
+using Lambda;
 
 class MessageWindow  extends WindowBase{
   var storyText: h2d.Text;
@@ -13,6 +14,7 @@ class MessageWindow  extends WindowBase{
   var nextArrow: h2d.Bitmap;
   var accumulator: Float;
   var arrowPosX:Float;
+  var seenText: Array<String>;
   public var isPlayingText:Bool;
 
   public function new(parent: h2d.Object, x:Float, y:Float, width:Float, height:Float) {
@@ -113,6 +115,13 @@ class MessageWindow  extends WindowBase{
 
   }
 
+  function handleSeenText(text:String) {
+    if(seenText.has(text)) {
+      storyText.textColor = 0xADD8E6;
+    } else {
+      storyText.textColor = 0xFFFFFF;
+    }
+  }
 
   public function startText(text:String) {
     EventListener.clearHooks("textUpdate");
@@ -121,6 +130,7 @@ class MessageWindow  extends WindowBase{
     var timeFrame = .0125;
     var seconds = timeFrame;
     var index = 0;
+    handleSeenText(textData);
     //Should track input and if user clicks again, show all Text
     // Will have to change input event tracking and add indicator
     EventListener.addEvent("textUpdate", () -> {
@@ -128,6 +138,7 @@ class MessageWindow  extends WindowBase{
       if(storyText.text == textData)  {
         this.isPlayingText = false;
         this.startNextArrow();
+        seenText.push(textData);
         EventListener.clearHooks("textUpdate");
       }
        else {

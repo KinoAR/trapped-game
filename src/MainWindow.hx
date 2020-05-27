@@ -4,12 +4,14 @@ import GameData.Command;
 import MessageWindow;
 import GraphicWindow;
 import HudWindow;
+import ChoiceWindow;
 import Types;
 
 class MainWindow extends WindowBase {
   public var hudWindow:HudWindow;
   public var messageWindow:MessageWindow;
   public var graphicWindow:GraphicWindow;
+  public var choiceWindow:ChoiceWindow;
   public var commands: Array<Command>;
   public var commandIndex:Int;
 
@@ -22,7 +24,11 @@ class MainWindow extends WindowBase {
     messageWindow = new MessageWindow(this, 10, 190, 350, 350);
     graphicWindow = new GraphicWindow(this, 10, 10, 350, 350);
     hudWindow = new HudWindow(this, 8, 8 , 344, 50);
-   
+    choiceWindow = new ChoiceWindow(this, 10, 190, 350, 150);
+    //Goes to the next command when the choice is complete
+    EventListener.addEvent("choiceComplete", () -> {
+      this.updateCommand(1);
+    });
     // sendCommand(ChangeGraphic(hxd.Res.zipper4.toTile()));
   }
 
@@ -70,6 +76,18 @@ class MainWindow extends WindowBase {
         show(false);
       case ShowWindow:
         show(true);
+      case SetSwitch(name, value):
+        setSwitchValue(name, value);
+        updateCommand(1);
+      case SwitchText(switchName, str):
+        switch(GameData.getSwitchValue(switchName)) {
+            case true:
+              ShowText(str);
+            case false:
+              //Do nothing
+        }
+      case ShowChoice(choices):
+        choiceWindow.showChoices(choices);
       case _:
         //Do nothing
     }
@@ -91,6 +109,10 @@ class MainWindow extends WindowBase {
     messageWindow.setNameText(name);
     messageWindow.stopNextArrow();
     messageWindow.startText(text);
+  }
+
+  public function setSwitchValue(name:String, value:Bool) {
+    GameData.setSwitch(name, value);
   }
 
   public function showStoryText(text:String) {

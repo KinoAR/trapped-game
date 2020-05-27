@@ -4073,11 +4073,44 @@ GameData.initializeGameData = function() {
 		return;
 	};
 	var content = "";
+	GameData.switches = new haxe_ds_StringMap();
 };
 GameData.getGameData = function() {
 	return GameData.parsedGameData;
 };
 GameData.onGameLoad = function() {
+};
+GameData.handleChoice = function(switchName) {
+	GameData.setSwitch(switchName,true);
+};
+GameData.setSwitch = function(name,value) {
+	var _this = GameData.switches;
+	if(__map_reserved[name] != null) {
+		_this.setReserved(name,value);
+	} else {
+		_this.h[name] = value;
+	}
+};
+GameData.getSwitchValue = function(name) {
+	var _this = GameData.switches;
+	if(__map_reserved[name] != null ? _this.existsReserved(name) : _this.h.hasOwnProperty(name)) {
+		var _this1 = GameData.switches;
+		if(__map_reserved[name] != null) {
+			return _this1.getReserved(name);
+		} else {
+			return _this1.h[name];
+		}
+	} else {
+		return false;
+	}
+};
+GameData.clearSwitches = function() {
+	var _this = GameData.switches;
+	_this.h = { };
+	_this.rh = null;
+};
+GameData.clearSwitch = function(name) {
+	GameData.switches.remove(name);
 };
 var WindowBase = function(parent,x,y,width,height) {
 	h2d_Graphics.call(this,parent);
@@ -4639,10 +4672,21 @@ MainWindow.prototype = $extend(WindowBase.prototype,{
 			this.hudWindow.setDays(days);
 			this.updateCommand(1);
 			break;
+		case 5:
+			var value = command.value;
+			var name1 = command.name;
+			this.setSwitchValue(name1,value);
+			this.updateCommand(1);
+			break;
 		case 6:
+			var str2 = command.str;
+			var switchName = command.switchName;
+			var _g = GameData.getSwitchValue(switchName);
+			break;
+		case 9:
 			this.show(false);
 			break;
-		case 7:
+		case 10:
 			this.show(true);
 			break;
 		default:
@@ -4661,6 +4705,9 @@ MainWindow.prototype = $extend(WindowBase.prototype,{
 		this.messageWindow.setNameText(name);
 		this.messageWindow.stopNextArrow();
 		this.messageWindow.startText(text);
+	}
+	,setSwitchValue: function(name,value) {
+		GameData.setSwitch(name,value);
 	}
 	,showStoryText: function(text) {
 		this.messageWindow.clearNameText();
@@ -5185,15 +5232,18 @@ var Condition = $hxEnums["Condition"] = { __ename__ : true, __constructs__ : ["G
 	,Bad: {_hx_index:2,__enum__:"Condition",toString:$estr}
 };
 Condition.__empty_constructs__ = [Condition.Good,Condition.Average,Condition.Bad];
-var SysCommands = $hxEnums["SysCommands"] = { __ename__ : true, __constructs__ : ["ShowText","ShowTextPrsn","ChangeGraphic","Wait","SetDays","None","CloseWindow","ShowWindow"]
+var SysCommands = $hxEnums["SysCommands"] = { __ename__ : true, __constructs__ : ["ShowText","ShowTextPrsn","ChangeGraphic","Wait","SetDays","SetSwitch","SwitchText","ShowChoice","None","CloseWindow","ShowWindow"]
 	,ShowText: ($_=function(str) { return {_hx_index:0,str:str,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["str"],$_)
 	,ShowTextPrsn: ($_=function(name,str) { return {_hx_index:1,name:name,str:str,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["name","str"],$_)
 	,ChangeGraphic: ($_=function(tile) { return {_hx_index:2,tile:tile,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["tile"],$_)
 	,Wait: ($_=function(seconds) { return {_hx_index:3,seconds:seconds,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["seconds"],$_)
 	,SetDays: ($_=function(days) { return {_hx_index:4,days:days,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["days"],$_)
-	,None: {_hx_index:5,__enum__:"SysCommands",toString:$estr}
-	,CloseWindow: {_hx_index:6,__enum__:"SysCommands",toString:$estr}
-	,ShowWindow: {_hx_index:7,__enum__:"SysCommands",toString:$estr}
+	,SetSwitch: ($_=function(name,value) { return {_hx_index:5,name:name,value:value,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["name","value"],$_)
+	,SwitchText: ($_=function(switchName,str) { return {_hx_index:6,switchName:switchName,str:str,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["switchName","str"],$_)
+	,ShowChoice: ($_=function(choices) { return {_hx_index:7,choices:choices,__enum__:"SysCommands",toString:$estr}; },$_.__params__ = ["choices"],$_)
+	,None: {_hx_index:8,__enum__:"SysCommands",toString:$estr}
+	,CloseWindow: {_hx_index:9,__enum__:"SysCommands",toString:$estr}
+	,ShowWindow: {_hx_index:10,__enum__:"SysCommands",toString:$estr}
 };
 SysCommands.__empty_constructs__ = [SysCommands.None,SysCommands.CloseWindow,SysCommands.ShowWindow];
 var Utilities = function() { };
@@ -5209,8 +5259,21 @@ Utilities.createCommand = function(command) {
 	case "CLOSEWINDOW":
 		return SysCommands.CloseWindow;
 	case "SETDAYS":
-		haxe_Log.trace(args[0],{ fileName : "src/Utilities.hx", lineNumber : 15, className : "Utilities", methodName : "createCommand"});
+		haxe_Log.trace(args[0],{ fileName : "src/Utilities.hx", lineNumber : 17, className : "Utilities", methodName : "createCommand"});
 		return SysCommands.SetDays(args[0]);
+	case "SETSWITCH":
+		return SysCommands.SetSwitch(args[0],args[1]);
+	case "SHOWCHOICE":
+		var result = new Array(args.length);
+		var _g = 0;
+		var _g1 = args.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var element = args[i];
+			result[i] = { first : element[0], second : element[1]};
+		}
+		var choices = result;
+		return SysCommands.ShowChoice(choices);
 	case "SHOWTEXT":
 		return SysCommands.ShowText(args.join(" "));
 	case "SHOWTEXTP":
@@ -5218,6 +5281,8 @@ Utilities.createCommand = function(command) {
 		return SysCommands.ShowTextPrsn(person,args.join(" "));
 	case "SHOWWINDOW":
 		return SysCommands.ShowWindow;
+	case "SWITCHTEXT":
+		return SysCommands.SwitchText(args[0],args.join(" "));
 	case "WAIT":
 		return SysCommands.Wait(Std.parseInt(args[0]));
 	default:
@@ -61919,10 +61984,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 5:
 				if(_g11._hx_index == 5) {
-					var _g10 = _g11.t;
+					var _g7 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g12 = _g2.t;
-						var _g111 = _g2.size;
+						var _g9 = _g2.t;
+						var _g8 = _g2.size;
 						var n = _g11.size;
 						this.buf.b += Std.string("vec" + n + "(");
 						var v9;
@@ -61973,10 +62038,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 6:
 				if(_g11._hx_index == 5) {
-					var _g14 = _g11.t;
+					var _g31 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g16 = _g2.t;
-						var _g15 = _g2.size;
+						var _g5 = _g2.t;
+						var _g4 = _g2.size;
 						var n1 = _g11.size;
 						this.buf.b += Std.string("vec" + n1 + "(");
 						var v12;
@@ -62027,10 +62092,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 7:
 				if(_g11._hx_index == 5) {
-					var _g18 = _g11.t;
+					var _g111 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g20 = _g2.t;
-						var _g19 = _g2.size;
+						var _g13 = _g2.t;
+						var _g12 = _g2.size;
 						var n2 = _g11.size;
 						this.buf.b += Std.string("vec" + n2 + "(");
 						var v15;
@@ -62081,10 +62146,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 8:
 				if(_g11._hx_index == 5) {
-					var _g6 = _g11.t;
+					var _g15 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g8 = _g2.t;
-						var _g7 = _g2.size;
+						var _g17 = _g2.t;
+						var _g16 = _g2.size;
 						var n3 = _g11.size;
 						this.buf.b += Std.string("vec" + n3 + "(");
 						var v18;
@@ -62135,10 +62200,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 9:
 				if(_g11._hx_index == 5) {
-					var _g28 = _g11.t;
+					var _g26 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g30 = _g2.t;
-						var _g29 = _g2.size;
+						var _g28 = _g2.t;
+						var _g27 = _g2.size;
 						var n4 = _g11.size;
 						this.buf.b += Std.string("vec" + n4 + "(");
 						var v21;
@@ -62189,10 +62254,10 @@ hxsl_GlslOut.prototype = {
 				break;
 			case 10:
 				if(_g11._hx_index == 5) {
-					var _g22 = _g11.t;
+					var _g19 = _g11.t;
 					if(_g2._hx_index == 5) {
-						var _g24 = _g2.t;
-						var _g23 = _g2.size;
+						var _g21 = _g2.t;
+						var _g20 = _g2.size;
 						var n5 = _g11.size;
 						this.buf.b += Std.string("vec" + n5 + "(");
 						var v24;
@@ -62253,7 +62318,7 @@ hxsl_GlslOut.prototype = {
 				if(e.t != hxsl_Type.TInt) {
 					var tmp1;
 					if(op._hx_index == 20) {
-						var _g4 = op.op;
+						var _g6 = op.op;
 						tmp1 = true;
 					} else {
 						tmp1 = false;
@@ -62283,7 +62348,7 @@ hxsl_GlslOut.prototype = {
 									this.decl("vec3 m3x4mult( vec3 v, _mat3x4 m) { vec4 ve = vec4(v,1.0); return vec3(dot(m.a,ve),dot(m.b,ve),dot(m.c,ve)); }");
 									var tmp2;
 									if(op._hx_index == 20) {
-										var _g5 = op.op;
+										var _g10 = op.op;
 										tmp2 = true;
 									} else {
 										tmp2 = false;
@@ -62334,7 +62399,7 @@ hxsl_GlslOut.prototype = {
 					if(e.t != hxsl_Type.TInt) {
 						var tmp3;
 						if(op._hx_index == 20) {
-							var _g9 = op.op;
+							var _g14 = op.op;
 							tmp3 = true;
 						} else {
 							tmp3 = false;
@@ -62425,10 +62490,10 @@ hxsl_GlslOut.prototype = {
 					var v37 = this.getFunName(g1,args,e.t);
 					this.buf.b += Std.string(v37);
 					this.buf.b += Std.string("(");
-					var _g13 = 0;
-					while(_g13 < args.length) {
-						var e3 = args[_g13];
-						++_g13;
+					var _g18 = 0;
+					while(_g18 < args.length) {
+						var e3 = args[_g18];
+						++_g18;
 						this.addValue(e3,tabs);
 						this.buf.b += Std.string(", ");
 					}
@@ -62443,9 +62508,9 @@ hxsl_GlslOut.prototype = {
 					} else {
 						var v38 = _g34;
 						var args1 = _g35;
-						var _g17 = v38.e;
-						if(_g17._hx_index == 2) {
-							var g2 = _g17.g;
+						var _g22 = v38.e;
+						if(_g22._hx_index == 2) {
+							var g2 = _g22.g;
 							var v39 = this.getFunName(g2,args1,e.t);
 							this.buf.b += Std.string(v39);
 						} else {
@@ -62453,10 +62518,10 @@ hxsl_GlslOut.prototype = {
 						}
 						this.buf.b += Std.string("(");
 						var first = true;
-						var _g21 = 0;
-						while(_g21 < args1.length) {
-							var e5 = args1[_g21];
-							++_g21;
+						var _g23 = 0;
+						while(_g23 < args1.length) {
+							var e5 = args1[_g23];
+							++_g23;
 							if(first) {
 								first = false;
 							} else {
@@ -62470,9 +62535,9 @@ hxsl_GlslOut.prototype = {
 				default:
 					var args2 = _g35;
 					var v40 = _g34;
-					var _g25 = v40.e;
-					if(_g25._hx_index == 2) {
-						var g3 = _g25.g;
+					var _g24 = v40.e;
+					if(_g24._hx_index == 2) {
+						var g3 = _g24.g;
 						var v41 = this.getFunName(g3,args2,e.t);
 						this.buf.b += Std.string(v41);
 					} else {
@@ -62480,10 +62545,10 @@ hxsl_GlslOut.prototype = {
 					}
 					this.buf.b += Std.string("(");
 					var first1 = true;
-					var _g26 = 0;
-					while(_g26 < args2.length) {
-						var e6 = args2[_g26];
-						++_g26;
+					var _g25 = 0;
+					while(_g25 < args2.length) {
+						var e6 = args2[_g25];
+						++_g25;
 						if(first1) {
 							first1 = false;
 						} else {
@@ -62496,9 +62561,9 @@ hxsl_GlslOut.prototype = {
 			} else {
 				var args3 = _g35;
 				var v42 = _g34;
-				var _g27 = v42.e;
-				if(_g27._hx_index == 2) {
-					var g4 = _g27.g;
+				var _g29 = v42.e;
+				if(_g29._hx_index == 2) {
+					var g4 = _g29.g;
 					var v43 = this.getFunName(g4,args3,e.t);
 					this.buf.b += Std.string(v43);
 				} else {
@@ -62524,10 +62589,10 @@ hxsl_GlslOut.prototype = {
 			var regs = _g.regs;
 			var e8 = _g.e;
 			if(e8.t._hx_index == 3) {
-				var _g31 = 0;
-				while(_g31 < regs.length) {
-					var r = regs[_g31];
-					++_g31;
+				var _g30 = 0;
+				while(_g30 < regs.length) {
+					var r = regs[_g30];
+					++_g30;
 					if(r != hxsl_Component.X) {
 						throw new js__$Boot_HaxeError("assert");
 					}
