@@ -31,17 +31,74 @@
         "args": [3]
       },
       {
+        "name":"ShowText",
+        "args": ["I open the website for our company, unpleasantly surprised to find an article about the virus."]
+      }, 
+      {
+        "name":"ShowText",
+        "args": ["Things aren't that serious for us; a couple cases started to touch the East coast, but we're in the clear. Everyone needs to just relax."]
+      }, 
+      {
         "name": "ShowText",
-        "args": ["\"2020 is my year...\" I mumbled to myself while pounding the keys as if I had cinderblocks for fingers. This year I made a vow to myself to grow more as a person and finally change my life. This year is going to be different."]
+        "args": ["Now back to business as usual. The virus better not come to our state."]
+      }, 
+      {
+        "name":"SetDays",
+        "args": [12]
       },
       {
         "name": "ShowText",
-        "args": ["Last year I made a name for myself at the company, bringing them a lot of business, but for me this wasn't something I always wanted to do. I felt there was more to my life than a 9-5 job and developing software."]
+        "args": ["Looks like things have calmed down recently. People are starting to relax a bit. Our state remains the same while things are starting to change in the states around us."]
       },
       {
         "name": "ShowText",
-        "args": ["I knew I wanted to live outside the box, but there was something...something hold me back from that."]
-      }
+        "args": ["People are starting to wear masks now! Along with that people are now trading food for toilet paper. The rest of the world has really gone crazy at this point."]
+      },
+      {"name":"SetDays", "args": [17]},
+      {
+        "name": "ShowTextP",
+        "args": ["Person A", "Hey did you hear? They're going to have everyone start working from home now. Apparently, there have been some confirmed cases in the area."]
+      },
+     {
+       "name": "ShowTextP",
+       "args": ["Person A", "Looks like our little part of the world isn't so safe anymore."]
+     },
+     {
+       "name":"ShowTextP",
+       "args": ["Me", "Seriously? What is going anymore? People can't just stay inside for a few days? It really shouldn't have gotten this bad."]
+     },
+     {
+       "name": "ShowTextP",
+       "args": ["Person A", "It is what it is; looks like we won't see each other for a while. Anyway, guess you can enjoy the semi-vacation."]
+     },
+     {
+       "name": "ShowTextP",
+       "args": ["Heh, ain't that the truth. Time to watch those Netflix series I wanted to catch up on. Guess I'll be seeing you."]
+     },
+      {
+        "name": "ShowTextP",
+        "args": ["Person A", "Yeah, I'll be seeing you. Stay safe."]
+      },
+      {
+        "name": "SetDays",
+        "args": [20]
+      },
+      {"name": "ShowText",
+      "args": "We've slowly been adapting to quarantine life. In a way, life is pretty simple; now I don't have to commute to work and Netflix is right next to my computer. DOn't even have to leave my house for food. Life is good. Either way this should be over soon."},
+      {
+        "name": "SetDays",
+        "args": [25]
+      },
+      {
+        "name": "ShowText",
+        "args": ["The world continues to spiral out of control. Scrolling through social media, people are doing insane things. Instead of staying inside, they're protesting as if the virus does not exist. Lots of memes and a bit of outrage popping up all over the internet."]
+      }, 
+      {"name": "ShowText", "args": ["People are losing their jobs and unemployee is on the rise. Thankfully, I have no issue in that department since I can work remotely. But, I can't help but feel bad for the other people who aren't so lucky."]},
+      {"name": "ShowTextP", "args": ["Me", "It feels like the walls are closing in..."]},
+      {"name": "SetDays", "args": [26]},
+      {"name":"ShowText", "args": ["Life continues, but I'm on edge. My quarantine life doesn't include just me anymore. Now it's me and my girlfriend who works at the Hospital."]},
+      {"name": "ShowText", "args": ["Everyday I worry about her. She could get the infection at any point just by being a little careless for one moment. It could be the end of her...."]},
+      {"name": "ShowText", "args": ["...It could be the end of me."]}
     ]
   }]
 }
