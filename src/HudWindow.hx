@@ -18,7 +18,7 @@ class HudWindow  extends WindowBase {
   override function init() {
     drawHUDBackground(this.x + 6, this.y + 6);
     setupCondition(this.x + 10, this.y + 10);
-    setupDays(this.x + 50, 0);
+    setupDays(this.x + 50, 20);
   }
 
   function  drawHUDBackground(x:Float, y:Float) {
@@ -41,7 +41,7 @@ class HudWindow  extends WindowBase {
   function setupDays(x:Float, y:Float) {
     var font = DefaultFont.get();
     dayText = new h2d.Text(font, this);
-    dayText.x = conditionText.x + x;
+    dayText.x = conditionText.x;
     dayText.y = conditionText.y + y;
     dayText.textColor = 0xFFFFFF;
     dayText.smooth = true;

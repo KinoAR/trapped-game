@@ -29,8 +29,10 @@ class Utilities {
       case "SETSWITCH":
         SetSwitch(args[0], args[1]);
       case "SWITCHTEXT":
-        SwitchText(args[0], args.join(" "));
+        var switchName = args.shift();
+        SwitchText(switchName, args.join(" "));
       case "SWITCHCOND":
+        trace("Sent switch cond");
         SwitchCond(args[0], args[1]);
       case "CONDTEXT":
         var cond = switch(args.shift().toUpperCase()) {

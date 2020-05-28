@@ -27,6 +27,7 @@ class MainWindow extends WindowBase {
     choiceWindow = new ChoiceWindow(this, 10, 190, 350, 150);
     //Goes to the next command when the choice is complete
     EventListener.addEvent("choiceComplete", () -> {
+      trace(GameData.getSwitchValue("doubtMaria"));
       this.updateCommand(1);
     });
     // sendCommand(ChangeGraphic(hxd.Res.zipper4.toTile()));
@@ -45,16 +46,18 @@ class MainWindow extends WindowBase {
   }
 
   public function updateCommand(value:Int) {
-    this.commandIndex+=value;
-    if(this.commandIndex > -1 
-      && this.commandIndex < this.commands.length) {
-        var command = this.commands[this.commandIndex];
+    if(this.choiceWindow.visible == false) {
+      this.commandIndex+=value;
+      if(this.commandIndex > -1 
+        && this.commandIndex < this.commands.length) {
+          var command = this.commands[this.commandIndex];
         // trace("Updated Command - index: " + this.commandIndex);
           sendCommand(Utilities.createCommand(command)); 
-    }
+      }
       
-   this.commandIndex = cast(Utilities.clamp(this.commandIndex, 0, this.commands.length), Int);
-   trace(this.commandIndex);
+      this.commandIndex = cast(Utilities.clamp(this.commandIndex, 0, this.commands.length), Int);
+      trace(this.commandIndex);
+    }
   }
 
   public function sendCommand(command:SysCommands) {
@@ -89,10 +92,11 @@ class MainWindow extends WindowBase {
       case ShowChoice(choices):
         choiceWindow.showChoices(choices);
       case SwitchCond(switchName, value):
+        trace(switchName, GameData.getSwitchValue(switchName));
         switch(GameData.getSwitchValue(switchName)) {
           case true:
             GameData.updateCondition(value);
-            trace(GameData.getCondition());
+            trace(switchName, GameData.getCondition());
             this.hudWindow.setCondition(GameData.getCondition());
             updateCommand(1);
           case false:

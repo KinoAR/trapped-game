@@ -72,8 +72,8 @@
        "args": ["Person A", "It is what it is; looks like we won't see each other for a while. Anyway, guess you can enjoy the semi-vacation."]
      },
      {
-       "name": "ShowText",
-       "args": ["Heh, ain't that the truth. Time to watch those Netflix series I wanted to catch up on. Guess I'll be seeing you."]
+       "name": "ShowTextP",
+       "args": ["Me","Heh, ain't that the truth. Time to watch those Netflix series I wanted to catch up on. Guess I'll be seeing you."]
      },
       {
         "name": "ShowTextP",
@@ -83,6 +83,7 @@
         "name": "SetDays",
         "args": [20]
       },
+      {"name": "ChangeGraphic", "args": ["room-practice.png"]},
       {"name": "ShowText",
       "args": ["We've slowly been adapting to quarantine life. In a way, life is pretty simple; now I don't have to commute to work and Netflix is right next to my computer. DOn't even have to leave my house for food. Life is good. Either way this should be over soon."]},
       {
@@ -120,17 +121,23 @@
       {"name": "SetDays", "args": [39]},
       {"name": "ShowText", "args": ["Today, they mentioned a new strain of the virus that's more contagious. Again, the situation just gets more abysmal."]},
       {"name": "ShowText", "args": ["At that point I overhear my girlfriend speaking to her friend."]},
-      {"name": "ShowTextP", "args": ["Maria", "The whole left wind died out because of the virus?"]},
+      {"name": "ShowTextP", "args": ["Maria", "The whole left wing died out because of the virus?"]},
       {"name": "ShowTextP", "args": ["Maria", "Yeah...this virus is horrible. I hope you and your family are staying safe. We're taking all the precautions we can here."]},
       {"name": "ShowText", "args": ["At this point, life seems fleeting."]},
       {"name": "ShowText", "args": ["At that moment the TV starts spewing out negative facts about the situation."]},
       {"name": "ShowChoice", "args": [
         ["Listen to the disaster facts", "watchFacts"],
         ["Turn off the TV", "turnOffTV"]
-      ]}
-
-
-
+      ]},
+      {"name": "SwitchText", "args": ["watchFacts", "I watched the death tolls and numbers go on and on for hours on the television. In my mind, it felt like the virus was too close to home."]},
+      {"name": "SwitchCond", "args": ["watchFacts", -1]},
+      {"name": "SwitchCond", "args": ["turnOffTV", -1]},
+      {"name": "SetDays", "args": [40]},
+      {"name": "CondText", "args": ["Bad", "That moment I woke up to my girlfriend coughing. She started to feel more and more ill as the day went on. As she reached out to me I pulled away. The fear of contracting the virus got to me. Could the whole room be covered in the Virus? I have no clue. My life may be forfeit."]},
+      {"name": "CondText", "args": ["Bad", "Just then I was plagued by a cough. My body convulsing as I lost consciousness...the world fading to darkness."]},
+      {"name": "CondText", "args": ["Bad", "That moment I woke up in a cold sweat heart beating out of my chest. I should be careful of the people closest to me. My life, my mental state is going down hilll... The world only seems to be getting worse; things just won't get any better."]},
+      {"name": "CondText", "args": ["Good", "I woke up to the sound of my girlfriend happily by my side. The days dragged on like usual, but now I felt a new sense of purpose in my actions. Life is fleeting and I plan to do everything I can to make the most of it, even if I'm stuck inside for now."]},
+      {"name": "CondText", "args": ["Avg", "I woke up in a daze feeling my mental state slightly slip away. The world seems to be getting worse. I'm not sure if I should be hopeful or filled with negativity. Either way, this is might become my new normal."]}
     ]
   }]
 }

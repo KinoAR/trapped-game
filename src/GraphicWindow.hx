@@ -44,6 +44,7 @@ class GraphicWindow extends WindowBase {
   public function setGraphic(image: h2d.Tile) {
     EventListener.clearHooks("graphicUpdate");
     storyGraphic.clear();
+    storyGraphic.tile.switchTexture(image);
     storyGraphic.drawTile(this.x, this.y, image);
     storyGraphic.alpha = 0;
     EventListener.addEvent("graphicUpdate", () -> {

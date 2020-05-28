@@ -42,9 +42,10 @@ class ChoiceWindow extends WindowBase {
   function addChoice(choiceText:String, switchName:String) {
     var choice = new Text(DefaultFont.get(), this);
     var interaction = new h2d.Interactive(this.width, lineHeight, choice);
+    choice.x += 30;
     choice.text = choiceText;
     choice.scale(1.3);
-    choice.y = this.y + textYPosition;
+    choice.y = this.y + 10+ textYPosition;
     textYPosition+= lineHeight;
     choices.push(choice);
     interaction.onClick = (e: hxd.Event) -> {
@@ -52,6 +53,12 @@ class ChoiceWindow extends WindowBase {
       finishChoices();
       EventListener.emitSignal("choiceComplete");
     };
+    interaction.onOver = (_) -> {
+      choice.textColor = 0xADD8E6;
+    }
+    interaction.onOut = (_) -> {
+      choice.textColor = 0xFFFFFF;
+    }
   }
 
   private function clearChoices() {
