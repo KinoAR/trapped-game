@@ -72,7 +72,7 @@
        "args": ["Person A", "It is what it is; looks like we won't see each other for a while. Anyway, guess you can enjoy the semi-vacation."]
      },
      {
-       "name": "ShowTextP",
+       "name": "ShowText",
        "args": ["Heh, ain't that the truth. Time to watch those Netflix series I wanted to catch up on. Guess I'll be seeing you."]
      },
       {
@@ -84,7 +84,7 @@
         "args": [20]
       },
       {"name": "ShowText",
-      "args": "We've slowly been adapting to quarantine life. In a way, life is pretty simple; now I don't have to commute to work and Netflix is right next to my computer. DOn't even have to leave my house for food. Life is good. Either way this should be over soon."},
+      "args": ["We've slowly been adapting to quarantine life. In a way, life is pretty simple; now I don't have to commute to work and Netflix is right next to my computer. DOn't even have to leave my house for food. Life is good. Either way this should be over soon."]},
       {
         "name": "SetDays",
         "args": [25]
@@ -98,7 +98,39 @@
       {"name": "SetDays", "args": [26]},
       {"name":"ShowText", "args": ["Life continues, but I'm on edge. My quarantine life doesn't include just me anymore. Now it's me and my girlfriend who works at the Hospital."]},
       {"name": "ShowText", "args": ["Everyday I worry about her. She could get the infection at any point just by being a little careless for one moment. It could be the end of her...."]},
-      {"name": "ShowText", "args": ["...It could be the end of me."]}
+      {"name": "ShowText", "args": ["...It could be the end of me."]},
+      {"name": "ShowChoice", "args": [
+        ["Trust", "trustMaria"],
+        ["Doubt", "doubtMaria"]
+      ]},
+      {"name": "SwitchCond", "args": ["trustMaria", 1]},
+      {"name": "SwitchCond", "args": ["doubtMaria", -1]},
+      {"name": "CondText", "args": ["Good", "She's smart and careful. I believe in her and I think we can get through this together. Whatever happens we got this."]},
+      {"name": "CondText", "args": ["Avg", "Living with her puts me at risk. It's not her fault if she gets the disease, but maybe I should be a bit more careful around her for my own safety."]},
+      {"name": "SetDays", "args": [33]},
+      {"name": "ShowText", "args": ["At this point in time, lockdown has been extended. All of us have been told to be wary of going outside. I might be an introvert, but I'm starting to miss my friends and seeing people in general. I need to do things. Netflix only loots so long."]},
+      {"name": "ShowText", "args": ["My girlfriend started taking up a hobby. She's started practicing yoga in her spare time and drawing. Maybe I should do something similar; we have so much time on our now. There's no execuse for me to not gain those skills I wanted as a kid."]},
+      {"name": "SetDays", "args": [37]},
+      {"name": "ShowText", "args": ["I've started drawing more and learning more about myself. With all this time and less distractions I've started to think about what I want out of life. With the cases continuing to rise in my area, everyday feels like I'm getting closer to a wall, a wall of hard truths about my own moratlity."]},
+      {"name": "ShowTextP", "args": ["Me", "Is this all I wanted out of life?"]},
+      {"name": "ShowText", "args": ["\"There's more for me out there.\" That's all I can think about as all the childhood dreams playback in my mind."]},
+      {"name": "SetDays", "args": [38]},
+      {"name": "ShowText", "args": ["Started working on my own game. I've always wanted to create games; that's why I decided to learn programming. The quarantine has given me a reason to put effort toward that childhood dream."]},
+      {"name": "ShowText", "args": ["This is the way I wanted to make an impact on the world originally. Maybe if I keep working at it I can quit my day job."]},
+      {"name": "SetDays", "args": [39]},
+      {"name": "ShowText", "args": ["Today, they mentioned a new strain of the virus that's more contagious. Again, the situation just gets more abysmal."]},
+      {"name": "ShowText", "args": ["At that point I overhear my girlfriend speaking to her friend."]},
+      {"name": "ShowTextP", "args": ["Maria", "The whole left wind died out because of the virus?"]},
+      {"name": "ShowTextP", "args": ["Maria", "Yeah...this virus is horrible. I hope you and your family are staying safe. We're taking all the precautions we can here."]},
+      {"name": "ShowText", "args": ["At this point, life seems fleeting."]},
+      {"name": "ShowText", "args": ["At that moment the TV starts spewing out negative facts about the situation."]},
+      {"name": "ShowChoice", "args": [
+        ["Listen to the disaster facts", "watchFacts"],
+        ["Turn off the TV", "turnOffTV"]
+      ]}
+
+
+
     ]
   }]
 }

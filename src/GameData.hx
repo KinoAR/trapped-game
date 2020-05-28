@@ -1,3 +1,4 @@
+import Types.Condition;
 import haxe.io.Bytes;
 import hxd.net.BinaryLoader;
 import  haxe.Json;
@@ -25,6 +26,8 @@ class GameData {
   public static var scenes: Array<Scene>;
   public static var isLoaded = false;
   public static var switches: Map<String, Bool>;
+  public static var conditionValue:Int;
+  public static var currentCondition:Condition;
 
   public static function initializeGameData() {
     var binary = new BinaryLoader("res/story.json");
@@ -36,6 +39,8 @@ class GameData {
       onGameLoad();
     }
     var content : String = "";
+    conditionValue = 1;
+    updateCondition(0);
     switches = [];
   }
 
@@ -61,6 +66,28 @@ class GameData {
     } else {
       return false;
     }
+  }
+
+  public static function updateCondition(value:Int) {
+    conditionValue += value;
+    switch(conditionValue) {
+      case -1:
+        setCondition(Bad);
+      case 0:
+        setCondition(Average);
+      case 1:
+        setCondition(Good);
+      case _:
+        //Do nothing
+    }
+  }
+
+  public static function getCondition() {
+    return currentCondition;
+  }
+
+  public static function setCondition(condition) {
+    currentCondition = condition;
   }
 
   public static function clearSwitches() {

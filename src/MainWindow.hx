@@ -82,12 +82,32 @@ class MainWindow extends WindowBase {
       case SwitchText(switchName, str):
         switch(GameData.getSwitchValue(switchName)) {
             case true:
-              ShowText(str);
+              showStoryText(str);
             case false:
-              //Do nothing
+              updateCommand(1);
         }
       case ShowChoice(choices):
         choiceWindow.showChoices(choices);
+      case SwitchCond(switchName, value):
+        switch(GameData.getSwitchValue(switchName)) {
+          case true:
+            GameData.updateCondition(value);
+            trace(GameData.getCondition());
+            this.hudWindow.setCondition(GameData.getCondition());
+            updateCommand(1);
+          case false:
+            updateCommand(1);
+        }
+      case ConditionText(cond, str):
+        trace(cond);
+        trace(GameData.getCondition());
+        trace(cond == GameData.getCondition());
+        switch(GameData.getCondition() == cond) {
+          case true:
+            showStoryText(str);
+          case false:
+            updateCommand(1);
+        }
       case _:
         //Do nothing
     }

@@ -1,5 +1,6 @@
 import GameData.Command;
 import Types.SysCommands;
+import Types.Condition;
 import Types.Tuple;
 using Lambda;
 
@@ -29,6 +30,20 @@ class Utilities {
         SetSwitch(args[0], args[1]);
       case "SWITCHTEXT":
         SwitchText(args[0], args.join(" "));
+      case "SWITCHCOND":
+        SwitchCond(args[0], args[1]);
+      case "CONDTEXT":
+        var cond = switch(args.shift().toUpperCase()) {
+          case "GOOD":
+            Good;
+          case "AVG":
+            Average;
+          case "BAD":
+            Bad;
+          case _:
+            Good;
+        };
+        ConditionText(cond, args.join(" "));
       case "SHOWCHOICE":
         var choices = args.map(element -> {
           return {first:element[0], second:element[1]}
@@ -47,4 +62,5 @@ class Utilities {
   public static function lerp(start:Float, end:Float, lerpAmt:Float) {
     return (1 - lerpAmt) * start + lerpAmt * end;
   }
+
 }

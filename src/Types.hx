@@ -14,7 +14,9 @@ enum SysCommands {
   Wait(seconds:Int);
   SetDays(days:Int);
   SetSwitch(name:String, value:Bool);
+  SwitchCond(switchName:String, value:Int);
   SwitchText(switchName:String, str:String);
+  ConditionText(cond:Condition, str:String);
   ShowChoice(choices:Array<Tuple<String, String>>);
   None;
   CloseWindow;

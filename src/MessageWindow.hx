@@ -27,6 +27,7 @@ class MessageWindow  extends WindowBase{
     setupNameText(this.x + 30, this.y + 20);
     setupText(this.x + 30, this.y + 45);
     setupNextArrow(this.x + 305, this.y + 300);
+    seenText = [];
     this.isPlayingText = false;
     // setupTextInput(30, 420);
   }
@@ -35,7 +36,7 @@ class MessageWindow  extends WindowBase{
     nameText = new h2d.Text(DefaultFont.get(), this);
     nameText.scale(1.5);
     nameText.smooth = true;
-    nameText.maxWidth = 20;
+    nameText.maxWidth = 100;
     nameText.x = x;
     nameText.y = y;
     nameText.textColor = 0xFFFFFF;

@@ -8,6 +8,7 @@ using Lambda;
 
 class ChoiceWindow extends WindowBase {
   var textYPosition:Float = 0;
+  var lineHeight = 30;
   var choices:Array<h2d.Object>;
   public function new(parent: h2d.Object, x:Float, y:Float, width:Float, height:Float) {
     super(parent, x, y, width, height);
@@ -16,7 +17,15 @@ class ChoiceWindow extends WindowBase {
   override function init() {
     super.init();
     drawBorder(this.x, this.y, this.width, this.height);
+    drawBackground(this.x + 2, this.y + 2, 0x020202);
     this.choices = [];
+    this.show(false);
+  }
+
+  function drawBackground(x:Float, y:Float, color:Int) {
+    this.beginFill(color);
+    this.drawRect(x, y, this.width, this.height);
+    this.endFill();
   }
 
   public function showChoices(choices: Array<Tuple<String, String>>) {
@@ -32,10 +41,11 @@ class ChoiceWindow extends WindowBase {
 
   function addChoice(choiceText:String, switchName:String) {
     var choice = new Text(DefaultFont.get(), this);
-    var interaction = new h2d.Interactive(this.width, choice.lineSpacing, choice);
+    var interaction = new h2d.Interactive(this.width, lineHeight, choice);
     choice.text = choiceText;
-    choice.y = textYPosition;
-    textYPosition+= choice.lineSpacing;
+    choice.scale(1.3);
+    choice.y = this.y + textYPosition;
+    textYPosition+= lineHeight;
     choices.push(choice);
     interaction.onClick = (e: hxd.Event) -> {
       GameData.setSwitch(switchName, true);

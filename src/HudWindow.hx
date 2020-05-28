@@ -4,6 +4,7 @@ import Types;
 
 class HudWindow  extends WindowBase {
   var conditionText: h2d.Text;
+  var conditionValue:Int;
   var days:Int;
   var dayText: h2d.Text;
   var scene: h2d.Scene;
@@ -33,6 +34,7 @@ class HudWindow  extends WindowBase {
     conditionText.y = y;
     conditionText.scale(1.5);
     conditionText.smooth = true;
+    conditionValue = 1;
     setCondition(Good);
   }
 
@@ -60,6 +62,7 @@ class HudWindow  extends WindowBase {
         conditionText.textColor = 0xFF5733;
     }
   }
+
 
   public function setDays(days:Int) {
     dayText.text = "Days: " + days;
