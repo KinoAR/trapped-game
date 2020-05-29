@@ -46,6 +46,10 @@ class MainWindow extends WindowBase {
   }
 
   public function updateCommand(value:Int) {
+    if(this.commandIndex == this.commands.length) {
+      cast(parent, h2d.Scene).dispose();
+      SceneManager.changeScene(new CreditsScene());
+    }
     if(this.choiceWindow.visible == false) {
       this.commandIndex+=value;
       if(this.commandIndex > -1 
